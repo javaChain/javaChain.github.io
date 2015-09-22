@@ -41,16 +41,17 @@
   <link rel="shorticon icon" type="image/x-icon" href="/myBlog.ico?v=0.4.5.1" />
 
 
-<meta name="description" content="黄沙百战穿金甲，不破楼兰终不还">
+<meta name="description" content="Fastjson是一个Java语言编写的JSON处理器。1.遵循http://json.org标准，为其官方网站收录的参考实现之一。2.功能qiang打，支持JDK的各种类型，包括基本的JavaBean、Collection、Map、Date、Enum、泛型。3.无依赖，不需要例外额外的jar，能够直接跑在JDK上。4开源，使用Apache License 2.0协议开源。http://code.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="fastJson">
 <meta property="og:url" content="http://wwww.chen777.com/2015/09/21/fastJson/index.html">
 <meta property="og:site_name" content="陈西西">
-<meta property="og:description" content="黄沙百战穿金甲，不破楼兰终不还">
-<meta property="og:updated_time" content="2015-09-22T03:16:37.838Z">
+<meta property="og:description" content="Fastjson是一个Java语言编写的JSON处理器。1.遵循http://json.org标准，为其官方网站收录的参考实现之一。2.功能qiang打，支持JDK的各种类型，包括基本的JavaBean、Collection、Map、Date、Enum、泛型。3.无依赖，不需要例外额外的jar，能够直接跑在JDK上。4开源，使用Apache License 2.0协议开源。http://code.">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/0063lLoQgw1ewb8jgrkvaj30bl07kgm1.jpg">
+<meta property="og:updated_time" content="2015-09-22T06:55:15.572Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fastJson">
-<meta name="twitter:description" content="黄沙百战穿金甲，不破楼兰终不还">
+<meta name="twitter:description" content="Fastjson是一个Java语言编写的JSON处理器。1.遵循http://json.org标准，为其官方网站收录的参考实现之一。2.功能qiang打，支持JDK的各种类型，包括基本的JavaBean、Collection、Map、Date、Enum、泛型。3.无依赖，不需要例外额外的jar，能够直接跑在JDK上。4开源，使用Apache License 2.0协议开源。http://code.">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -240,7 +241,60 @@
       
 
       
-        <span itemprop="articleBody"></span>
+        <span itemprop="articleBody"><p>Fastjson是一个Java语言编写的JSON处理器。<br>1.遵循<a href="http://json.org标准，为其官方网站收录的参考实现之一。" target="_blank" rel="external">http://json.org标准，为其官方网站收录的参考实现之一。</a><br>2.功能qiang打，支持JDK的各种类型，包括基本的JavaBean、Collection、Map、Date、Enum、泛型。<br>3.无依赖，不需要例外额外的jar，能够直接跑在JDK上。<br>4开源，使用Apache License 2.0协议开源。<a href="http://code.alibabatech.com/wiki/display/FastJSON/Home" target="_blank" rel="external">http://code.alibabatech.com/wiki/display/FastJSON/Home</a></p>
+<p>下载地址：<br><a href="http://www.oschina.net/news/58783/fastjson-1-2-4" target="_blank" rel="external">http://www.oschina.net/news/58783/fastjson-1-2-4</a></p>
+<p>我的使用场景：<br>由于我是对象嵌套对象，然后在JS里面把json对象转换为json字符串，使用JSON.stringify()方法。然后后台使用JSON.parseObject(String text, Class clazz),把JSON文本parse为JavaBean。</p>
+<p>先看bean的结构:<br><strong>topicDTO:</strong></p>
+<pre><code><span class="keyword">private</span> <span class="built_in">int</span> id;
+
+<span class="keyword">private</span> <span class="keyword">String</span> topicTitle;        
+
+<span class="keyword">private</span> <span class="keyword">String</span> content;
+
+<span class="keyword">private</span> <span class="keyword">String</span> isBarrage;
+
+*<span class="keyword">private</span> VoteDTO voteDTO*;
+
+<span class="comment">/**
+  *getter,setter
+  *
+   */</span>
+</code></pre><p><strong>VoteDTO</strong></p>
+<pre><code><span class="keyword">private</span> <span class="built_in">int</span> id;
+
+<span class="keyword">private</span> <span class="keyword">String</span> voteTitle;
+
+<span class="keyword">private</span> <span class="keyword">String</span> imgUrl;
+
+<span class="keyword">private</span> <span class="keyword">String</span> content;
+
+<span class="comment">/**
+  *getter,setter
+  *
+   */</span>
+</code></pre><p>js处理：</p>
+<pre><code><span class="keyword">var</span> topicDTO={};
+<span class="comment">//and so on</span>
+<span class="keyword">var</span> topicDTO.id=$(<span class="string">'#topicId'</span>).val();
+<span class="keyword">var</span> topicStr=<span class="built_in">JSON</span>.stringify(topicDTO);
+$.post(<span class="string">"admin/topic/saveTopic.action"</span>,
+        {topicStr:topicStr}
+    , <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>{
+        <span class="keyword">var</span> status = data.result;
+        <span class="keyword">if</span> (status == <span class="string">"success"</span>) {
+            $.messager.alert(<span class="string">'信息'</span>, <span class="string">'话题新增成功!'</span>, <span class="string">'info'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+                close();
+            });
+        } <span class="keyword">else</span> {
+            $.messager.alert(<span class="string">'错误'</span>, <span class="string">'话题新增失败!'</span>, <span class="string">'error'</span>);
+        }
+    }, <span class="string">"json"</span>);
+</code></pre><p>action处理:</p>
+<pre><code><span class="built_in">String</span> topicStr=<span class="keyword">this</span>.getRequest().getParameter(<span class="string">"topicStr"</span>);
+TopicDTO dto=<span class="built_in">JSON</span>.parseObject(topicStr, topicDTO.getClass()); 
+</code></pre><p>此时前台传递的值都在dto对象中，简直是神器。</p>
+<p><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewb8jgrkvaj30bl07kgm1.jpg" alt=""></p>
+</span>
       
     </div>
 
