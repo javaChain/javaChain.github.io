@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://wwww.chen777.com/"/>
-  <updated>2015-09-22T06:56:52.830Z</updated>
+  <updated>2015-09-22T07:22:17.148Z</updated>
   <id>http://wwww.chen777.com/</id>
   
   <author>
@@ -15,12 +15,30 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[hexo_question]]></title>
+    <link href="http://wwww.chen777.com/2015/09/22/hexo-question/"/>
+    <id>http://wwww.chen777.com/2015/09/22/hexo-question/</id>
+    <published>2015-09-22T07:05:50.000Z</published>
+    <updated>2015-09-22T07:22:17.148Z</updated>
+    <content type="html"><![CDATA[<p>搭建hexo走了许多弯路，弯路走了很多，人也变弯了<br><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewb8vpqwuhj301s01sweb.jpg" alt=""><br>今天归纳一下，借鉴：<a href="http://blog.csdn.net/wx_962464/article/details/44786929" target="_blank" rel="external">http://blog.csdn.net/wx_962464/article/details/44786929</a><br>next主题的设定：<a href="http://theme-next.iissnan.com/theme-settings.html" target="_blank" rel="external">http://theme-next.iissnan.com/theme-settings.html</a><br>说说我蠢哭的事情，让各位客官高兴高兴吧。</p>
+<p>搭建的时候大家都说站点配置文件加入xxxx，我一直不知道是那个配置文件，后来墨迹了十几分钟在另外的博客截图才看到是此_config.yml,然后终于找到的配置文件心里十万匹草利马奔腾，劳资终于找到了，哈哈哈，然后next主题我刚进来的时候是繁体的，这让强迫症的我要死，然后去next主题看，照着弄，就是不对。后来百度错误，原来是没在冒号后面加空格，擦。</p>
+<p>然后最近在研究怎么备份，因为hexo始终在本地，如果我换了地方 我改如何继续使用，诶，可怜的我到现在也没有研究出个123，好希望人来支持我(原谅我对git的不理解，搞了很久还是有问题)，if you want help me,you can call QQ 280385556! 3ks</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>搭建hexo走了许多弯路，弯路走了很多，人也变弯了<br><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewb8vpqwuhj301s01sweb.jpg" alt=""><br>今天归纳一下，借鉴：<a href="ht]]>
+    </summary>
+    
+      <category term="hexo" scheme="http://wwww.chen777.com/tags/hexo/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[fastJson]]></title>
     <link href="http://wwww.chen777.com/2015/09/21/fastJson/"/>
     <id>http://wwww.chen777.com/2015/09/21/fastJson/</id>
     <published>2015-09-21T01:21:12.000Z</published>
-    <updated>2015-09-22T06:56:52.830Z</updated>
-    <content type="html"><![CDATA[<p>Fastjson是一个Java语言编写的JSON处理器。<br>1.遵循<a href="http://json.org标准，为其官方网站收录的参考实现之一。" target="_blank" rel="external">http://json.org标准，为其官方网站收录的参考实现之一。</a><br>2.功能qiang打，支持JDK的各种类型，包括基本的JavaBean、Collection、Map、Date、Enum、泛型。<br>3.无依赖，不需要例外额外的jar，能够直接跑在JDK上。<br>4开源，使用Apache License 2.0协议开源。<a href="http://code.alibabatech.com/wiki/display/FastJSON/Home" target="_blank" rel="external">http://code.alibabatech.com/wiki/display/FastJSON/Home</a></p>
+    <updated>2015-09-22T07:01:51.223Z</updated>
+    <content type="html"><![CDATA[<p>Fastjson是一个Java语言编写的JSON处理器。<br>1.遵循<a href="http://json.org标准，为其官方网站收录的参考实现之一。" target="_blank" rel="external">http://json.org标准，为其官方网站收录的参考实现之一。</a><br>2.功能qiang打，支持JDK的各种类型，包括基本的JavaBean、Collection、Map、Date、Enum、泛型。<br>3.无依赖，不需要例外额外的jar，能够直接跑在JDK上。<br>4开源,使用Apache License 2.0协议开源。<a href="http://code.alibabatech.com/wiki/display/FastJSON/Home" target="_blank" rel="external">http://code.alibabatech.com/wiki/display/FastJSON/Home</a></p>
 <p>下载地址：<br><a href="http://www.oschina.net/news/58783/fastjson-1-2-4" target="_blank" rel="external">http://www.oschina.net/news/58783/fastjson-1-2-4</a></p>
 <p>我的使用场景：<br>由于我是对象嵌套对象，然后在JS里面把json对象转换为json字符串，使用JSON.stringify()方法。然后后台使用JSON.parseObject(String text, Class clazz),把JSON文本parse为JavaBean。</p>
 <p>先看bean的结构:<br><strong>topicDTO:</strong></p>
@@ -38,7 +56,7 @@
   *getter,setter
   *
    */</span>
-</code></pre><p><strong>VoteDTO</strong></p>
+</code></pre><p><strong>VoteDTO:</strong></p>
 <pre><code><span class="keyword">private</span> <span class="built_in">int</span> id;
 
 <span class="keyword">private</span> <span class="keyword">String</span> voteTitle;
@@ -79,8 +97,6 @@ TopicDTO dto=<span class="built_in">JSON</span>.parseObject(topicStr, topicDTO.g
     </summary>
     
       <category term="json" scheme="http://wwww.chen777.com/tags/json/"/>
-    
-      <category term="json" scheme="http://wwww.chen777.com/categories/json/"/>
     
   </entry>
   
