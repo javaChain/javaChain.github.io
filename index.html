@@ -191,8 +191,91 @@
           
           
             
+              <a class="post-title-link" href="/2015/09/23/java-sort/" itemprop="url">
+                java-sort排序问题
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2015-09-23T11:54:20+08:00" content="2015-09-23">
+            2015-09-23
+          </time>
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2015/09/23/java-sort/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/23/java-sort/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+            前言：前一阵子接到这样的一个需求修改排序的时候，如果修改其中一个排序，其他的都顺序排列。
+例如，修改id=328排序为3的改为排序1，则变成如图：
+思路：首先把需要修改的id=328的数据从list中remove,然后Collections.sort(list);重新排序，再把拿出来的id=328的数据插入相应的位置。然后for循环设置顺序
+先说sort方法：
+public class SubscribeDTO implements Serializable,Comparable&lt;SubscribeDTO&gt;{
+    @Override
+    public int compare
+            ...
+          </span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/09/23/java-sort/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
               <a class="post-title-link" href="/2015/09/22/hexo-question/" itemprop="url">
-                hexo_question
+                hexo遇到的问题
               </a>
             
           
@@ -231,7 +314,8 @@
         
           <span itemprop="articleBody">
             
-            搭建hexo走了许多弯路，弯路走了很多，人也变弯了今天归纳一下，借鉴：http://blog.csdn.net/wx_962464/article/details/44786929next主题的设定：http://theme-next.iissnan.com/theme-settings.html说
+            搭建hexo走了许多弯路，弯路走了很多，人也变弯了今天归纳一下，借鉴：http://blog.csdn.net/wx_962464/article/details/44786929next主题的设定：http://theme-next.iissnan.com/theme-settings.html说说我蠢哭的事情，让各位客官高兴高兴吧。
+搭建的时候大家都说站点配置文件加入xxxx，我一直不知道是那个配置文件，后来墨迹了十几分钟在另外的博客截图才看到是此_config.yml,然后终于找到的配置文件心里十万匹草利马奔腾，劳资终于找到了，哈哈哈，然后next主题我刚进来的时候是繁体的，这让强迫症的
             ...
           </span>
           <div class="post-more-link text-center">
@@ -308,7 +392,9 @@
         
           <span itemprop="articleBody">
             
-            Fastjson是一个Java语言编写的JSON处理器。1.遵循http://json.org标准，为其官方网站收录的参考实现之一。2.功能qiang打，支持JDK的各种类型，包括基本的JavaBean、Collection、Map、Date、Enum、泛型。3.无依赖，不需要例外额外的jar，能够
+            Fastjson是一个Java语言编写的JSON处理器。1.遵循http://json.org标准，为其官方网站收录的参考实现之一。2.功能qiang打，支持JDK的各种类型，包括基本的JavaBean、Collection、Map、Date、Enum、泛型。3.无依赖，不需要例外额外的jar，能够直接跑在JDK上。4开源,使用Apache License 2.0协议开源。http://code.alibabatech.com/wiki/display/FastJSON/Home
+下载地址：http://www.oschina.net/news/58783/fastjson-1-2-4
+我的使
             ...
           </span>
           <div class="post-more-link text-center">
@@ -469,7 +555,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -483,7 +569,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -541,7 +627,8 @@
     </main>
 
     <footer id="footer" class="footer">
-      <div class="footer-inner"> <div class="copyright" >
+      <div class="footer-inner"> <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
   
   &copy; &nbsp; 
   <span itemprop="copyrightYear">2015</span>
@@ -549,7 +636,14 @@
     <i class="icon-next-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Xixi Chain</span>
+	 <span id="busuanzi_container_site_pv" style='display:none'>
+		本站总访问量<span id="busuanzi_value_site_pv"></span>次
+	</span>
+	<span id="busuanzi_container_site_uv">
+	  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+	</span>
 </div>
+
 
  </div>
     </footer>

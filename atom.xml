@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://wwww.chen777.com/"/>
-  <updated>2015-09-22T07:22:17.148Z</updated>
+  <updated>2015-09-23T07:49:26.743Z</updated>
   <id>http://wwww.chen777.com/</id>
   
   <author>
@@ -15,14 +15,73 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title><![CDATA[hexo_question]]></title>
+    <title><![CDATA[java-sort排序问题]]></title>
+    <link href="http://wwww.chen777.com/2015/09/23/java-sort/"/>
+    <id>http://wwww.chen777.com/2015/09/23/java-sort/</id>
+    <published>2015-09-23T03:54:20.000Z</published>
+    <updated>2015-09-23T07:49:26.743Z</updated>
+    <content type="html"><![CDATA[<p>前言：前一阵子接到这样的一个需求修改排序的时候，如果修改其中一个排序，其他的都顺序排列。<br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1ewce9w7oyvj30fz099771.jpg" alt=""></p>
+<p>例如，修改id=328排序为3的改为排序1，则变成如图：<img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewcecgsd9aj30g1096770.jpg" alt=""></p>
+<p>思路：首先把需要修改的id=328的数据从list中remove,然后<em>Collections.sort(list);</em>重新排序，再把拿出来的id=328的数据插入相应的位置。然后for循环设置顺序</p>
+<p>先说sort方法：</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SubscribeDTO</span> <span class="keyword">implements</span> <span class="title">Serializable</span>,<span class="title">Comparable</span>&lt;<span class="title">SubscribeDTO</span>&gt;</span>{
+    @Override
+    <span class="keyword">public</span> <span class="keyword">int</span> compareTo(SubscribeDTO o) {
+        <span class="keyword">if</span>(<span class="keyword">this</span>.<span class="keyword">order</span> == o.getOrder()){
+            <span class="keyword">if</span>(o.getUpdateDate()!=<span class="keyword">null</span>){
+                <span class="keyword">return</span> (<span class="keyword">int</span>) (o.getUpdateDate().getTime() - <span class="keyword">this</span>.updateDate.getTime());
+            }<span class="keyword">else</span>{
+                <span class="keyword">return</span> -<span class="number">1</span>;
+            }
+        }<span class="keyword">else</span>{
+            <span class="keyword">return</span> <span class="keyword">this</span>.<span class="keyword">order</span> - o.getOrder();
+        }
+    }
+}
+</code></pre><p>在看action代码：</p>
+<pre><code><span class="label">for</span> (<span class="keyword">SubscribeDTO </span><span class="keyword">subscribeDTO </span>: <span class="keyword">subList) </span>{
+        <span class="preprocessor">if</span>(<span class="keyword">subscribeDTO.getId().equals(id)){
+</span>            <span class="keyword">subscribeDTO.setOrder(order);
+</span>            <span class="keyword">subscribDTO1=subscribeDTO;
+</span>            <span class="keyword">subList.remove(subscribeDTO);
+</span>            <span class="keyword">break;
+</span>        }
+    }
+
+    Collections.sort(<span class="keyword">subList);
+</span>    <span class="preprocessor">if</span>(order&lt;<span class="number">=0</span>){
+        <span class="keyword">subList.add(0, </span><span class="keyword">subscribDTO1);
+</span>    }<span class="preprocessor">else</span> <span class="preprocessor">if</span>(order&gt;<span class="label">=subList</span>.size()+<span class="number">1</span>){
+        <span class="keyword">subList.add(subList.size(), </span><span class="keyword">subscribDTO1);
+</span>    }<span class="preprocessor">else</span>{
+        <span class="keyword">subList.add(order-1, </span><span class="keyword">subscribDTO1);
+</span>    }
+
+    for(int i = <span class="number">0</span><span class="comment">; i &lt; subList.size();i++)</span>
+    {
+        <span class="keyword">subList.get(i).setOrder(i+1);
+</span>    }
+</code></pre><p>这样就实现了图2所示的例子;</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>前言：前一阵子接到这样的一个需求修改排序的时候，如果修改其中一个排序，其他的都顺序排列。<br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1ewce9w7oyvj30fz099771.jpg" alt=""></p>
+<]]>
+    </summary>
+    
+      <category term="sort" scheme="http://wwww.chen777.com/tags/sort/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[hexo遇到的问题]]></title>
     <link href="http://wwww.chen777.com/2015/09/22/hexo-question/"/>
     <id>http://wwww.chen777.com/2015/09/22/hexo-question/</id>
     <published>2015-09-22T07:05:50.000Z</published>
-    <updated>2015-09-22T07:22:17.148Z</updated>
+    <updated>2015-09-23T03:53:25.328Z</updated>
     <content type="html"><![CDATA[<p>搭建hexo走了许多弯路，弯路走了很多，人也变弯了<br><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewb8vpqwuhj301s01sweb.jpg" alt=""><br>今天归纳一下，借鉴：<a href="http://blog.csdn.net/wx_962464/article/details/44786929" target="_blank" rel="external">http://blog.csdn.net/wx_962464/article/details/44786929</a><br>next主题的设定：<a href="http://theme-next.iissnan.com/theme-settings.html" target="_blank" rel="external">http://theme-next.iissnan.com/theme-settings.html</a><br>说说我蠢哭的事情，让各位客官高兴高兴吧。</p>
 <p>搭建的时候大家都说站点配置文件加入xxxx，我一直不知道是那个配置文件，后来墨迹了十几分钟在另外的博客截图才看到是此_config.yml,然后终于找到的配置文件心里十万匹草利马奔腾，劳资终于找到了，哈哈哈，然后next主题我刚进来的时候是繁体的，这让强迫症的我要死，然后去next主题看，照着弄，就是不对。后来百度错误，原来是没在冒号后面加空格，擦。</p>
-<p>然后最近在研究怎么备份，因为hexo始终在本地，如果我换了地方 我改如何继续使用，诶，可怜的我到现在也没有研究出个123，好希望人来支持我(原谅我对git的不理解，搞了很久还是有问题)，if you want help me,you can call QQ 280385556! 3ks</p>
+<p>然后最近在研究怎么备份，因为hexo始终在本地，如果我换了地方 我改如何继续使用，诶，可怜的我到现在也没有研究出个123，好希望人来支持我(原谅我对git的不理解，搞了很久还是有问题).if you want to help me,you can call QQ 280385556! 3ks</p>
+<p>总结一下：照着文档弄博客的时候，好着急，想一口吃一个大胖子，然后着急弄，很多其实博主提到了，我错了无数遍终于看到了这句话。诶。欲速则不达啊。 </p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>搭建hexo走了许多弯路，弯路走了很多，人也变弯了<br><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewb8vpqwuhj301s01sweb.jpg" alt=""><br>今天归纳一下，借鉴：<a href="ht]]>

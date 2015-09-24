@@ -30,7 +30,7 @@
 
 
 
-  <meta name="keywords" content="timer," />
+  <meta name="keywords" content="sort," />
 
 
 
@@ -41,34 +41,30 @@
   <link rel="shorticon icon" type="image/x-icon" href="/myBlog.ico?v=0.4.5.1" />
 
 
-<meta name="description" content="创建timer类实现接口：ServletContextListener然后在web.xml中配置listener    
-public static final Logger LOG = LoggerFactory.make();
-
-//时间间隔(一天)  
-private static final long PERIOD_DAY = 24 * 60 * 60 * 1000;  
-
-private">
+<meta name="description" content="前言：前一阵子接到这样的一个需求修改排序的时候，如果修改其中一个排序，其他的都顺序排列。
+例如，修改id=328排序为3的改为排序1，则变成如图：
+思路：首先把需要修改的id=328的数据从list中remove,然后Collections.sort(list);重新排序，再把拿出来的id=328的数据插入相应的位置。然后for循环设置顺序
+先说sort方法：
+public class Subsc">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java timer设置">
-<meta property="og:url" content="http://wwww.chen777.com/2015/09/18/postName/index.html">
+<meta property="og:title" content="java-sort排序问题">
+<meta property="og:url" content="http://wwww.chen777.com/2015/09/23/java-sort/index.html">
 <meta property="og:site_name" content="陈西西">
-<meta property="og:description" content="创建timer类实现接口：ServletContextListener然后在web.xml中配置listener    
-public static final Logger LOG = LoggerFactory.make();
-
-//时间间隔(一天)  
-private static final long PERIOD_DAY = 24 * 60 * 60 * 1000;  
-
-private">
-<meta property="og:updated_time" content="2015-09-21T11:54:49.047Z">
+<meta property="og:description" content="前言：前一阵子接到这样的一个需求修改排序的时候，如果修改其中一个排序，其他的都顺序排列。
+例如，修改id=328排序为3的改为排序1，则变成如图：
+思路：首先把需要修改的id=328的数据从list中remove,然后Collections.sort(list);重新排序，再把拿出来的id=328的数据插入相应的位置。然后for循环设置顺序
+先说sort方法：
+public class Subsc">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/0063lLoQgw1ewce9w7oyvj30fz099771.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/0063lLoQgw1ewcecgsd9aj30g1096770.jpg">
+<meta property="og:updated_time" content="2015-09-23T07:49:26.743Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java timer设置">
-<meta name="twitter:description" content="创建timer类实现接口：ServletContextListener然后在web.xml中配置listener    
-public static final Logger LOG = LoggerFactory.make();
-
-//时间间隔(一天)  
-private static final long PERIOD_DAY = 24 * 60 * 60 * 1000;  
-
-private">
+<meta name="twitter:title" content="java-sort排序问题">
+<meta name="twitter:description" content="前言：前一阵子接到这样的一个需求修改排序的时候，如果修改其中一个排序，其他的都顺序排列。
+例如，修改id=328排序为3的改为排序1，则变成如图：
+思路：首先把需要修改的id=328的数据从list中remove,然后Collections.sort(list);重新排序，再把拿出来的id=328的数据插入相应的位置。然后for循环设置顺序
+先说sort方法：
+public class Subsc">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -78,7 +74,7 @@ private">
   };
 </script>
 
-  <title> java timer设置 | 陈西西 </title>
+  <title> java-sort排序问题 | 陈西西 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -208,7 +204,7 @@ private">
           
           
             
-              java timer设置
+              java-sort排序问题
             
           
         </h1>
@@ -217,34 +213,19 @@ private">
       <div class="post-meta">
         <span class="post-time">
           发表于
-          <time itemprop="dateCreated" datetime="2015-09-18T10:38:44+08:00" content="2015-09-18">
-            2015-09-18
+          <time itemprop="dateCreated" datetime="2015-09-23T11:54:20+08:00" content="2015-09-23">
+            2015-09-23
           </time>
         </span>
 
-        
-          <span class="post-category" >
-            &nbsp; | &nbsp; 分类于
-            
-              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                <a href="/categories/timer/" itemprop="url" rel="index">
-                  <span itemprop="name">timer</span>
-                </a>
-              </span>
-
-              
-              
-
-            
-          </span>
         
 
         
           
             <span class="post-comments-count">
               &nbsp; | &nbsp;
-              <a href="/2015/09/18/postName/#comments" itemprop="discussionUrl">
-                <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/18/postName/" itemprop="commentsCount"></span>
+              <a href="/2015/09/23/java-sort/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/23/java-sort/" itemprop="commentsCount"></span>
               </a>
             </span>
           
@@ -258,94 +239,48 @@ private">
       
 
       
-        <span itemprop="articleBody"><p>创建timer类实现接口：ServletContextListener然后在web.xml中配置listener    </p>
-<pre><code><span class="keyword">public</span> <span class="keyword">static</span> final Logger LOG = LoggerFactory.make();
-
-<span class="comment">//时间间隔(一天)  </span>
-<span class="keyword">private</span> <span class="keyword">static</span> final <span class="keyword">long</span> PERIOD_DAY = <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>;  
-
-<span class="keyword">private</span> Timer timer;
-
-<span class="comment">//容器摧毁</span>
-<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">contextDestroyed</span><span class="params">(ServletContextEvent arg0)</span> </span>{
-    timer.cancel();
-
-}
-</code></pre><a id="more"></a>
-<pre><code><span class="comment">//容器初始化</span>
-<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">contextInitialized</span><span class="params">(ServletContextEvent arg0)</span> </span>{
-    LOG.info(<span class="string">"start timer"</span>);
-    Calendar calendar = Calendar.getInstance();
-      <span class="comment">/*** 定制每日2:00执行方法 ***/</span>
-      calendar.<span class="built_in">set</span>(Calendar.HOUR_OF_DAY, <span class="number">2</span>);
-      calendar.<span class="built_in">set</span>(Calendar.MINUTE, <span class="number">0</span>);
-      calendar.<span class="built_in">set</span>(Calendar.SECOND, <span class="number">0</span>);
-      Date date=calendar.getTime(); <span class="comment">//第一次执行定时任务的时间</span>
-
-      <span class="comment">//如果第一次执行定时任务的时间 小于 当前的时间</span>
-      <span class="comment">//此时要在 第一次执行定时任务的时间 加一天，以便此任务*在下个时间点执行。如果不加一天，任务会立即执行。</span>
-      <span class="keyword">if</span> (date.before(<span class="keyword">new</span> Date())) {
-          date = <span class="keyword">this</span>.addDay(date, <span class="number">1</span>);
-      }*
-    timer = <span class="keyword">new</span> Timer();  
-    Task task = <span class="keyword">new</span> Task();  
-    <span class="comment">//安排指定的任务在指定的时间开始进行重复的固定延迟执行。  </span>
-    timer.schedule(task,date,PERIOD_DAY);  
-    LOG.info(<span class="string">"start end"</span>);
-}  
-
-<span class="comment">// 增加或减少天数</span>
- <span class="function"><span class="keyword">public</span> Date <span class="title">addDay</span><span class="params">(Date date, <span class="keyword">int</span> num)</span> </span>{
-  Calendar startDT = Calendar.getInstance();
-  startDT.setTime(date);
-  startDT.add(Calendar.DAY_OF_MONTH, num);
-  <span class="keyword">return</span> startDT.getTime();
- }
-<span class="comment">/** 
- * 执行内容 
- * 
- */</span>  
-<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{ 
-    ApplicationContext ctx= GetApplicationContext.getInstance();
-    HotWordsDao hotWordsDao = (HotWordsDao) ctx.getBean(<span class="string">"hotWordsDao"</span>); 
-    <span class="keyword">try</span> {
-        List&lt;DailyHotWordDTO&gt; dailyList=hotWordsDao.getDailyHotWordList();
-        <span class="keyword">if</span>(dailyList!=null &amp;&amp; dailyList.size()&gt;<span class="number">0</span>){
-            hotWordsDao.insertHotWords(dailyList);
+        <span itemprop="articleBody"><p>前言：前一阵子接到这样的一个需求修改排序的时候，如果修改其中一个排序，其他的都顺序排列。<br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1ewce9w7oyvj30fz099771.jpg" alt=""></p>
+<p>例如，修改id=328排序为3的改为排序1，则变成如图：<img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewcecgsd9aj30g1096770.jpg" alt=""></p>
+<p>思路：首先把需要修改的id=328的数据从list中remove,然后<em>Collections.sort(list);</em>重新排序，再把拿出来的id=328的数据插入相应的位置。然后for循环设置顺序</p>
+<p>先说sort方法：</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SubscribeDTO</span> <span class="keyword">implements</span> <span class="title">Serializable</span>,<span class="title">Comparable</span>&lt;<span class="title">SubscribeDTO</span>&gt;</span>{
+    @Override
+    <span class="keyword">public</span> <span class="keyword">int</span> compareTo(SubscribeDTO o) {
+        <span class="keyword">if</span>(<span class="keyword">this</span>.<span class="keyword">order</span> == o.getOrder()){
+            <span class="keyword">if</span>(o.getUpdateDate()!=<span class="keyword">null</span>){
+                <span class="keyword">return</span> (<span class="keyword">int</span>) (o.getUpdateDate().getTime() - <span class="keyword">this</span>.updateDate.getTime());
+            }<span class="keyword">else</span>{
+                <span class="keyword">return</span> -<span class="number">1</span>;
+            }
+        }<span class="keyword">else</span>{
+            <span class="keyword">return</span> <span class="keyword">this</span>.<span class="keyword">order</span> - o.getOrder();
         }
-    } <span class="keyword">catch</span> (Exception e) {
-        e.printStackTrace();
     }
 }
+</code></pre><p>在看action代码：</p>
+<pre><code><span class="label">for</span> (<span class="keyword">SubscribeDTO </span><span class="keyword">subscribeDTO </span>: <span class="keyword">subList) </span>{
+        <span class="preprocessor">if</span>(<span class="keyword">subscribeDTO.getId().equals(id)){
+</span>            <span class="keyword">subscribeDTO.setOrder(order);
+</span>            <span class="keyword">subscribDTO1=subscribeDTO;
+</span>            <span class="keyword">subList.remove(subscribeDTO);
+</span>            <span class="keyword">break;
+</span>        }
+    }
 
-    <span class="comment">//获得注解的hotWordsDao</span>
-    <span class="keyword">public</span> <span class="keyword">class</span> GetApplicationContext {
-    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> ApplicationContextHolder {  
-        <span class="comment">// 单例变量  </span>
-        <span class="keyword">private</span> <span class="keyword">static</span> ApplicationContext AC = <span class="keyword">new</span> FileSystemXmlApplicationContext(  
-                <span class="string">"classpath:applicationContext-*.xml"</span>);  
-    }  
+    Collections.sort(<span class="keyword">subList);
+</span>    <span class="preprocessor">if</span>(order&lt;<span class="number">=0</span>){
+        <span class="keyword">subList.add(0, </span><span class="keyword">subscribDTO1);
+</span>    }<span class="preprocessor">else</span> <span class="preprocessor">if</span>(order&gt;<span class="label">=subList</span>.size()+<span class="number">1</span>){
+        <span class="keyword">subList.add(subList.size(), </span><span class="keyword">subscribDTO1);
+</span>    }<span class="preprocessor">else</span>{
+        <span class="keyword">subList.add(order-1, </span><span class="keyword">subscribDTO1);
+</span>    }
 
-
-    <span class="comment">// 私有化的构造方法，保证外部的类不能通过构造器来实例化。  </span>
-    <span class="function"><span class="keyword">private</span> <span class="title">GetApplicationContext</span><span class="params">()</span> </span>{  
-
-
-    }  
-
-
-    <span class="comment">// 获取单例对象实例  </span>
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ApplicationContext <span class="title">getInstance</span><span class="params">()</span> </span>{  
-        <span class="keyword">if</span> (ApplicationContextHolder.AC == null) {  
-            ApplicationContextHolder.AC = <span class="keyword">new</span> FileSystemXmlApplicationContext(  
-                    <span class="string">"classpath:applicationContext-*.xml"</span>);  
-        }  
-        <span class="keyword">return</span> ApplicationContextHolder.AC;  
-    }  
-}
-</code></pre><p>web.xml中配置listener：<br><code>&lt;listener&gt;&lt;listener-class&gt;com.inveno.ccs.Timer.TimerManager&lt;listener-class&gt;&lt;/listener&gt;</code></p>
-<p>总结：功能开发完成了，在完成的时候有几个地方遇到了问题:<br>1.获取不到hotWordsDao，然后折腾半天，终于搞定。<br>2.只要是服务重启就会调用task，这样业务就产生问题，然后我百度找了一个判断。</p>
-<p>定时任务其实有很多，也很灵活，spring quartz/timer等等。</p>
+    for(int i = <span class="number">0</span><span class="comment">; i &lt; subList.size();i++)</span>
+    {
+        <span class="keyword">subList.get(i).setOrder(i+1);
+</span>    }
+</code></pre><p>这样就实现了图2所示的例子;</p>
 </span>
       
     </div>
@@ -354,7 +289,7 @@ private">
       
         <div class="post-tags">
           
-            <a href="/tags/timer/" rel="tag">#timer</a>
+            <a href="/tags/sort/" rel="tag">#sort</a>
           
         </div>
       
@@ -363,11 +298,11 @@ private">
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/09/21/fastJson/" rel="prev">fastJson</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/09/22/hexo-question/" rel="next">hexo遇到的问题</a>
             
           </div>
         </div>
@@ -382,10 +317,10 @@ private">
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2015/09/18/postName/"
-     data-title="java timer设置"
+        <div class="ds-share flat" data-thread-key="2015/09/23/java-sort/"
+     data-title="java-sort排序问题"
      data-content=""
-     data-url="http://wwww.chen777.com/2015/09/18/postName/">
+     data-url="http://wwww.chen777.com/2015/09/23/java-sort/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -415,8 +350,8 @@ private">
         
           <div class="comments" id="comments">
             
-              <div class="ds-thread" data-thread-key="2015/09/18/postName/"
-                   data-title="java timer设置" data-url="http://wwww.chen777.com/2015/09/18/postName/">
+              <div class="ds-thread" data-thread-key="2015/09/23/java-sort/"
+                   data-title="java-sort排序问题" data-url="http://wwww.chen777.com/2015/09/23/java-sort/">
               </div>
             
           </div>
