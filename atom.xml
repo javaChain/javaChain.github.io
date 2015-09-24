@@ -3,9 +3,9 @@
   <title><![CDATA[陈西西]]></title>
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
-  <link href="http://wwww.chen777.com/"/>
+  <link href="http://chen777.com/"/>
   <updated>2015-09-23T07:49:26.743Z</updated>
-  <id>http://wwww.chen777.com/</id>
+  <id>http://chen777.com/</id>
   
   <author>
     <name><![CDATA[Xixi Chain]]></name>
@@ -16,8 +16,8 @@
   
   <entry>
     <title><![CDATA[java-sort排序问题]]></title>
-    <link href="http://wwww.chen777.com/2015/09/23/java-sort/"/>
-    <id>http://wwww.chen777.com/2015/09/23/java-sort/</id>
+    <link href="http://chen777.com/2015/09/23/java-sort/"/>
+    <id>http://chen777.com/2015/09/23/java-sort/</id>
     <published>2015-09-23T03:54:20.000Z</published>
     <updated>2015-09-23T07:49:26.743Z</updated>
     <content type="html"><![CDATA[<p>前言：前一阵子接到这样的一个需求修改排序的时候，如果修改其中一个排序，其他的都顺序排列。<br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1ewce9w7oyvj30fz099771.jpg" alt=""></p>
@@ -68,14 +68,14 @@
 <]]>
     </summary>
     
-      <category term="sort" scheme="http://wwww.chen777.com/tags/sort/"/>
+      <category term="sort" scheme="http://chen777.com/tags/sort/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[hexo遇到的问题]]></title>
-    <link href="http://wwww.chen777.com/2015/09/22/hexo-question/"/>
-    <id>http://wwww.chen777.com/2015/09/22/hexo-question/</id>
+    <link href="http://chen777.com/2015/09/22/hexo-question/"/>
+    <id>http://chen777.com/2015/09/22/hexo-question/</id>
     <published>2015-09-22T07:05:50.000Z</published>
     <updated>2015-09-23T03:53:25.328Z</updated>
     <content type="html"><![CDATA[<p>搭建hexo走了许多弯路，弯路走了很多，人也变弯了<br><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewb8vpqwuhj301s01sweb.jpg" alt=""><br>今天归纳一下，借鉴：<a href="http://blog.csdn.net/wx_962464/article/details/44786929" target="_blank" rel="external">http://blog.csdn.net/wx_962464/article/details/44786929</a><br>next主题的设定：<a href="http://theme-next.iissnan.com/theme-settings.html" target="_blank" rel="external">http://theme-next.iissnan.com/theme-settings.html</a><br>说说我蠢哭的事情，让各位客官高兴高兴吧。</p>
@@ -87,14 +87,14 @@
     <![CDATA[<p>搭建hexo走了许多弯路，弯路走了很多，人也变弯了<br><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewb8vpqwuhj301s01sweb.jpg" alt=""><br>今天归纳一下，借鉴：<a href="ht]]>
     </summary>
     
-      <category term="hexo" scheme="http://wwww.chen777.com/tags/hexo/"/>
+      <category term="hexo" scheme="http://chen777.com/tags/hexo/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[fastJson]]></title>
-    <link href="http://wwww.chen777.com/2015/09/21/fastJson/"/>
-    <id>http://wwww.chen777.com/2015/09/21/fastJson/</id>
+    <link href="http://chen777.com/2015/09/21/fastJson/"/>
+    <id>http://chen777.com/2015/09/21/fastJson/</id>
     <published>2015-09-21T01:21:12.000Z</published>
     <updated>2015-09-22T07:01:51.223Z</updated>
     <content type="html"><![CDATA[<p>Fastjson是一个Java语言编写的JSON处理器。<br>1.遵循<a href="http://json.org标准，为其官方网站收录的参考实现之一。" target="_blank" rel="external">http://json.org标准，为其官方网站收录的参考实现之一。</a><br>2.功能qiang打，支持JDK的各种类型，包括基本的JavaBean、Collection、Map、Date、Enum、泛型。<br>3.无依赖，不需要例外额外的jar，能够直接跑在JDK上。<br>4开源,使用Apache License 2.0协议开源。<a href="http://code.alibabatech.com/wiki/display/FastJSON/Home" target="_blank" rel="external">http://code.alibabatech.com/wiki/display/FastJSON/Home</a></p>
@@ -155,14 +155,14 @@ TopicDTO dto=<span class="built_in">JSON</span>.parseObject(topicStr, topicDTO.g
     <![CDATA[<p>Fastjson是一个Java语言编写的JSON处理器。<br>1.遵循<a href="http://json.org标准，为其官方网站收录的参考实现之一。" target="_blank" rel="external">http://json.org标准，为其官方网站收]]>
     </summary>
     
-      <category term="json" scheme="http://wwww.chen777.com/tags/json/"/>
+      <category term="json" scheme="http://chen777.com/tags/json/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[java timer设置]]></title>
-    <link href="http://wwww.chen777.com/2015/09/18/postName/"/>
-    <id>http://wwww.chen777.com/2015/09/18/postName/</id>
+    <link href="http://chen777.com/2015/09/18/postName/"/>
+    <id>http://chen777.com/2015/09/18/postName/</id>
     <published>2015-09-18T02:38:44.000Z</published>
     <updated>2015-09-21T11:54:49.047Z</updated>
     <content type="html"><![CDATA[<p>创建timer类实现接口：ServletContextListener然后在web.xml中配置listener    </p>
@@ -272,9 +272,9 @@ TopicDTO dto=<span class="built_in">JSON</span>.parseObject(topicStr, topicDTO.g
     
     </summary>
     
-      <category term="timer" scheme="http://wwww.chen777.com/tags/timer/"/>
+      <category term="timer" scheme="http://chen777.com/tags/timer/"/>
     
-      <category term="timer" scheme="http://wwww.chen777.com/categories/timer/"/>
+      <category term="timer" scheme="http://chen777.com/categories/timer/"/>
     
   </entry>
   
