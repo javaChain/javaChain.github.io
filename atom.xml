@@ -139,8 +139,8 @@
     <link href="http://blog.chen777.com/2015/09/21/fastJson/"/>
     <id>http://blog.chen777.com/2015/09/21/fastJson/</id>
     <published>2015-09-21T01:21:12.000Z</published>
-    <updated>2015-09-25T01:34:43.401Z</updated>
-    <content type="html"><![CDATA[<p>Fastjson是一个Java语言编写的JSON处理器。<br>1.遵循<a href="http://json.org标准，为其官方网站收录的参考实现之一。" target="_blank" rel="external">http://json.org标准，为其官方网站收录的参考实现之一。</a><br>2.功能qiang打，支持JDK的各种类型，包括基本的JavaBean、Collection、Map、Date、Enum、泛型。<br>3.无依赖，不需要例外额外的jar，能够直接跑在JDK上。<br>4开源,使用Apache License 2.0协议开源。<a href="http://code.alibabatech.com/wiki/display/FastJSON/Home" target="_blank" rel="external">http://code.alibabatech.com/wiki/display/FastJSON/Home</a></p>
+    <updated>2015-09-25T01:54:28.769Z</updated>
+    <content type="html"><![CDATA[<p>Fastjson是一个Java语言编写的JSON处理器。<br>1.遵循<a href="http://json.org标准，为其官方网站收录的参考实现之一。" target="_blank" rel="external">http://json.org标准，为其官方网站收录的参考实现之一。</a><br>2.功能强大，支持JDK的各种类型，包括基本的JavaBean、Collection、Map、Date、Enum、泛型。<br>3.无依赖，不需要例外额外的jar，能够直接跑在JDK上。<br>4开源,使用Apache License 2.0协议开源。<a href="http://code.alibabatech.com/wiki/display/FastJSON/Home" target="_blank" rel="external">http://code.alibabatech.com/wiki/display/FastJSON/Home</a></p>
 <p>下载地址：<br><a href="http://www.oschina.net/news/58783/fastjson-1-2-4" target="_blank" rel="external">http://www.oschina.net/news/58783/fastjson-1-2-4</a></p>
 <p>我的使用场景：<br>由于我是对象嵌套对象，然后在JS里面把json对象转换为json字符串，使用JSON.stringify()方法。然后后台使用JSON.parseObject(String text, Class clazz),把JSON文本parse为JavaBean。</p>
 <p>先看bean的结构:<br><strong>topicDTO:</strong></p>
