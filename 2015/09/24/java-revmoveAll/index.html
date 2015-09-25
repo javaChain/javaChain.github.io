@@ -30,7 +30,7 @@
 
 
 
-  <meta name="keywords" content="sort," />
+  <meta name="keywords" content="List,java," />
 
 
 
@@ -41,30 +41,23 @@
   <link rel="shorticon icon" type="image/x-icon" href="/myBlog.ico" />
 
 
-<meta name="description" content="前言：前一阵子接到这样的一个需求修改排序的时候，如果修改其中一个排序，其他的都顺序排列。
-例如，修改id=328排序为3的改为排序1，则变成如图：
-思路：首先把需要修改的id=328的数据从list中remove,然后Collections.sort(list);重新排序，再把拿出来的id=328的数据插入相应的位置。然后for循环设置顺序
-先说sort方法：
-public class Subsc">
+<meta name="description" content="java list remove(Object) removeAll(Collection&amp;lt;?&amp;gt; collection)先看看API介绍
+需要实现其equals，才能remove(Object)，引用下面这篇文章：http://blog.csdn.net/will_awoke/article/details/6528872
+By the way,contains(Object)也是需要">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java-sort排序问题">
-<meta property="og:url" content="http://blog.chen777.com/2015/09/23/java-sort/index.html">
+<meta property="og:title" content="java List remove,contains底层">
+<meta property="og:url" content="http://blog.chen777.com/2015/09/24/java-revmoveAll/index.html">
 <meta property="og:site_name" content="陈西西">
-<meta property="og:description" content="前言：前一阵子接到这样的一个需求修改排序的时候，如果修改其中一个排序，其他的都顺序排列。
-例如，修改id=328排序为3的改为排序1，则变成如图：
-思路：首先把需要修改的id=328的数据从list中remove,然后Collections.sort(list);重新排序，再把拿出来的id=328的数据插入相应的位置。然后for循环设置顺序
-先说sort方法：
-public class Subsc">
-<meta property="og:image" content="http://ww2.sinaimg.cn/large/0063lLoQgw1ewce9w7oyvj30fz099771.jpg">
-<meta property="og:image" content="http://ww3.sinaimg.cn/large/0063lLoQgw1ewcecgsd9aj30g1096770.jpg">
-<meta property="og:updated_time" content="2015-09-23T07:49:26.743Z">
+<meta property="og:description" content="java list remove(Object) removeAll(Collection&amp;lt;?&amp;gt; collection)先看看API介绍
+需要实现其equals，才能remove(Object)，引用下面这篇文章：http://blog.csdn.net/will_awoke/article/details/6528872
+By the way,contains(Object)也是需要">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/0063lLoQgw1ewef5213sgj31610azadb.jpg">
+<meta property="og:updated_time" content="2015-09-25T01:17:43.081Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java-sort排序问题">
-<meta name="twitter:description" content="前言：前一阵子接到这样的一个需求修改排序的时候，如果修改其中一个排序，其他的都顺序排列。
-例如，修改id=328排序为3的改为排序1，则变成如图：
-思路：首先把需要修改的id=328的数据从list中remove,然后Collections.sort(list);重新排序，再把拿出来的id=328的数据插入相应的位置。然后for循环设置顺序
-先说sort方法：
-public class Subsc">
+<meta name="twitter:title" content="java List remove,contains底层">
+<meta name="twitter:description" content="java list remove(Object) removeAll(Collection&amp;lt;?&amp;gt; collection)先看看API介绍
+需要实现其equals，才能remove(Object)，引用下面这篇文章：http://blog.csdn.net/will_awoke/article/details/6528872
+By the way,contains(Object)也是需要">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -74,7 +67,7 @@ public class Subsc">
   };
 </script>
 
-  <title> java-sort排序问题 | 陈西西 </title>
+  <title> java List remove,contains底层 | 陈西西 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -194,7 +187,7 @@ public class Subsc">
           
           
             
-              java-sort排序问题
+              java List remove,contains底层
             
           
         </h1>
@@ -203,8 +196,8 @@ public class Subsc">
       <div class="post-meta">
         <span class="post-time">
           发表于
-          <time itemprop="dateCreated" datetime="2015-09-23T11:54:20+08:00" content="2015-09-23">
-            2015-09-23
+          <time itemprop="dateCreated" datetime="2015-09-24T17:35:29+08:00" content="2015-09-24">
+            2015-09-24
           </time>
         </span>
 
@@ -214,8 +207,8 @@ public class Subsc">
           
             <span class="post-comments-count">
               &nbsp; | &nbsp;
-              <a href="/2015/09/23/java-sort/#comments" itemprop="discussionUrl">
-                <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/23/java-sort/" itemprop="commentsCount"></span>
+              <a href="/2015/09/24/java-revmoveAll/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/24/java-revmoveAll/" itemprop="commentsCount"></span>
               </a>
             </span>
           
@@ -229,48 +222,32 @@ public class Subsc">
       
 
       
-        <span itemprop="articleBody"><p>前言：前一阵子接到这样的一个需求修改排序的时候，如果修改其中一个排序，其他的都顺序排列。<br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1ewce9w7oyvj30fz099771.jpg" alt=""></p>
-<p>例如，修改id=328排序为3的改为排序1，则变成如图：<img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewcecgsd9aj30g1096770.jpg" alt=""></p>
-<p>思路：首先把需要修改的id=328的数据从list中remove,然后<em>Collections.sort(list);</em>重新排序，再把拿出来的id=328的数据插入相应的位置。然后for循环设置顺序</p>
-<p>先说sort方法：</p>
-<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SubscribeDTO</span> <span class="keyword">implements</span> <span class="title">Serializable</span>,<span class="title">Comparable</span>&lt;<span class="title">SubscribeDTO</span>&gt;</span>{
-    @Override
-    <span class="keyword">public</span> <span class="keyword">int</span> compareTo(SubscribeDTO o) {
-        <span class="keyword">if</span>(<span class="keyword">this</span>.<span class="keyword">order</span> == o.getOrder()){
-            <span class="keyword">if</span>(o.getUpdateDate()!=<span class="keyword">null</span>){
-                <span class="keyword">return</span> (<span class="keyword">int</span>) (o.getUpdateDate().getTime() - <span class="keyword">this</span>.updateDate.getTime());
-            }<span class="keyword">else</span>{
-                <span class="keyword">return</span> -<span class="number">1</span>;
-            }
-        }<span class="keyword">else</span>{
-            <span class="keyword">return</span> <span class="keyword">this</span>.<span class="keyword">order</span> - o.getOrder();
-        }
-    }
+        <span itemprop="articleBody"><p>java list remove(Object) removeAll(Collection&lt;?&gt; collection)先看看API介绍<br><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewef5213sgj31610azadb.jpg" alt=""></p>
+<p>需要实现其equals，才能remove(Object)，引用下面这篇文章：<br><a href="http://blog.csdn.net/will_awoke/article/details/6528872" target="_blank" rel="external">http://blog.csdn.net/will_awoke/article/details/6528872</a></p>
+<p>By the way,contains(Object)也是需要实现其equals方法，源码：</p>
+<pre><code><span class="keyword">public</span> <span class="built_in">boolean</span> contains(<span class="keyword">Object</span> obj)
+{
+    <span class="keyword">return</span> indexOf(obj) &gt;= <span class="number">0</span>;
 }
-</code></pre><p>在看action代码：</p>
-<pre><code><span class="label">for</span> (<span class="keyword">SubscribeDTO </span><span class="keyword">subscribeDTO </span>: <span class="keyword">subList) </span>{
-        <span class="preprocessor">if</span>(<span class="keyword">subscribeDTO.getId().equals(id)){
-</span>            <span class="keyword">subscribeDTO.setOrder(order);
-</span>            <span class="keyword">subscribDTO1=subscribeDTO;
-</span>            <span class="keyword">subList.remove(subscribeDTO);
-</span>            <span class="keyword">break;
-</span>        }
-    }
 
-    Collections.sort(<span class="keyword">subList);
-</span>    <span class="preprocessor">if</span>(order&lt;<span class="number">=0</span>){
-        <span class="keyword">subList.add(0, </span><span class="keyword">subscribDTO1);
-</span>    }<span class="preprocessor">else</span> <span class="preprocessor">if</span>(order&gt;<span class="label">=subList</span>.size()+<span class="number">1</span>){
-        <span class="keyword">subList.add(subList.size(), </span><span class="keyword">subscribDTO1);
-</span>    }<span class="preprocessor">else</span>{
-        <span class="keyword">subList.add(order-1, </span><span class="keyword">subscribDTO1);
-</span>    }
-
-    for(int i = <span class="number">0</span><span class="comment">; i &lt; subList.size();i++)</span>
+<span class="keyword">public</span> <span class="built_in">int</span> indexOf(<span class="keyword">Object</span> obj)
+{
+    <span class="keyword">if</span>(obj == <span class="keyword">null</span>)
     {
-        <span class="keyword">subList.get(i).setOrder(i+1);
-</span>    }
-</code></pre><p>这样就实现了图2所示的例子;</p>
+        <span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="built_in">size</span>; i++)
+            <span class="keyword">if</span>(elementData[i] == <span class="keyword">null</span>)
+                <span class="keyword">return</span> i;
+
+    } <span class="keyword">else</span>
+    {
+        <span class="keyword">for</span>(<span class="built_in">int</span> j = <span class="number">0</span>; j &lt; <span class="built_in">size</span>; j++)
+            <span class="keyword">if</span>(*obj.equals(elementData[j])*)
+                <span class="keyword">return</span> j;
+
+    }
+    <span class="keyword">return</span> -<span class="number">1</span>;
+} 
+</code></pre><p>多用反编译查看原理，才能了解其底层 以便更好的优化和操作List.</p>
 </span>
       
     </div>
@@ -279,7 +256,9 @@ public class Subsc">
       
         <div class="post-tags">
           
-            <a href="/tags/sort/" rel="tag">#sort</a>
+            <a href="/tags/List/" rel="tag">#List</a>
+          
+            <a href="/tags/java/" rel="tag">#java</a>
           
         </div>
       
@@ -288,13 +267,11 @@ public class Subsc">
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/09/24/java-revmoveAll/" rel="prev">java List remove,contains底层</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/09/22/hexo-question/" rel="next">hexo遇到的问题</a>
+              <a href="/2015/09/23/java-sort/" rel="next">java-sort排序问题</a>
             
           </div>
         </div>
@@ -309,10 +286,10 @@ public class Subsc">
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2015/09/23/java-sort/"
-     data-title="java-sort排序问题"
+        <div class="ds-share flat" data-thread-key="2015/09/24/java-revmoveAll/"
+     data-title="java List remove,contains底层"
      data-content=""
-     data-url="http://blog.chen777.com/2015/09/23/java-sort/">
+     data-url="http://blog.chen777.com/2015/09/24/java-revmoveAll/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -342,8 +319,8 @@ public class Subsc">
         
           <div class="comments" id="comments">
             
-              <div class="ds-thread" data-thread-key="2015/09/23/java-sort/"
-                   data-title="java-sort排序问题" data-url="http://blog.chen777.com/2015/09/23/java-sort/">
+              <div class="ds-thread" data-thread-key="2015/09/24/java-revmoveAll/"
+                   data-title="java List remove,contains底层" data-url="http://blog.chen777.com/2015/09/24/java-revmoveAll/">
               </div>
             
           </div>

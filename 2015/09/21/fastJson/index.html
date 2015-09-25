@@ -48,7 +48,7 @@
 <meta property="og:site_name" content="陈西西">
 <meta property="og:description" content="Fastjson是一个Java语言编写的JSON处理器。1.遵循http://json.org标准，为其官方网站收录的参考实现之一。2.功能qiang打，支持JDK的各种类型，包括基本的JavaBean、Collection、Map、Date、Enum、泛型。3.无依赖，不需要例外额外的jar，能够直接跑在JDK上。4开源,使用Apache License 2.0协议开源。http://code.">
 <meta property="og:image" content="http://ww3.sinaimg.cn/large/0063lLoQgw1ewb8jgrkvaj30bl07kgm1.jpg">
-<meta property="og:updated_time" content="2015-09-22T07:01:51.223Z">
+<meta property="og:updated_time" content="2015-09-25T01:34:43.401Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fastJson">
 <meta name="twitter:description" content="Fastjson是一个Java语言编写的JSON处理器。1.遵循http://json.org标准，为其官方网站收录的参考实现之一。2.功能qiang打，支持JDK的各种类型，包括基本的JavaBean、Collection、Map、Date、Enum、泛型。3.无依赖，不需要例外额外的jar，能够直接跑在JDK上。4开源,使用Apache License 2.0协议开源。http://code.">
@@ -268,7 +268,22 @@ $.post(<span class="string">"admin/topic/saveTopic.action"</span>,
 <pre><code><span class="built_in">String</span> topicStr=<span class="keyword">this</span>.getRequest().getParameter(<span class="string">"topicStr"</span>);
 TopicDTO dto=<span class="built_in">JSON</span>.parseObject(topicStr, topicDTO.getClass()); 
 </code></pre><p>此时前台传递的值都在dto对象中，简直是神器。</p>
-<p><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewb8jgrkvaj30bl07kgm1.jpg" alt=""></p>
+<p>说说fastJson的JSON.parseObject(String text, Class clazz);<br>前台通过JSON.stringify(rows)传JSON字符串到后台</p>
+<pre><code><span class="keyword">var</span> rows=$(<span class="string">'#dbgrid'</span>).datagrid(<span class="string">'getChecked'</span>);
+</code></pre><p>*切记$.post传值千万不要这么写,</p>
+<pre><code>$.post(<span class="string">"admin/hotWords/pushHotWordsTable.action"</span>,
+        {<span class="string">'rows'</span>,rows}
+    , <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>{
+    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; data.length; i++) {
+        str+=<span class="string">"&lt;tr&gt;&lt;td&gt;"</span>+data[i].hotWords+<span class="string">"&lt;/td&gt;&lt;td&gt;&lt;input type='text' value="</span>+data[i].order+<span class="string">" /&gt;&lt;/td&gt;&lt;/tr&gt;"</span>
+    }
+    $(<span class="string">'#hotWordsTable'</span>).append(str);
+    $(<span class="string">'#hotWordsTableData'</span>).val(data);
+    }, <span class="string">"json"</span>);    
+</code></pre><p>不然会报错请求不到后台*.<br>后台当然是简单粗暴的:</p>
+<pre><code><span class="built_in">String</span> rows= <span class="keyword">this</span>.getRequest().getParameter(<span class="string">"data"</span>);
+<span class="built_in">List</span>&lt;HotWordsDTO&gt; hotWordsList =JSON.parseArray(rows, HotWordsDTO.<span class="keyword">class</span>);
+</code></pre><p><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewb8jgrkvaj30bl07kgm1.jpg" alt=""></p>
 </span>
       
     </div>
@@ -381,7 +396,7 @@ TopicDTO dto=<span class="built_in">JSON</span>.parseObject(topicStr, topicDTO.g
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">5</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -395,7 +410,7 @@ TopicDTO dto=<span class="built_in">JSON</span>.parseObject(topicStr, topicDTO.g
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">6</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

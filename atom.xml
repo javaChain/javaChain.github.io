@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2015-09-23T07:49:26.743Z</updated>
+  <updated>2015-09-25T01:17:43.081Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -13,6 +13,49 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[java List remove,contains底层]]></title>
+    <link href="http://blog.chen777.com/2015/09/24/java-revmoveAll/"/>
+    <id>http://blog.chen777.com/2015/09/24/java-revmoveAll/</id>
+    <published>2015-09-24T09:35:29.000Z</published>
+    <updated>2015-09-25T01:17:43.081Z</updated>
+    <content type="html"><![CDATA[<p>java list remove(Object) removeAll(Collection&lt;?&gt; collection)先看看API介绍<br><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewef5213sgj31610azadb.jpg" alt=""></p>
+<p>需要实现其equals，才能remove(Object)，引用下面这篇文章：<br><a href="http://blog.csdn.net/will_awoke/article/details/6528872" target="_blank" rel="external">http://blog.csdn.net/will_awoke/article/details/6528872</a></p>
+<p>By the way,contains(Object)也是需要实现其equals方法，源码：</p>
+<pre><code><span class="keyword">public</span> <span class="built_in">boolean</span> contains(<span class="keyword">Object</span> obj)
+{
+    <span class="keyword">return</span> indexOf(obj) &gt;= <span class="number">0</span>;
+}
+
+<span class="keyword">public</span> <span class="built_in">int</span> indexOf(<span class="keyword">Object</span> obj)
+{
+    <span class="keyword">if</span>(obj == <span class="keyword">null</span>)
+    {
+        <span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="built_in">size</span>; i++)
+            <span class="keyword">if</span>(elementData[i] == <span class="keyword">null</span>)
+                <span class="keyword">return</span> i;
+
+    } <span class="keyword">else</span>
+    {
+        <span class="keyword">for</span>(<span class="built_in">int</span> j = <span class="number">0</span>; j &lt; <span class="built_in">size</span>; j++)
+            <span class="keyword">if</span>(*obj.equals(elementData[j])*)
+                <span class="keyword">return</span> j;
+
+    }
+    <span class="keyword">return</span> -<span class="number">1</span>;
+} 
+</code></pre><p>多用反编译查看原理，才能了解其底层 以便更好的优化和操作List.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>java list remove(Object) removeAll(Collection&lt;?&gt; collection)先看看API介绍<br><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewef5213sg]]>
+    </summary>
+    
+      <category term="List" scheme="http://blog.chen777.com/tags/List/"/>
+    
+      <category term="java" scheme="http://blog.chen777.com/tags/java/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[java-sort排序问题]]></title>
@@ -96,7 +139,7 @@
     <link href="http://blog.chen777.com/2015/09/21/fastJson/"/>
     <id>http://blog.chen777.com/2015/09/21/fastJson/</id>
     <published>2015-09-21T01:21:12.000Z</published>
-    <updated>2015-09-22T07:01:51.223Z</updated>
+    <updated>2015-09-25T01:34:43.401Z</updated>
     <content type="html"><![CDATA[<p>Fastjson是一个Java语言编写的JSON处理器。<br>1.遵循<a href="http://json.org标准，为其官方网站收录的参考实现之一。" target="_blank" rel="external">http://json.org标准，为其官方网站收录的参考实现之一。</a><br>2.功能qiang打，支持JDK的各种类型，包括基本的JavaBean、Collection、Map、Date、Enum、泛型。<br>3.无依赖，不需要例外额外的jar，能够直接跑在JDK上。<br>4开源,使用Apache License 2.0协议开源。<a href="http://code.alibabatech.com/wiki/display/FastJSON/Home" target="_blank" rel="external">http://code.alibabatech.com/wiki/display/FastJSON/Home</a></p>
 <p>下载地址：<br><a href="http://www.oschina.net/news/58783/fastjson-1-2-4" target="_blank" rel="external">http://www.oschina.net/news/58783/fastjson-1-2-4</a></p>
 <p>我的使用场景：<br>由于我是对象嵌套对象，然后在JS里面把json对象转换为json字符串，使用JSON.stringify()方法。然后后台使用JSON.parseObject(String text, Class clazz),把JSON文本parse为JavaBean。</p>
@@ -149,7 +192,22 @@ $.post(<span class="string">"admin/topic/saveTopic.action"</span>,
 <pre><code><span class="built_in">String</span> topicStr=<span class="keyword">this</span>.getRequest().getParameter(<span class="string">"topicStr"</span>);
 TopicDTO dto=<span class="built_in">JSON</span>.parseObject(topicStr, topicDTO.getClass()); 
 </code></pre><p>此时前台传递的值都在dto对象中，简直是神器。</p>
-<p><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewb8jgrkvaj30bl07kgm1.jpg" alt=""></p>
+<p>说说fastJson的JSON.parseObject(String text, Class clazz);<br>前台通过JSON.stringify(rows)传JSON字符串到后台</p>
+<pre><code><span class="keyword">var</span> rows=$(<span class="string">'#dbgrid'</span>).datagrid(<span class="string">'getChecked'</span>);
+</code></pre><p>*切记$.post传值千万不要这么写,</p>
+<pre><code>$.post(<span class="string">"admin/hotWords/pushHotWordsTable.action"</span>,
+        {<span class="string">'rows'</span>,rows}
+    , <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>{
+    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; data.length; i++) {
+        str+=<span class="string">"&lt;tr&gt;&lt;td&gt;"</span>+data[i].hotWords+<span class="string">"&lt;/td&gt;&lt;td&gt;&lt;input type='text' value="</span>+data[i].order+<span class="string">" /&gt;&lt;/td&gt;&lt;/tr&gt;"</span>
+    }
+    $(<span class="string">'#hotWordsTable'</span>).append(str);
+    $(<span class="string">'#hotWordsTableData'</span>).val(data);
+    }, <span class="string">"json"</span>);    
+</code></pre><p>不然会报错请求不到后台*.<br>后台当然是简单粗暴的:</p>
+<pre><code><span class="built_in">String</span> rows= <span class="keyword">this</span>.getRequest().getParameter(<span class="string">"data"</span>);
+<span class="built_in">List</span>&lt;HotWordsDTO&gt; hotWordsList =JSON.parseArray(rows, HotWordsDTO.<span class="keyword">class</span>);
+</code></pre><p><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewb8jgrkvaj30bl07kgm1.jpg" alt=""></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>Fastjson是一个Java语言编写的JSON处理器。<br>1.遵循<a href="http://json.org标准，为其官方网站收录的参考实现之一。" target="_blank" rel="external">http://json.org标准，为其官方网站收]]>
