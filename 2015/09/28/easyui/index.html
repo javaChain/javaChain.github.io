@@ -30,7 +30,7 @@
 
 
 
-  <meta name="keywords" content="hexo," />
+  <meta name="keywords" content="easyui,图片上传," />
 
 
 
@@ -41,20 +41,24 @@
   <link rel="shorticon icon" type="image/x-icon" href="/myBlog.ico" />
 
 
-<meta name="description" content="搭建hexo走了许多弯路，弯路走了很多，人也变弯了今天归纳一下，借鉴：http://blog.csdn.net/wx_962464/article/details/44786929next主题的设定：http://theme-next.iissnan.com/theme-settings.html说说我蠢哭的事情，让各位客官高兴高兴吧。
-搭建的时候大家都说站点配置文件加入xxxx，我一直不知道是那">
+<meta name="description" content="首先看页面构造还是比较复杂的页面构成，图片上传预览压缩，多选combobox,tree，以及xheditor。页面比较传统的 我就不做介绍，讲封面图、推送机型、推送渠道、地域标签、发布时间、详情内容。
+封面图
+我这里使用的是ajaxfileupload控件做的上传，引用的CSS JS如图下载地址：http://url.cn/SP3S7c没有的去网上对应找就可以的，topic-update.js是业">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hexo遇到的问题">
-<meta property="og:url" content="http://blog.chen777.com/2015/09/22/hexo-question/index.html">
+<meta property="og:title" content="easyui做后台">
+<meta property="og:url" content="http://blog.chen777.com/2015/09/28/easyui/index.html">
 <meta property="og:site_name" content="陈西西">
-<meta property="og:description" content="搭建hexo走了许多弯路，弯路走了很多，人也变弯了今天归纳一下，借鉴：http://blog.csdn.net/wx_962464/article/details/44786929next主题的设定：http://theme-next.iissnan.com/theme-settings.html说说我蠢哭的事情，让各位客官高兴高兴吧。
-搭建的时候大家都说站点配置文件加入xxxx，我一直不知道是那">
-<meta property="og:image" content="http://ww3.sinaimg.cn/large/0063lLoQgw1ewb8vpqwuhj301s01sweb.jpg">
-<meta property="og:updated_time" content="2015-09-23T03:53:25.328Z">
+<meta property="og:description" content="首先看页面构造还是比较复杂的页面构成，图片上传预览压缩，多选combobox,tree，以及xheditor。页面比较传统的 我就不做介绍，讲封面图、推送机型、推送渠道、地域标签、发布时间、详情内容。
+封面图
+我这里使用的是ajaxfileupload控件做的上传，引用的CSS JS如图下载地址：http://url.cn/SP3S7c没有的去网上对应找就可以的，topic-update.js是业">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/0063lLoQgw1ewhxyxv3rjj30vb0mrgoi.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/0063lLoQgw1ewhz3u3ppqj30sy09yjze.jpg">
+<meta property="og:updated_time" content="2015-09-28T03:23:50.927Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hexo遇到的问题">
-<meta name="twitter:description" content="搭建hexo走了许多弯路，弯路走了很多，人也变弯了今天归纳一下，借鉴：http://blog.csdn.net/wx_962464/article/details/44786929next主题的设定：http://theme-next.iissnan.com/theme-settings.html说说我蠢哭的事情，让各位客官高兴高兴吧。
-搭建的时候大家都说站点配置文件加入xxxx，我一直不知道是那">
+<meta name="twitter:title" content="easyui做后台">
+<meta name="twitter:description" content="首先看页面构造还是比较复杂的页面构成，图片上传预览压缩，多选combobox,tree，以及xheditor。页面比较传统的 我就不做介绍，讲封面图、推送机型、推送渠道、地域标签、发布时间、详情内容。
+封面图
+我这里使用的是ajaxfileupload控件做的上传，引用的CSS JS如图下载地址：http://url.cn/SP3S7c没有的去网上对应找就可以的，topic-update.js是业">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -64,7 +68,7 @@
   };
 </script>
 
-  <title> hexo遇到的问题 | 陈西西 </title>
+  <title> easyui做后台 | 陈西西 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -184,7 +188,7 @@
           
           
             
-              hexo遇到的问题
+              easyui做后台
             
           
         </h1>
@@ -193,8 +197,8 @@
       <div class="post-meta">
         <span class="post-time">
           发表于
-          <time itemprop="dateCreated" datetime="2015-09-22T15:05:50+08:00" content="2015-09-22">
-            2015-09-22
+          <time itemprop="dateCreated" datetime="2015-09-28T10:00:32+08:00" content="2015-09-28">
+            2015-09-28
           </time>
         </span>
 
@@ -204,8 +208,8 @@
           
             <span class="post-comments-count">
               &nbsp; | &nbsp;
-              <a href="/2015/09/22/hexo-question/#comments" itemprop="discussionUrl">
-                <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/22/hexo-question/" itemprop="commentsCount"></span>
+              <a href="/2015/09/28/easyui/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/28/easyui/" itemprop="commentsCount"></span>
               </a>
             </span>
           
@@ -219,11 +223,102 @@
       
 
       
-        <span itemprop="articleBody"><p>搭建hexo走了许多弯路，弯路走了很多，人也变弯了<br><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewb8vpqwuhj301s01sweb.jpg" alt=""><br>今天归纳一下，借鉴：<a href="http://blog.csdn.net/wx_962464/article/details/44786929" target="_blank" rel="external">http://blog.csdn.net/wx_962464/article/details/44786929</a><br>next主题的设定：<a href="http://theme-next.iissnan.com/theme-settings.html" target="_blank" rel="external">http://theme-next.iissnan.com/theme-settings.html</a><br>说说我蠢哭的事情，让各位客官高兴高兴吧。</p>
-<p>搭建的时候大家都说站点配置文件加入xxxx，我一直不知道是那个配置文件，后来墨迹了十几分钟在另外的博客截图才看到是此_config.yml,然后终于找到的配置文件心里十万匹草利马奔腾，劳资终于找到了，哈哈哈，然后next主题我刚进来的时候是繁体的，这让强迫症的我要死，然后去next主题看，照着弄，就是不对。后来百度错误，原来是没在冒号后面加空格，擦。</p>
-<p>然后最近在研究怎么备份，因为hexo始终在本地，如果我换了地方 我改如何继续使用，诶，可怜的我到现在也没有研究出个123，好希望人来支持我(原谅我对git的不理解，搞了很久还是有问题).if you want to help me,you can call QQ 280385556! 3ks</p>
-<p>总结一下：照着文档弄博客的时候，好着急，想一口吃一个大胖子，然后着急弄，很多其实博主提到了，我错了无数遍终于看到了这句话。诶。欲速则不达啊。 </p>
-</span>
+        <span itemprop="articleBody"><p>首先看页面构造<br><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1ewhxyxv3rjj30vb0mrgoi.jpg" alt="">还是比较复杂的页面构成，图片上传预览压缩，多选combobox,tree，以及xheditor。<br>页面比较传统的 我就不做介绍，讲封面图、推送机型、推送渠道、地域标签、发布时间、详情内容。</p>
+<p><strong>封面图</strong></p>
+<p>我这里使用的是ajaxfileupload控件做的上传，引用的CSS JS如图<img src="http://ww1.sinaimg.cn/large/0063lLoQgw1ewhz3u3ppqj30sy09yjze.jpg" alt=""><br>下载地址：<a href="http://url.cn/SP3S7c" target="_blank" rel="external">http://url.cn/SP3S7c</a><br>没有的去网上对应找就可以的，topic-update.js是业务的JS其他的全是插件,各位看官酌情添加。<br>JSP页面：</p>
+<pre><code><span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">th</span> <span class="attribute">width</span>=<span class="value">"120px"</span> <span class="attribute">align</span>=<span class="value">"right"</span> <span class="attribute">nowrap</span>=<span class="value">"nowrap"</span>&gt;</span>封面图：<span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">td</span> <span class="attribute">colspan</span>=<span class="value">"5"</span> <span class="attribute">nowrap</span>=<span class="value">"nowrap"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"file"</span> <span class="attribute">id</span>=<span class="value">"imgUploadBtn"</span> <span class="attribute">style</span>=<span class="value">"width: 180px;"</span> /&gt;</span>
+            <span class="tag">&lt;<span class="title">a</span> <span class="attribute">id</span>=<span class="value">"btnUpLoadImg"</span> <span class="attribute">href</span>=<span class="value">"javaScript:void(0);"</span> <span class="attribute">class</span>=<span class="value">"easyui-linkbutton"</span> <span class="attribute">style</span>=<span class="value">"width: 50px; height: 22px"</span>&gt;</span>上传<span class="tag">&lt;/<span class="title">a</span>&gt;</span>(宽&gt;=540）
+            <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"showImgDiv"</span> <span class="attribute">align</span>=<span class="value">"left"</span>&gt;</span>
+                                <span class="tag">&lt;<span class="title">img</span> <span class="attribute">id</span>=<span class="value">"imgUrl"</span> <span class="attribute">onload</span>=<span class="value">"JsUtils.autoResizeImage(300,100,this)"</span> /&gt;</span>
+                            <span class="tag">&lt;/<span class="title">div</span>&gt;</span> <span class="tag">&lt;<span class="title">s:textfield</span> <span class="attribute">id</span>=<span class="value">"imgUrlIn"</span> <span class="attribute">type</span>=<span class="value">"hidden"</span> /&gt;</span>
+            <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+</code></pre><p>topic-upadte.js:</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">uploadImg</span>(<span class="params"></span>)</span>{
+     $.ajaxFileUpload( {
+            url : <span class="string">'admin/info/upload.action'</span>, <span class="comment">//需要链接到服务器地址</span>
+            secureuri : <span class="literal">false</span>,
+            fileElementId : <span class="string">'imgUploadBtn'</span>, <span class="comment">//文件选择框的id属性 name</span>
+            width:<span class="number">540</span>,
+            height:<span class="number">0</span>,
+            dataType : <span class="string">'text'</span>, 
+            success : <span class="function"><span class="keyword">function</span>(<span class="params">data, status</span>)</span>{
+                <span class="keyword">var</span> jsonData = strToJson(data);
+                <span class="keyword">if</span>(jsonData.err)
+                {
+                    $.messager.alert(<span class="string">'温馨提示'</span>,jsonData.err,<span class="string">'warning'</span>);
+                }
+                <span class="keyword">else</span>
+                {
+                    <span class="keyword">var</span> url = jsonData.msg.url;
+                    $(<span class="string">"#imgUrl"</span>).attr(<span class="string">"src"</span>,url);
+                    imgUrl = url;
+                    $(<span class="string">"#imgUrlIn"</span>).val(url);
+                }
+        }
+    });
+}
+</code></pre><p>action：<em>filedata,filedataFileName,fileWidth,fileHeight getter/setter省略</em></p>
+<pre><code>/**
+ * 图片上传
+ */
+public void uploadImg(){
+    topicSerivice.upload(filedata,filedataFileName,fileWidth,fileHeight)<span class="comment">;</span>
+}
+
+    public <span class="built_in">String</span> upload(File filedata, <span class="built_in">String</span> fileName, <span class="built_in">int</span> fileWidth,
+        <span class="built_in">int</span> fileHeight) {
+    ServletActionContext.getResponse().setContentType(<span class="string">"text/html; charset=utf-8"</span>)<span class="comment">;</span>
+    <span class="built_in">String</span> json= <span class="string">""</span><span class="comment">;</span>
+      <span class="built_in">String</span> path1=<span class="string">""</span><span class="comment">;</span>
+      <span class="keyword">if</span>(filedata!=<span class="literal">null</span>){
+
+        // 获取缩略图保存的文件夹
+        <span class="built_in">String</span> filePath = PropertyUtils.getProperty(<span class="string">"temp"</span>)<span class="comment">;</span>
+            // 获取网站基础路径
+        <span class="built_in">String</span> baseurl = PropertyUtils.getProperty(<span class="string">"baseurl"</span>)<span class="comment">;</span>
+
+        // 获取到文件的绝对路径
+        <span class="built_in">String</span> fd = DateUtil.formatDate(new Date(), <span class="string">"yyyyMMdd"</span>)<span class="comment">;</span>
+        <span class="built_in">String</span> uploadPath =  filePath + fd<span class="comment">;</span>
+        <span class="built_in">String</span> newFileName = System.nanoTime()
+                + UploadFileUtil.getFileName(fileName)<span class="comment">;</span>
+        path1 = UploadFileUtil.uploadFileInfo(filedata,uploadPath+<span class="string">"/"</span>, newFileName.toLowerCase())<span class="comment">;</span>
+        <span class="built_in">String</span> path = ServletActionContext.getServletContext().getContextPath()<span class="comment">;</span>
+        path1 = baseurl + path + path1<span class="comment">;            </span>
+      }
+     /* <span class="built_in">String</span> tempWH=path1.substring(path1.indexOf(<span class="string">"?"</span>)+<span class="number">1</span>)<span class="comment">;</span>
+        <span class="keyword">if</span>(tempWH.indexOf(<span class="string">"*"</span>)&gt;<span class="number">0</span>){
+            <span class="built_in">String</span> _width=tempWH.substring(<span class="number">0</span>,tempWH.indexOf(<span class="string">"*"</span>))<span class="comment">;</span>
+            <span class="built_in">String</span> _height=tempWH.substring(tempWH.indexOf(<span class="string">"*"</span>)+<span class="number">1</span>)<span class="comment">;</span>
+            <span class="keyword">if</span>(_width.matches(<span class="string">"\\d+"</span>) &amp;&amp; _height.matches(<span class="string">"\\d+"</span>))
+            {
+                <span class="keyword">if</span>(Integer.parseInt(_width) &lt;= width) 
+                {
+                    json=<span class="string">"{\"</span>err\<span class="string">":\"</span>宽度需要大于:<span class="string">"+width+"</span>\<span class="string">",\"</span>msg\<span class="string">":{\"</span>url\<span class="string">":\""+path1+"</span>\<span class="string">"}}"</span><span class="comment">;</span>
+                }
+                <span class="keyword">else</span> <span class="keyword">if</span>(Integer.parseInt(_height) &lt;= height)
+                {
+                    json=<span class="string">"{\"</span>err\<span class="string">":\"</span>长度需要大于:<span class="string">"+height+"</span>\<span class="string">",\"</span>msg\<span class="string">":{\"</span>url\<span class="string">":\""+path1+"</span>\<span class="string">"}}"</span><span class="comment">;</span>
+                }
+                <span class="keyword">else</span>
+                {
+                    json=<span class="string">"{\"</span>err\<span class="string">":\"</span>\<span class="string">",\"</span>msg\<span class="string">":{\"</span>url\<span class="string">":\""+path1+"</span>\<span class="string">"}}"</span><span class="comment">; </span>
+                }
+            }
+        }*/
+      json=<span class="string">"{\"</span>err\<span class="string">":\"</span>\<span class="string">",\"</span>msg\<span class="string">":{\"</span>url\<span class="string">":\""+path1+"</span>\<span class="string">"}}"</span><span class="comment">; </span>
+        try {
+            ServletActionContext.getResponse().getWriter().write(json)<span class="comment">;</span>
+        } catch (IOException e) {
+            e.printStackTrace()<span class="comment">;</span>
+        }
+      <span class="keyword">return</span> <span class="literal">null</span><span class="comment">;</span>
+}
+</code></pre></span>
       
     </div>
 
@@ -231,7 +326,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/hexo/" rel="tag">#hexo</a>
+            <a href="/tags/easyui/" rel="tag">#easyui</a>
+          
+            <a href="/tags/图片上传/" rel="tag">#图片上传</a>
           
         </div>
       
@@ -240,13 +337,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/09/23/java-sort/" rel="prev">java-sort排序问题</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/09/21/fastJson/" rel="next">fastJson</a>
+              <a href="/2015/09/24/java-revmoveAll/" rel="next">java List remove,contains底层</a>
             
           </div>
         </div>
@@ -261,10 +356,10 @@
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2015/09/22/hexo-question/"
-     data-title="hexo遇到的问题"
+        <div class="ds-share flat" data-thread-key="2015/09/28/easyui/"
+     data-title="easyui做后台"
      data-content=""
-     data-url="http://blog.chen777.com/2015/09/22/hexo-question/">
+     data-url="http://blog.chen777.com/2015/09/28/easyui/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -294,8 +389,8 @@
         
           <div class="comments" id="comments">
             
-              <div class="ds-thread" data-thread-key="2015/09/22/hexo-question/"
-                   data-title="hexo遇到的问题" data-url="http://blog.chen777.com/2015/09/22/hexo-question/">
+              <div class="ds-thread" data-thread-key="2015/09/28/easyui/"
+                   data-title="easyui做后台" data-url="http://blog.chen777.com/2015/09/28/easyui/">
               </div>
             
           </div>
