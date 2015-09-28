@@ -48,7 +48,7 @@
 <meta property="og:site_name" content="陈西西">
 <meta property="og:description" content="Fastjson是一个Java语言编写的JSON处理器。1.遵循http://json.org标准，为其官方网站收录的参考实现之一。2.功能强大，支持JDK的各种类型，包括基本的JavaBean、Collection、Map、Date、Enum、泛型。3.无依赖，不需要例外额外的jar，能够直接跑在JDK上。4开源,使用Apache License 2.0协议开源。http://code.alib">
 <meta property="og:image" content="http://ww3.sinaimg.cn/large/0063lLoQgw1ewb8jgrkvaj30bl07kgm1.jpg">
-<meta property="og:updated_time" content="2015-09-25T01:54:28.769Z">
+<meta property="og:updated_time" content="2015-09-28T03:49:59.006Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="fastJson">
 <meta name="twitter:description" content="Fastjson是一个Java语言编写的JSON处理器。1.遵循http://json.org标准，为其官方网站收录的参考实现之一。2.功能强大，支持JDK的各种类型，包括基本的JavaBean、Collection、Map、Date、Enum、泛型。3.无依赖，不需要例外额外的jar，能够直接跑在JDK上。4开源,使用Apache License 2.0协议开源。http://code.alib">
@@ -270,7 +270,7 @@ TopicDTO dto=<span class="built_in">JSON</span>.parseObject(topicStr, topicDTO.g
 </code></pre><p>此时前台传递的值都在dto对象中，简直是神器。</p>
 <p>说说fastJson的JSON.parseObject(String text, Class clazz);<br>前台通过JSON.stringify(rows)传JSON字符串到后台</p>
 <pre><code><span class="keyword">var</span> rows=$(<span class="string">'#dbgrid'</span>).datagrid(<span class="string">'getChecked'</span>);
-</code></pre><p>*切记$.post传值千万不要这么写,</p>
+</code></pre><p><em>切记$.post传值千万不要这么写,{</em>rows*，} </p>
 <pre><code>$.post(<span class="string">"admin/hotWords/pushHotWordsTable.action"</span>,
         {<span class="string">'rows'</span>,rows}
     , <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>{

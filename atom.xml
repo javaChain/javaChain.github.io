@@ -251,7 +251,7 @@ public void uploadImg(){
     <link href="http://blog.chen777.com/2015/09/21/fastJson/"/>
     <id>http://blog.chen777.com/2015/09/21/fastJson/</id>
     <published>2015-09-21T01:21:12.000Z</published>
-    <updated>2015-09-25T01:54:28.769Z</updated>
+    <updated>2015-09-28T03:49:59.006Z</updated>
     <content type="html"><![CDATA[<p>Fastjson是一个Java语言编写的JSON处理器。<br>1.遵循<a href="http://json.org标准，为其官方网站收录的参考实现之一。" target="_blank" rel="external">http://json.org标准，为其官方网站收录的参考实现之一。</a><br>2.功能强大，支持JDK的各种类型，包括基本的JavaBean、Collection、Map、Date、Enum、泛型。<br>3.无依赖，不需要例外额外的jar，能够直接跑在JDK上。<br>4开源,使用Apache License 2.0协议开源。<a href="http://code.alibabatech.com/wiki/display/FastJSON/Home" target="_blank" rel="external">http://code.alibabatech.com/wiki/display/FastJSON/Home</a></p>
 <p>下载地址：<br><a href="http://www.oschina.net/news/58783/fastjson-1-2-4" target="_blank" rel="external">http://www.oschina.net/news/58783/fastjson-1-2-4</a></p>
 <p>我的使用场景：<br>由于我是对象嵌套对象，然后在JS里面把json对象转换为json字符串，使用JSON.stringify()方法。然后后台使用JSON.parseObject(String text, Class clazz),把JSON文本parse为JavaBean。</p>
@@ -306,7 +306,7 @@ TopicDTO dto=<span class="built_in">JSON</span>.parseObject(topicStr, topicDTO.g
 </code></pre><p>此时前台传递的值都在dto对象中，简直是神器。</p>
 <p>说说fastJson的JSON.parseObject(String text, Class clazz);<br>前台通过JSON.stringify(rows)传JSON字符串到后台</p>
 <pre><code><span class="keyword">var</span> rows=$(<span class="string">'#dbgrid'</span>).datagrid(<span class="string">'getChecked'</span>);
-</code></pre><p>*切记$.post传值千万不要这么写,</p>
+</code></pre><p><em>切记$.post传值千万不要这么写,{</em>rows*，} </p>
 <pre><code>$.post(<span class="string">"admin/hotWords/pushHotWordsTable.action"</span>,
         {<span class="string">'rows'</span>,rows}
     , <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>{
