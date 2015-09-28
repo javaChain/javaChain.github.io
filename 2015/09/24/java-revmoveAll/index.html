@@ -52,7 +52,7 @@ By the way,contains(Object)也是需要">
 需要实现其equals，才能remove(Object)，引用下面这篇文章：http://blog.csdn.net/will_awoke/article/details/6528872
 By the way,contains(Object)也是需要">
 <meta property="og:image" content="http://ww3.sinaimg.cn/large/0063lLoQgw1ewef5213sgj31610azadb.jpg">
-<meta property="og:updated_time" content="2015-09-25T01:17:43.081Z">
+<meta property="og:updated_time" content="2015-09-28T08:39:56.276Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java List remove,contains底层">
 <meta name="twitter:description" content="java list remove(Object) removeAll(Collection&amp;lt;?&amp;gt; collection)先看看API介绍
@@ -241,7 +241,7 @@ By the way,contains(Object)也是需要">
     } <span class="keyword">else</span>
     {
         <span class="keyword">for</span>(<span class="built_in">int</span> j = <span class="number">0</span>; j &lt; <span class="built_in">size</span>; j++)
-            <span class="keyword">if</span>(*obj.equals(elementData[j])*)
+            <span class="keyword">if</span>(obj.equals(elementData[j]))
                 <span class="keyword">return</span> j;
 
     }
