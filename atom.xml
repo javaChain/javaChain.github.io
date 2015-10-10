@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2015-09-28T04:24:59.624Z</updated>
+  <updated>2015-10-10T03:24:12.224Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -13,6 +13,24 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[程序员必备之机械键盘]]></title>
+    <link href="http://blog.chen777.com/2015/10/10/jianpan/"/>
+    <id>http://blog.chen777.com/2015/10/10/jianpan/</id>
+    <published>2015-10-10T03:13:31.000Z</published>
+    <updated>2015-10-10T03:24:12.224Z</updated>
+    <content type="html"><![CDATA[<p>最近入手了一款青轴机械键盘，虽然价格有点贵（相比于普通的键盘），但是还是很爽的哈。噼里啪啦的手感以及好看的外观，干活都持久了。<br>我买的是达尔优的青轴，有人说青轴吵，买茶轴或红轴，我个人推荐青轴。<br>我是手残档，图片拍的不好 凑合看。<br><a id="more"></a><br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1ewvvh38ayjj31kw16ok8b.jpg" alt=""><br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1ewvvhsubjnj31kw16o18n.jpg" alt=""><br><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewvvi0ixetj31kw16oh4t.jpg" alt=""></p>
+<p>链接：<a href="http://item.jd.com/1365181.html" target="_blank" rel="external">http://item.jd.com/1365181.html</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>最近入手了一款青轴机械键盘，虽然价格有点贵（相比于普通的键盘），但是还是很爽的哈。噼里啪啦的手感以及好看的外观，干活都持久了。<br>我买的是达尔优的青轴，有人说青轴吵，买茶轴或红轴，我个人推荐青轴。<br>我是手残档，图片拍的不好 凑合看。<br>]]>
+    
+    </summary>
+    
+      <category term="机械键盘" scheme="http://blog.chen777.com/tags/%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[easyui做后台]]></title>
