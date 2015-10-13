@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2015-10-12T07:44:28.038Z</updated>
+  <updated>2015-10-13T03:03:17.480Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -13,6 +13,251 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Java与C#AES加密解密]]></title>
+    <link href="http://blog.chen777.com/2015/10/13/Java%E4%B8%8EC-AES%E5%8A%A0%E5%AF%86%E8%A7%A3%E5%AF%86/"/>
+    <id>http://blog.chen777.com/2015/10/13/Java与C-AES加密解密/</id>
+    <published>2015-10-13T02:54:08.000Z</published>
+    <updated>2015-10-13T03:03:17.480Z</updated>
+    <content type="html"><![CDATA[<p>Java与C#AES加密解密，曾经做过特此留下来备份.<br>&lt;–more–&gt;</p>
+<p><em>C#</em></p>
+<pre><code><span class="preprocessor">#<span class="keyword">region</span> AES加解密  </span>
+   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span>  </span>
+   <span class="comment"><span class="xmlDocTag">///</span>AES加密（加密步骤）  </span>
+   <span class="comment"><span class="xmlDocTag">///</span>1，加密字符串得到2进制数组；  </span>
+   <span class="comment"><span class="xmlDocTag">///</span>2，将2禁止数组转为16进制；  </span>
+   <span class="comment"><span class="xmlDocTag">///</span>3，进行base64编码  </span>
+   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span>  </span>
+   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;param name="toEncrypt"&gt;</span>要加密的字符串<span class="xmlDocTag">&lt;/param&gt;</span>  </span>
+   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;param name="key"&gt;</span>密钥<span class="xmlDocTag">&lt;/param&gt;</span>  </span>
+   <span class="function"><span class="keyword">public</span> String <span class="title">Encrypt</span>(<span class="params">String toEncrypt, String key</span>)   
+   </span>{  
+       Byte[] _Key = Encoding.ASCII.GetBytes(key);  
+       Byte[] _Source = Encoding.UTF8.GetBytes(toEncrypt);  
+
+       Aes aes = Aes.Create(<span class="string">"AES"</span>);  
+       aes.Mode = CipherMode.ECB;  
+       aes.Padding = PaddingMode.PKCS7;  
+       aes.Key = _Key;  
+       ICryptoTransform cTransform = aes.CreateEncryptor();  
+       Byte[] cryptData = cTransform.TransformFinalBlock(_Source, <span class="number">0</span>, _Source.Length);  
+       String HexCryptString = Hex_2To16(cryptData);  
+       Byte[] HexCryptData = Encoding.UTF8.GetBytes(HexCryptString);  
+       String CryptString =Convert.ToBase64String(HexCryptData);  
+       <span class="keyword">return</span> CryptString;  
+   }  
+
+   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span>  </span>
+   <span class="comment"><span class="xmlDocTag">///</span> AES解密（解密步骤）  </span>
+   <span class="comment"><span class="xmlDocTag">///</span> 1，将BASE64字符串转为16进制数组  </span>
+   <span class="comment"><span class="xmlDocTag">///</span> 2，将16进制数组转为字符串  </span>
+   <span class="comment"><span class="xmlDocTag">///</span> 3，将字符串转为2进制数据  </span>
+   <span class="comment"><span class="xmlDocTag">///</span> 4，用AES解密数据  </span>
+   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span>  </span>
+   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;param name="encryptedSource"&gt;</span>已加密的内容<span class="xmlDocTag">&lt;/param&gt;</span>  </span>
+   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;param name="key"&gt;</span>密钥<span class="xmlDocTag">&lt;/param&gt;</span>  </span>
+   <span class="function"><span class="keyword">public</span> String <span class="title">Decrypt</span>(<span class="params"><span class="keyword">string</span> encryptedSource, <span class="keyword">string</span> key</span>)  
+   </span>{  
+       Byte[] _Key = Encoding.ASCII.GetBytes(key);  
+       Aes aes = Aes.Create(<span class="string">"AES"</span>);  
+       aes.Mode = CipherMode.ECB;  
+       aes.Padding = PaddingMode.PKCS7;  
+       aes.Key = _Key;  
+       ICryptoTransform cTransform = aes.CreateDecryptor();  
+
+       Byte[] encryptedData = Convert.FromBase64String(encryptedSource);  
+       String encryptedString = Encoding.UTF8.GetString(encryptedData);  
+       Byte[] _Source = Hex_16To2(encryptedString);  
+       Byte[] originalSrouceData = cTransform.TransformFinalBlock(_Source, <span class="number">0</span>, _Source.Length);  
+       String originalString = Encoding.UTF8.GetString(originalSrouceData);  
+       <span class="keyword">return</span> originalString;  
+   }  
+
+   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span>  </span>
+   <span class="comment"><span class="xmlDocTag">///</span> 2进制转16进制  </span>
+   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span>  </span>
+   <span class="function">String <span class="title">Hex_2To16</span>(<span class="params">Byte[] bytes</span>)  
+   </span>{  
+       String hexString = String.Empty;  
+       Int32 iLength = <span class="number">65535</span>;  
+       <span class="keyword">if</span> (bytes != <span class="keyword">null</span>)  
+       {  
+           StringBuilder strB = <span class="keyword">new</span> StringBuilder();  
+
+           <span class="keyword">if</span> (bytes.Length &lt; iLength)  
+           {  
+               iLength = bytes.Length;  
+           }  
+
+           <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; iLength; i++)  
+           {  
+               strB.Append(bytes[i].ToString(<span class="string">"X2"</span>));  
+           }  
+           hexString = strB.ToString();  
+       }  
+       <span class="keyword">return</span> hexString;  
+   }  
+
+   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span>  </span>
+   <span class="comment"><span class="xmlDocTag">///</span> 16进制转2进制  </span>
+   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span>  </span>
+   Byte[] Hex_16To2(String hexString)  
+   {  
+       <span class="keyword">if</span> ((hexString.Length % <span class="number">2</span>) != <span class="number">0</span>)  
+       {  
+           hexString += <span class="string">" "</span>;  
+       }  
+       Byte[] returnBytes = <span class="keyword">new</span> Byte[hexString.Length / <span class="number">2</span>];  
+       <span class="keyword">for</span> (Int32 i = <span class="number">0</span>; i &lt; returnBytes.Length; i++)  
+       {  
+           returnBytes[i] = Convert.ToByte(hexString.Substring(i * <span class="number">2</span>, <span class="number">2</span>), <span class="number">16</span>);  
+       }  
+       <span class="keyword">return</span> returnBytes;  
+   }  
+   <span class="preprocessor">#<span class="keyword">endregion</span>  </span>
+</code></pre><p><em>java</em></p>
+<pre><code><span class="keyword">package</span> com.palic.pss.afcs.worldthrough.common.util;
+
+<span class="keyword">import</span> javax.crypto.Cipher;
+<span class="keyword">import</span> javax.crypto.spec.SecretKeySpec;
+
+<span class="keyword">import</span> repack.com.thoughtworks.xstream.core.util.Base64Encoder;
+<span class="comment">/**
+ * AES加密解密
+ * @author
+ *
+ */</span>
+<span class="keyword">public</span> class AesUtils {
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">String</span> cKey= <span class="string">"assistant7654321"</span>;
+      <span class="comment">/** 
+     * 加密--把加密后的byte数组先进行二进制转16进制在进行base64编码 
+     * @param sSrc 
+     * @param sKey 
+     * @return 
+     * @throws Exception 
+     */</span>  
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">String</span> encrypt(<span class="keyword">String</span> sSrc, <span class="keyword">String</span> sKey) <span class="keyword">throws</span> Exception {  
+        <span class="keyword">if</span> (sKey == <span class="keyword">null</span>) {  
+            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Argument sKey is null."</span>);  
+        }  
+        <span class="keyword">if</span> (sKey.length() != <span class="number">16</span>) {  
+            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(  
+                    <span class="string">"Argument sKey'length is not 16."</span>);  
+        }  
+        <span class="built_in">byte</span>[] raw = sKey.getBytes(<span class="string">"ASCII"</span>);  
+        SecretKeySpec skeySpec = <span class="keyword">new</span> SecretKeySpec(raw, <span class="string">"AES"</span>);  
+
+        Cipher cipher = Cipher.getInstance(<span class="string">"AES"</span>);  
+        cipher.init(Cipher.ENCRYPT_MODE, skeySpec);  
+
+        <span class="built_in">byte</span>[] encrypted = cipher.doFinal(sSrc.getBytes(<span class="string">"UTF-8"</span>));  
+        <span class="keyword">String</span> tempStr = parseByte2HexStr(encrypted);  
+
+        Base64Encoder encoder = <span class="keyword">new</span> Base64Encoder();  
+        <span class="keyword">return</span> encoder.encode(tempStr.getBytes(<span class="string">"UTF-8"</span>));  
+    }  
+
+    <span class="comment">/** 
+     *解密--先 进行base64解码，在进行16进制转为2进制然后再解码 
+     * @param sSrc 
+     * @param sKey 
+     * @return 
+     * @throws Exception 
+     */</span>  
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">String</span> decrypt(<span class="keyword">String</span> sSrc, <span class="keyword">String</span> sKey) <span class="keyword">throws</span> Exception {  
+
+        <span class="keyword">if</span> (sKey == <span class="keyword">null</span>) {  
+            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"499"</span>);  
+        }  
+        <span class="keyword">if</span> (sKey.length() != <span class="number">16</span>) {  
+            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"498"</span>);  
+        }  
+
+        <span class="built_in">byte</span>[] raw = sKey.getBytes(<span class="string">"ASCII"</span>);  
+        SecretKeySpec skeySpec = <span class="keyword">new</span> SecretKeySpec(raw, <span class="string">"AES"</span>);  
+
+        Cipher cipher = Cipher.getInstance(<span class="string">"AES"</span>);  
+        cipher.init(Cipher.DECRYPT_MODE, skeySpec);  
+
+        Base64Encoder encoder = <span class="keyword">new</span> Base64Encoder();  
+        <span class="built_in">byte</span>[] encrypted1 = encoder.decode(sSrc);  
+
+        <span class="keyword">String</span> tempStr = <span class="keyword">new</span> <span class="keyword">String</span>(encrypted1, <span class="string">"utf-8"</span>);  
+        encrypted1 = parseHexStr2Byte(tempStr);  
+        <span class="built_in">byte</span>[] original = cipher.doFinal(encrypted1);  
+        <span class="keyword">String</span> originalString = <span class="keyword">new</span> <span class="keyword">String</span>(original, <span class="string">"utf-8"</span>);  
+        <span class="keyword">return</span> originalString;  
+    }  
+
+    <span class="comment">/** 
+     * 将二进制转换成16进制 
+     *  
+     * @param buf 
+     * @return 
+     */</span>  
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">String</span> parseByte2HexStr(<span class="built_in">byte</span> buf[]) {  
+        StringBuffer sb = <span class="keyword">new</span> StringBuffer();  
+        <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; buf.length; i++) {  
+            <span class="keyword">String</span> <span class="built_in">hex</span> = Integer.toHexString(buf[i] &amp; <span class="number">0xFF</span>);  
+            <span class="keyword">if</span> (<span class="built_in">hex</span>.length() == <span class="number">1</span>) {  
+                <span class="built_in">hex</span> = <span class="string">'0'</span> + <span class="built_in">hex</span>;  
+            }  
+            sb.<span class="built_in">append</span>(<span class="built_in">hex</span>.toUpperCase());  
+        }  
+        <span class="keyword">return</span> sb.toString();  
+    }  
+
+    <span class="comment">/** 
+     * 将16进制转换为二进制 
+     *  
+     * @param hexStr 
+     * @return 
+     */</span>  
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">byte</span>[] parseHexStr2Byte(<span class="keyword">String</span> hexStr) {  
+        <span class="keyword">if</span> (hexStr.length() &lt; <span class="number">1</span>)  
+            <span class="keyword">return</span> <span class="keyword">null</span>;  
+        <span class="built_in">byte</span>[] result = <span class="keyword">new</span> <span class="built_in">byte</span>[hexStr.length() / <span class="number">2</span>];  
+        <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; hexStr.length() / <span class="number">2</span>; i++) {  
+            <span class="built_in">int</span> high = Integer.parseInt(hexStr.substring(i * <span class="number">2</span>, i * <span class="number">2</span> + <span class="number">1</span>), <span class="number">16</span>);  
+            <span class="built_in">int</span> low = Integer.parseInt(hexStr.substring(i * <span class="number">2</span> + <span class="number">1</span>, i * <span class="number">2</span> + <span class="number">2</span>),  
+                    <span class="number">16</span>);  
+            result[i] = (<span class="built_in">byte</span>) (high * <span class="number">16</span> + low);  
+        }  
+        <span class="keyword">return</span> result;  
+    } 
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) <span class="keyword">throws</span> Exception {
+        <span class="comment">/*
+         * 加密用的Key 可以用26个字母和数字组成，最好不要用保留字符，虽然不会错，至于怎么裁决，个人看情况而定
+         */</span>
+        <span class="keyword">String</span> cKey = <span class="string">"assistant7654321"</span>;
+        <span class="comment">// 需要加密的字串</span>
+        <span class="keyword">String</span> cSrc = <span class="string">"123456"</span>;
+        <span class="comment">// 加密</span>
+        <span class="keyword">long</span> lStart = System.currentTimeMillis();
+        <span class="keyword">String</span> enString = encrypt(cSrc, cKey);
+        System.out.<span class="built_in">println</span>(<span class="string">"加密后的字串是："</span> + enString);
+        <span class="keyword">long</span> lUseTime = System.currentTimeMillis() - lStart;
+        System.out.<span class="built_in">println</span>(<span class="string">"加密耗时："</span> + lUseTime + <span class="string">"毫秒"</span>);
+        <span class="comment">// 解密</span>
+        lStart = System.currentTimeMillis();
+        <span class="keyword">String</span> DeString = decrypt(enString, cKey);
+        System.out.<span class="built_in">println</span>(<span class="string">"解密后的字串是："</span> + DeString);
+        lUseTime = System.currentTimeMillis() - lStart;
+        System.out.<span class="built_in">println</span>(<span class="string">"解密耗时："</span> + lUseTime + <span class="string">"毫秒"</span>);
+    }
+}
+</code></pre><p>附上微云链接地址：链接：<a href="http://share.weiyun.com/f896aba9320a03a939f3cfd6d320448f" target="_blank" rel="external">http://share.weiyun.com/f896aba9320a03a939f3cfd6d320448f</a> （密码：O05n）</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>Java与C#AES加密解密，曾经做过特此留下来备份.<br>&lt;–more–&gt;</p>
+<p><em>C#</em></p>
+<pre><code><span class="preprocessor">#<span class="keyword">region<]]>
+    </summary>
+    
+      <category term="AES" scheme="http://blog.chen777.com/tags/AES/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[开发工具]]></title>
