@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2015-10-13T03:03:17.480Z</updated>
+  <updated>2015-10-13T03:05:50.374Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -19,8 +19,8 @@
     <link href="http://blog.chen777.com/2015/10/13/Java%E4%B8%8EC-AES%E5%8A%A0%E5%AF%86%E8%A7%A3%E5%AF%86/"/>
     <id>http://blog.chen777.com/2015/10/13/Java与C-AES加密解密/</id>
     <published>2015-10-13T02:54:08.000Z</published>
-    <updated>2015-10-13T03:03:17.480Z</updated>
-    <content type="html"><![CDATA[<p>Java与C#AES加密解密，曾经做过特此留下来备份.<br>&lt;–more–&gt;</p>
+    <updated>2015-10-13T03:05:50.374Z</updated>
+    <content type="html"><![CDATA[<p>Java与C#AES加密解密，曾经做过特此留下来备份.<br><a id="more"></a></p>
 <p><em>C#</em></p>
 <pre><code><span class="preprocessor">#<span class="keyword">region</span> AES加解密  </span>
    <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span>  </span>
@@ -250,9 +250,8 @@
 </code></pre><p>附上微云链接地址：链接：<a href="http://share.weiyun.com/f896aba9320a03a939f3cfd6d320448f" target="_blank" rel="external">http://share.weiyun.com/f896aba9320a03a939f3cfd6d320448f</a> （密码：O05n）</p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<p>Java与C#AES加密解密，曾经做过特此留下来备份.<br>&lt;–more–&gt;</p>
-<p><em>C#</em></p>
-<pre><code><span class="preprocessor">#<span class="keyword">region<]]>
+    <![CDATA[<p>Java与C#AES加密解密，曾经做过特此留下来备份.<br>]]>
+    
     </summary>
     
       <category term="AES" scheme="http://blog.chen777.com/tags/AES/"/>
