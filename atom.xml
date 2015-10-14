@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2015-10-13T03:05:50.374Z</updated>
+  <updated>2015-10-14T04:24:13.330Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -13,6 +13,85 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[富文本编辑器]]></title>
+    <link href="http://blog.chen777.com/2015/10/14/%E5%AF%8C%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8/"/>
+    <id>http://blog.chen777.com/2015/10/14/富文本编辑器/</id>
+    <published>2015-10-14T03:12:33.000Z</published>
+    <updated>2015-10-14T04:24:13.330Z</updated>
+    <content type="html"><![CDATA[<p>今天学弟需要用到富文本编辑器@喜子，写一下基本用法做备份，我使用的是xheditor官方地址：<a href="http://xheditor.com/" target="_blank" rel="external">http://xheditor.com/</a><br><strong>xheditor:</strong></p>
+<blockquote>
+<p>在线HTML编辑器就是在线编辑HTML代码的工具，它经常被应用于留言板留言、论坛发贴、Blog编写日志或等需要用户输入HTML的地方，是Web应用的常用模块之一。在线HTML编辑器可以实现对编辑内容添加各种丰富多彩的文字效果，以及提供各种方便快捷的操作功能，最大的提高编辑工作效率。在线HTML编辑器是任何网站不可或缺的重要功能组件，是互联网用户得心应手的驰骋网络的有力工具。<br><a id="more"></a></p>
+</blockquote>
+<p>废话不多说直接贴代码：</p>
+<pre><code><span class="doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;<span class="title">html</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">head</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">charset</span>=<span class="value">"utf-8"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">title</span>&gt;</span>xheditor<span class="tag">&lt;/<span class="title">title</span>&gt;</span>
+
+        <span class="tag">&lt;<span class="title">style</span> <span class="attribute">type</span>=<span class="value">"text/css"</span>&gt;</span><span class="css">
+        <span class="class">.videoClassName</span> <span class="rules">{
+            <span class="rule"><span class="attribute">background</span>:<span class="value"> transparent <span class="function">url</span>(img/video_icon_1.png) no-repeat
+                <span class="number">20px</span> <span class="number">20px</span></span></span>;
+            <span class="rule"><span class="attribute">background-position</span>:<span class="value"> <span class="number">3px</span> <span class="number">3px</span></span></span>;
+        }</span>
+        </span><span class="tag">&lt;/<span class="title">style</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"js/jquery-1.7.2.min.js"</span> &gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"js/xheditor/xheditor-1.1.14-zh-cn.min.js"</span> &gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"js/test.js"</span> &gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">body</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">textarea</span>  <span class="attribute">id</span>=<span class="value">"elm2"</span> <span class="attribute">style</span>=<span class="value">"width: 900px; height: 300px;"</span> <span class="attribute">rows</span>=<span class="value">"100"</span> <span class="attribute">cols</span>=<span class="value">"50"</span>&gt;</span><span class="tag">&lt;/<span class="title">textarea</span>&gt;</span> <span class="comment">&lt;!-- 富文本编辑器如果需要一键格式化功能，则要加入此div --&gt;</span>
+        <span class="tag">&lt;<span class="title">br</span> /&gt;</span>
+        <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"button"</span> <span class="attribute">id</span>=<span class="value">"submitForm"</span> <span class="attribute">value</span>=<span class="value">"提交"</span>/&gt;</span>
+    <span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+</code></pre><p>test.js:</p>
+<pre><code>$(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+<span class="keyword">var</span> plugins = {
+        video:{c:<span class="string">'videoClassName'</span>,t:<span class="string">'录入视频(Ctrl+7)'</span>,s:<span class="string">'ctrl+7'</span>,i:<span class="function"><span class="keyword">function</span>(<span class="params">editor</span>)</span>{
+            <span class="comment">//editor.setSource('test');</span>
+        },e:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+            initVideoWin();
+        }}            
+}
+<span class="keyword">var</span> editor=$(<span class="string">'#elm2'</span>).xheditor({
+    tools:<span class="string">'Blocktag,Fontface,FontSize,Bold,Italic,Underline,Strikethrough,FontColor,BackColor,|,SelectAll,Removeformat,|,Align,|,List,Outdent,Indent,|,Link,Unlink,|,Img,|,Table,Source,Fullscreen,test1,Code,Hr,video'</span>,
+    skin:<span class="string">'vista'</span>,
+    upBtnText:<span class="string">' 上传 '</span>,
+    html5Upload:<span class="literal">false</span>,
+    upMultiple:<span class="string">'1'</span>,
+    upLinkUrl:<span class="string">'admin/info/upload.action?_charset_=utf-8'</span>,
+    upLinkExt:<span class="string">'jpeg,jpg,png,gif'</span>,
+    **upImgUrl:<span class="string">'admin/info/upload.action'</span>,**
+    upImgExt:<span class="string">'jpeg,jpg,png,gif'</span>,
+    cleanPaste:<span class="number">2</span>,
+    forcePtag:<span class="literal">true</span>,
+    Pastetext:<span class="literal">true</span>,
+    formatXHTML:<span class="literal">true</span>,
+    plugins:plugins
+    }); 
+})
+
+$(<span class="string">'#submitForm'</span>).click(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+    <span class="keyword">var</span> sHtml=editor.getSource();
+    <span class="keyword">var</span> test=editor.formatXHTML(sHtml);
+});
+</code></pre><p>mysql数据库使用的是text类型，插件上传图片upImgUrl这个是你controller里面写的上传方法。</p>
+<p>压缩包：<a href="http://share.weiyun.com/a4a60bd234baca957781f0716f1f03b6" target="_blank" rel="external">http://share.weiyun.com/a4a60bd234baca957781f0716f1f03b6</a><br>分享过期之后你可以联系我索取。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>今天学弟需要用到富文本编辑器@喜子，写一下基本用法做备份，我使用的是xheditor官方地址：<a href="http://xheditor.com/">http://xheditor.com/</a><br><strong>xheditor:</strong></p>
+<blockquote>
+<p>在线HTML编辑器就是在线编辑HTML代码的工具，它经常被应用于留言板留言、论坛发贴、Blog编写日志或等需要用户输入HTML的地方，是Web应用的常用模块之一。在线HTML编辑器可以实现对编辑内容添加各种丰富多彩的文字效果，以及提供各种方便快捷的操作功能，最大的提高编辑工作效率。在线HTML编辑器是任何网站不可或缺的重要功能组件，是互联网用户得心应手的驰骋网络的有力工具。<br>]]>
+    
+    </summary>
+    
+      <category term="xheditor" scheme="http://blog.chen777.com/tags/xheditor/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Java与C#AES加密解密]]></title>
