@@ -99,7 +99,7 @@ $(<span class="string">'#submitForm'</span>).click(<span class="function"><span 
     <link href="http://blog.chen777.com/2015/10/13/Java%E4%B8%8EC-AES%E5%8A%A0%E5%AF%86%E8%A7%A3%E5%AF%86/"/>
     <id>http://blog.chen777.com/2015/10/13/Java与C-AES加密解密/</id>
     <published>2015-10-13T02:54:08.000Z</published>
-    <updated>2015-10-14T08:16:21.760Z</updated>
+    <updated>2015-10-14T08:20:54.008Z</updated>
     <content type="html"><![CDATA[<p>Java与C#AES加密解密，曾经做过特此留下来备份.<br><a id="more"></a></p>
 <p><em>C#</em></p>
 <pre><code><span class="preprocessor">#<span class="keyword">region</span> AES加解密  </span>
@@ -327,7 +327,7 @@ $(<span class="string">'#submitForm'</span>).click(<span class="function"><span 
         System.out.<span class="built_in">println</span>(<span class="string">"解密耗时："</span> + lUseTime + <span class="string">"毫秒"</span>);
     }
 }
-</code></pre><p>附上微云链接地址：链接：<a href="http://pan.baidu.com/s/1pJout5L" target="_blank" rel="external">http://pan.baidu.com/s/1pJout5L</a> （密码：y4bd）</p>
+</code></pre><p>附上百度云盘链接地址：链接：<a href="http://pan.baidu.com/s/1pJout5L" target="_blank" rel="external">http://pan.baidu.com/s/1pJout5L</a> （密码：y4bd）</p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>Java与C#AES加密解密，曾经做过特此留下来备份.<br>]]>
@@ -343,11 +343,11 @@ $(<span class="string">'#submitForm'</span>).click(<span class="function"><span 
     <link href="http://blog.chen777.com/2015/10/12/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
     <id>http://blog.chen777.com/2015/10/12/开发工具/</id>
     <published>2015-10-12T06:57:43.000Z</published>
-    <updated>2015-10-14T08:14:13.045Z</updated>
+    <updated>2015-10-14T08:22:45.158Z</updated>
     <content type="html"><![CDATA[<p>工欲善其事必先利其器，每个coder的都有自己偏执的工具， 我介绍一下我使用的工具(eclipse,notepad++,secureCRT,navicat,HBuild),一般都是解压即可用，压缩包里面会有使用介绍。</p>
 <a id="more"></a>
 <p>eclipse：<a href="http://www.eclipse.org/downloads/" target="_blank" rel="external">http://www.eclipse.org/downloads/</a></p>
-<p>我使用的eclipse：<a href="http://pan.baidu.com/s/1dDExkeX" target="_blank" rel="external">http://pan.baidu.com/s/1dDExkeX</a>  /9k7r</p>
+<p>我使用的eclipse：<a href="http://pan.baidu.com/s/1C1yKA" target="_blank" rel="external">http://pan.baidu.com/s/1C1yKA</a>  /nsvj</p>
 <p>chrome:<a href="http://chromecj.com/chrome/2014-09/177/download.html" target="_blank" rel="external">http://chromecj.com/chrome/2014-09/177/download.html</a></p>
 <p>文本编辑器用的notepad++，世面上有很多文本编辑器editplus，uedit等。<br>notepad++:<a href="http://pan.baidu.com/s/1dDhTgwp" target="_blank" rel="external">http://pan.baidu.com/s/1dDhTgwp</a>  /d350</p>
 <p>反编译工具：<a href="http://pan.baidu.com/s/1pJH09gZ" target="_blank" rel="external">http://pan.baidu.com/s/1pJH09gZ</a>  /640h</p>
