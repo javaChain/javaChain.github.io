@@ -189,6 +189,87 @@
           
           
             
+              <a class="post-title-link" href="/2015/09/28/easyui/" itemprop="url">
+                easyui做后台
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2015-09-28T10:00:32+08:00" content="2015-09-28">
+            2015-09-28
+          </time>
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2015/09/28/easyui/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/28/easyui/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+            首先看页面构造还是比较复杂的页面构成，图片上传预览压缩，多选combobox,tree，以及xheditor。页面比较传统的 我就不做介绍，讲封面图、推送机型、推送渠道、地域标签、发布时间、详情内容。
+封面图
+我这里使用的是ajaxfileupload控件做的上传，引用的CSS JS如图下载地址：http://url.cn/SP3S7c没有的去网上对应找就可以的，topic-update.js是业务的JS其他的全是插件,各位看官酌情添加。JSP页面：
+&lt;tr&gt;
+    &lt;th width="120px" align="right" nowrap="nowrap"&gt;封面图
+            ...
+          </span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/09/28/easyui/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
               <a class="post-title-link" href="/2015/09/24/java-revmoveAll/" itemprop="url">
                 java List remove,contains底层
               </a>
@@ -503,112 +584,11 @@ public class SubscribeDTO implements Serializable,Comparable&lt;SubscribeDTO&gt;
 
 
     
-      
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      
-      
-        <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-              <a class="post-title-link" href="/2015/09/18/postName/" itemprop="url">
-                java timer设置
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于
-          <time itemprop="dateCreated" datetime="2015-09-18T10:38:44+08:00" content="2015-09-18">
-            2015-09-18
-          </time>
-        </span>
-
-        
-          <span class="post-category" >
-            &nbsp; | &nbsp; 分类于
-            
-              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                <a href="/categories/timer/" itemprop="url" rel="index">
-                  <span itemprop="name">timer</span>
-                </a>
-              </span>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-              &nbsp; | &nbsp;
-              <a href="/2015/09/18/postName/#comments" itemprop="discussionUrl">
-                <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/18/postName/" itemprop="commentsCount"></span>
-              </a>
-            </span>
-          
-        
-      </div>
-    </header>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>创建timer类实现接口：ServletContextListener然后在web.xml中配置listener    </p>
-<pre><code><span class="keyword">public</span> <span class="keyword">static</span> final Logger LOG = LoggerFactory.make();
-
-<span class="comment">//时间间隔(一天)  </span>
-<span class="keyword">private</span> <span class="keyword">static</span> final <span class="keyword">long</span> PERIOD_DAY = <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>;  
-
-<span class="keyword">private</span> Timer timer;
-
-<span class="comment">//容器摧毁</span>
-<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">contextDestroyed</span><span class="params">(ServletContextEvent arg0)</span> </span>{
-    timer.cancel();
-
-}
-</code></pre>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/09/18/postName/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/">&laquo;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/">&laquo;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">&raquo;</a>
   </nav>
 
  </div>
@@ -642,7 +622,7 @@ public class SubscribeDTO implements Serializable,Comparable&lt;SubscribeDTO&gt;
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-count">11</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
