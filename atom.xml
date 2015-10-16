@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2015-10-15T10:11:25.719Z</updated>
+  <updated>2015-10-16T01:13:42.248Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -19,9 +19,9 @@
     <link href="http://blog.chen777.com/2015/10/15/hexo%E5%AD%97%E4%BD%93%E9%97%AE%E9%A2%98/"/>
     <id>http://blog.chen777.com/2015/10/15/hexo字体问题/</id>
     <published>2015-10-15T09:36:21.000Z</published>
-    <updated>2015-10-15T10:11:25.719Z</updated>
-    <content type="html"><![CDATA[<p>hexo字体问题困扰了我好久了，我按照官方文档<a href="http://theme-next.iissnan.com/faqs.html#自定义字体" target="_blank" rel="external">http://theme-next.iissnan.com/faqs.html#自定义字体</a>设置了也没用，然后也自己折腾了半天就是没有效果，原来是需要<font color="red">hexo clean</font>一下然后重新提交部署到git才生效,很多实用next主题的也有这个问题<br>先看图片对面文字<br><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1ex1yo34wbnj30uz0prtdv.jpg?300*102" alt="http://ww1.sinaimg.cn/large/0063lLoQgw1ex1yo34wbnj30uz0prtdv.jpg"></p>
-<p><img src="http://ww4.sinaimg.cn/large/0063lLoQgw1ex1yoe8cmbj30wb0qrwjn.jpg?300*22" alt="http://ww4.sinaimg.cn/large/0063lLoQgw1ex1yoe8cmbj30wb0qrwjn.jpg"></p>
+    <updated>2015-10-16T01:13:42.248Z</updated>
+    <content type="html"><![CDATA[<p>hexo字体问题困扰了我好久了，我按照官方文档<a href="http://theme-next.iissnan.com/faqs.html#自定义字体" target="_blank" rel="external">http://theme-next.iissnan.com/faqs.html#自定义字体</a>设置了也没用，然后也自己折腾了半天就是没有效果，原来是需要<font color="red">hexo clean</font>一下然后重新提交部署到git才生效,很多实用next主题的也有这个问题<br>先看图片对面文字<br><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1ex1yo34wbnj30uz0prtdv.jpg?300*12" alt="图1" title="图1"></p>
+<p><img src="http://ww4.sinaimg.cn/large/0063lLoQgw1ex1yoe8cmbj30wb0qrwjn.jpg?300*22" alt="图2" title="图2"></p>
 <p>字体对面图中的文字，有区别的而且感觉第一的文字和图二真是差太多感觉非常不好。</p>
 <p>有2中方法可以解决这个问题。<br>第一种：<br>找到安装目录hexo的E:\hexo\themes\next\source\css_variables\base.styl<br>修改第56行，改为</p>
 <pre><code><span class="variable">$font-family-chinese</span>      = <span class="string">"Microsoft YaHei"</span> , <span class="string">"Microsoft Jhenghei"</span>, <span class="string">"Hiragino Sans GB"</span>
