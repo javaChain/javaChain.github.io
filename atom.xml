@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2015-10-16T01:13:42.248Z</updated>
+  <updated>2015-10-16T02:23:22.266Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -15,21 +15,41 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[markdown其他用法]]></title>
+    <link href="http://blog.chen777.com/2015/10/16/markdown%E5%85%B6%E4%BB%96%E7%94%A8%E6%B3%95/"/>
+    <id>http://blog.chen777.com/2015/10/16/markdown其他用法/</id>
+    <published>2015-10-16T01:15:56.000Z</published>
+    <updated>2015-10-16T02:23:22.266Z</updated>
+    <content type="html"><![CDATA[<p>我用markdown写博客的时候感觉有点力不从心，还不如html好写，当初是这么感觉的，我想要强调一下字体的大小啊，颜色啊，markdown虽然都有，但是又不是很灵活，后来仔细看文档发现其实Markdown兼容 HTML，所以需要一定的html基础。还是今天我特意留下这篇博客记录它的一些其他用法，<a href="http://www.cnblogs.com/rossoneri/p/4446440.html#_label10" target="_blank" rel="external">基本语法</a>不做介绍.<br><a id="more"></a></p>
+<p>这个是字体的：<a href="http://www.bubuko.com/infodetail-826462.html" target="_blank" rel="external">字体设置</a><br><br><strong>强调字体</strong> </p><p style="color:red;font-size:20px;">字体颜色大小设置</p><p><br>图片大小宽度高度也可以使用img标签转换<img src="" width="" height="">这种格式<br>暂时我只使用到这些。</p>
+<p>另外我想问一下markdownpad能否支持emoji表情？求助~~</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>我用markdown写博客的时候感觉有点力不从心，还不如html好写，当初是这么感觉的，我想要强调一下字体的大小啊，颜色啊，markdown虽然都有，但是又不是很灵活，后来仔细看文档发现其实Markdown兼容 HTML，所以需要一定的html基础。还是今天我特意留下这篇博客记录它的一些其他用法，<a href="http://www.cnblogs.com/rossoneri/p/4446440.html#_label10">基本语法</a>不做介绍.<br>]]>
+    
+    </summary>
+    
+      <category term="hexo" scheme="http://blog.chen777.com/tags/hexo/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[hexo字体问题]]></title>
     <link href="http://blog.chen777.com/2015/10/15/hexo%E5%AD%97%E4%BD%93%E9%97%AE%E9%A2%98/"/>
     <id>http://blog.chen777.com/2015/10/15/hexo字体问题/</id>
     <published>2015-10-15T09:36:21.000Z</published>
-    <updated>2015-10-16T01:13:42.248Z</updated>
-    <content type="html"><![CDATA[<p>hexo字体问题困扰了我好久了，我按照官方文档<a href="http://theme-next.iissnan.com/faqs.html#自定义字体" target="_blank" rel="external">http://theme-next.iissnan.com/faqs.html#自定义字体</a>设置了也没用，然后也自己折腾了半天就是没有效果，原来是需要<font color="red">hexo clean</font>一下然后重新提交部署到git才生效,很多实用next主题的也有这个问题<br>先看图片对面文字<br><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1ex1yo34wbnj30uz0prtdv.jpg?300*12" alt="图1" title="图1"></p>
+    <updated>2015-10-16T01:50:21.833Z</updated>
+    <content type="html"><![CDATA[<p>hexo字体问题困扰了我好久了，我按照官方文档<a href="http://theme-next.iissnan.com/faqs.html#自定义字体" target="_blank" rel="external">http://theme-next.iissnan.com/faqs.html#自定义字体</a>设置了也没用，然后也自己折腾了半天就是没有效果，原来是需要<font color="red">hexo clean</font>一下然后重新提交部署到git才生效,很多实用next主题的也有这个问题.<br><a id="more"></a></p>
+<p>先看图片对面文字<br><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1ex1yo34wbnj30uz0prtdv.jpg?300*12" alt="图1" title="图1"></p>
 <p><img src="http://ww4.sinaimg.cn/large/0063lLoQgw1ex1yoe8cmbj30wb0qrwjn.jpg?300*22" alt="图2" title="图2"></p>
 <p>字体对面图中的文字，有区别的而且感觉第一的文字和图二真是差太多感觉非常不好。</p>
 <p>有2中方法可以解决这个问题。<br>第一种：<br>找到安装目录hexo的E:\hexo\themes\next\source\css_variables\base.styl<br>修改第56行，改为</p>
 <pre><code><span class="variable">$font-family-chinese</span>      = <span class="string">"Microsoft YaHei"</span> , <span class="string">"Microsoft Jhenghei"</span>, <span class="string">"Hiragino Sans GB"</span>
 </code></pre><p>然后<font color="red">hexo clean</font>,hexo d–g 就好了。<br>第二种：<br>按照文档的<a href="http://theme-next.iissnan.com/faqs.html#自定义字体" target="_blank" rel="external">http://theme-next.iissnan.com/faqs.html#自定义字体</a>设置自己喜欢的字体，然后<font color="red">hexo clean</font>,hexo d–g 就好了。</p>
-<p>另外我想问一下markdownpad能否支持emoji表情？求助~~</p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<p>hexo字体问题困扰了我好久了，我按照官方文档<a href="http://theme-next.iissnan.com/faqs.html#自定义字体" target="_blank" rel="external">http://theme-next.iissnan.c]]>
+    <![CDATA[<p>hexo字体问题困扰了我好久了，我按照官方文档<a href="http://theme-next.iissnan.com/faqs.html#自定义字体">http://theme-next.iissnan.com/faqs.html#自定义字体</a>设置了也没用，然后也自己折腾了半天就是没有效果，原来是需要<font color='red'>hexo clean</font>一下然后重新提交部署到git才生效,很多实用next主题的也有这个问题.<br>]]>
+    
     </summary>
     
       <category term="hexo" scheme="http://blog.chen777.com/tags/hexo/"/>
