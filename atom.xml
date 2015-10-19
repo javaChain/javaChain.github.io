@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2015-10-16T02:23:22.266Z</updated>
+  <updated>2015-10-16T03:00:22.414Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -19,10 +19,9 @@
     <link href="http://blog.chen777.com/2015/10/16/markdown%E5%85%B6%E4%BB%96%E7%94%A8%E6%B3%95/"/>
     <id>http://blog.chen777.com/2015/10/16/markdown其他用法/</id>
     <published>2015-10-16T01:15:56.000Z</published>
-    <updated>2015-10-16T02:23:22.266Z</updated>
+    <updated>2015-10-16T03:00:22.414Z</updated>
     <content type="html"><![CDATA[<p>我用markdown写博客的时候感觉有点力不从心，还不如html好写，当初是这么感觉的，我想要强调一下字体的大小啊，颜色啊，markdown虽然都有，但是又不是很灵活，后来仔细看文档发现其实Markdown兼容 HTML，所以需要一定的html基础。还是今天我特意留下这篇博客记录它的一些其他用法，<a href="http://www.cnblogs.com/rossoneri/p/4446440.html#_label10" target="_blank" rel="external">基本语法</a>不做介绍.<br><a id="more"></a></p>
-<p>这个是字体的：<a href="http://www.bubuko.com/infodetail-826462.html" target="_blank" rel="external">字体设置</a><br><br><strong>强调字体</strong> </p><p style="color:red;font-size:20px;">字体颜色大小设置</p><p><br>图片大小宽度高度也可以使用img标签转换<img src="" width="" height="">这种格式<br>暂时我只使用到这些。</p>
-<p>另外我想问一下markdownpad能否支持emoji表情？求助~~</p>
+<p>这个是字体的：<a href="http://www.bubuko.com/infodetail-826462.html" target="_blank" rel="external">字体设置</a><br><br><strong>强调字体</strong> </p><p style="color:red;font-size:20px;">字体颜色大小设置</p><p><br>图片大小宽度高度也可以使用img标签转换<img src="" width="" height="">这种格式<br><a href="http://wuchong.me/blog/2014/12/13/hexo-theme-creating-image-styles/" target="_blank" rel="external">图片使用</a><br>暂时我只使用到这些。</p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>我用markdown写博客的时候感觉有点力不从心，还不如html好写，当初是这么感觉的，我想要强调一下字体的大小啊，颜色啊，markdown虽然都有，但是又不是很灵活，后来仔细看文档发现其实Markdown兼容 HTML，所以需要一定的html基础。还是今天我特意留下这篇博客记录它的一些其他用法，<a href="http://www.cnblogs.com/rossoneri/p/4446440.html#_label10">基本语法</a>不做介绍.<br>]]>
@@ -433,7 +432,7 @@ $(<span class="string">'#submitForm'</span>).click(<span class="function"><span 
     <link href="http://blog.chen777.com/2015/09/28/easyui/"/>
     <id>http://blog.chen777.com/2015/09/28/easyui/</id>
     <published>2015-09-28T02:00:32.000Z</published>
-    <updated>2015-09-28T04:24:59.624Z</updated>
+    <updated>2015-10-19T02:06:08.416Z</updated>
     <content type="html"><![CDATA[<p>首先看页面构造<br><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1ewhxyxv3rjj30vb0mrgoi.jpg" alt="">还是比较复杂的页面构成，图片上传预览压缩，多选combobox,tree，以及xheditor。<br>页面比较传统的 我就不做介绍，讲封面图、推送机型、推送渠道、地域标签、发布时间、详情内容。</p>
 <p><strong>封面图</strong></p>
 <p>我这里使用的是ajaxfileupload控件做的上传，引用的CSS JS如图<img src="http://ww1.sinaimg.cn/large/0063lLoQgw1ewhz3u3ppqj30sy09yjze.jpg" alt=""><br>下载地址：<a href="http://url.cn/SP3S7c" target="_blank" rel="external">http://url.cn/SP3S7c</a><br>没有的去网上对应找就可以的，topic-update.js是业务的JS其他的全是插件,各位看官酌情添加。<br>JSP页面：</p>
@@ -530,7 +529,6 @@ public void uploadImg(){
       <span class="keyword">return</span> <span class="literal">null</span><span class="comment">;</span>
 }
 </code></pre><p>顺便提一句：<a href="http://fex.baidu.com/webuploader/getting-started.html" target="_blank" rel="external">http://fex.baidu.com/webuploader/getting-started.html</a>这个上传插件也不错。大家各取所需。</p>
-<p>如果你有什么不明白的地方可以留言或者+Q群：307153267</p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>首先看页面构造<br><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1ewhxyxv3rjj30vb0mrgoi.jpg" alt="">还是比较复杂的页面构成，图片上传预览压缩，多选combobox,tree，以及xhed]]>
