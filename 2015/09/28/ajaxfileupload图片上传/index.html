@@ -30,7 +30,7 @@
 
 
 
-  <meta name="keywords" content="List,java," />
+  <meta name="keywords" content="uploadImg," />
 
 
 
@@ -41,23 +41,27 @@
   <link rel="shorticon icon" type="image/x-icon" href="/myBlog.ico" />
 
 
-<meta name="description" content="java list remove(Object) removeAll(Collection&amp;lt;?&amp;gt; collection)先看看API介绍
-需要实现其equals，才能remove(Object)，引用下面这篇文章：http://blog.csdn.net/will_awoke/article/details/6528872
-By the way,contains(Object)也是需要">
+<meta name="description" content="封面图
+我这里使用的是ajaxfileupload控件做的上传，引用的CSS JS如图下载地址：http://url.cn/SP3S7c没有的去网上对应找就可以的，topic-update.js是业务的JS其他的全是插件,各位看官酌情添加。JSP页面：
+&amp;lt;tr&amp;gt;
+    &amp;lt;th width=&quot;120px&quot; align=&quot;right&quot; nowrap=&quot;nowrap&quot;&amp;gt;封面图：">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java List remove,contains底层">
-<meta property="og:url" content="http://blog.chen777.com/2015/09/24/java-revmoveAll/index.html">
+<meta property="og:title" content="ajaxfileupload图片上传">
+<meta property="og:url" content="http://blog.chen777.com/2015/09/28/ajaxfileupload图片上传/index.html">
 <meta property="og:site_name" content="陈西西">
-<meta property="og:description" content="java list remove(Object) removeAll(Collection&amp;lt;?&amp;gt; collection)先看看API介绍
-需要实现其equals，才能remove(Object)，引用下面这篇文章：http://blog.csdn.net/will_awoke/article/details/6528872
-By the way,contains(Object)也是需要">
-<meta property="og:image" content="http://ww3.sinaimg.cn/large/0063lLoQgw1ewef5213sgj31610azadb.jpg">
-<meta property="og:updated_time" content="2015-09-28T08:39:56.276Z">
+<meta property="og:description" content="封面图
+我这里使用的是ajaxfileupload控件做的上传，引用的CSS JS如图下载地址：http://url.cn/SP3S7c没有的去网上对应找就可以的，topic-update.js是业务的JS其他的全是插件,各位看官酌情添加。JSP页面：
+&amp;lt;tr&amp;gt;
+    &amp;lt;th width=&quot;120px&quot; align=&quot;right&quot; nowrap=&quot;nowrap&quot;&amp;gt;封面图：">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/0063lLoQgw1ewhxyxv3rjj30vb0mrgoi.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/0063lLoQgw1ewhz3u3ppqj30sy09yjze.jpg">
+<meta property="og:updated_time" content="2015-10-21T03:22:55.784Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java List remove,contains底层">
-<meta name="twitter:description" content="java list remove(Object) removeAll(Collection&amp;lt;?&amp;gt; collection)先看看API介绍
-需要实现其equals，才能remove(Object)，引用下面这篇文章：http://blog.csdn.net/will_awoke/article/details/6528872
-By the way,contains(Object)也是需要">
+<meta name="twitter:title" content="ajaxfileupload图片上传">
+<meta name="twitter:description" content="封面图
+我这里使用的是ajaxfileupload控件做的上传，引用的CSS JS如图下载地址：http://url.cn/SP3S7c没有的去网上对应找就可以的，topic-update.js是业务的JS其他的全是插件,各位看官酌情添加。JSP页面：
+&amp;lt;tr&amp;gt;
+    &amp;lt;th width=&quot;120px&quot; align=&quot;right&quot; nowrap=&quot;nowrap&quot;&amp;gt;封面图：">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -67,7 +71,7 @@ By the way,contains(Object)也是需要">
   };
 </script>
 
-  <title> java List remove,contains底层 | 陈西西 </title>
+  <title> ajaxfileupload图片上传 | 陈西西 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -195,7 +199,7 @@ By the way,contains(Object)也是需要">
           
           
             
-              java List remove,contains底层
+              ajaxfileupload图片上传
             
           
         </h1>
@@ -204,8 +208,8 @@ By the way,contains(Object)也是需要">
       <div class="post-meta">
         <span class="post-time">
           发表于
-          <time itemprop="dateCreated" datetime="2015-09-24T17:35:29+08:00" content="2015-09-24">
-            2015-09-24
+          <time itemprop="dateCreated" datetime="2015-09-28T10:00:32+08:00" content="2015-09-28">
+            2015-09-28
           </time>
         </span>
 
@@ -215,8 +219,8 @@ By the way,contains(Object)也是需要">
           
             <span class="post-comments-count">
               &nbsp; | &nbsp;
-              <a href="/2015/09/24/java-revmoveAll/#comments" itemprop="discussionUrl">
-                <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/24/java-revmoveAll/" itemprop="commentsCount"></span>
+              <a href="/2015/09/28/ajaxfileupload图片上传/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/28/ajaxfileupload图片上传/" itemprop="commentsCount"></span>
               </a>
             </span>
           
@@ -230,32 +234,102 @@ By the way,contains(Object)也是需要">
       
 
       
-        <span itemprop="articleBody"><p>java list remove(Object) removeAll(Collection&lt;?&gt; collection)先看看API介绍<br><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewef5213sgj31610azadb.jpg" alt=""></p>
-<p>需要实现其equals，才能remove(Object)，引用下面这篇文章：<br><a href="http://blog.csdn.net/will_awoke/article/details/6528872" target="_blank" rel="external">http://blog.csdn.net/will_awoke/article/details/6528872</a></p>
-<p>By the way,contains(Object)也是需要实现其equals方法，源码：</p>
-<pre><code><span class="keyword">public</span> <span class="built_in">boolean</span> contains(<span class="keyword">Object</span> obj)
-{
-    <span class="keyword">return</span> indexOf(obj) &gt;= <span class="number">0</span>;
+        <span itemprop="articleBody"><p><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1ewhxyxv3rjj30vb0mrgoi.jpg" alt=""></p>
+<p><strong>封面图</strong></p>
+<p>我这里使用的是ajaxfileupload控件做的上传，引用的CSS JS如图<img src="http://ww1.sinaimg.cn/large/0063lLoQgw1ewhz3u3ppqj30sy09yjze.jpg" alt=""><br>下载地址：<a href="http://url.cn/SP3S7c" target="_blank" rel="external">http://url.cn/SP3S7c</a><br>没有的去网上对应找就可以的，topic-update.js是业务的JS其他的全是插件,各位看官酌情添加。<br>JSP页面：</p>
+<pre><code><span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">th</span> <span class="attribute">width</span>=<span class="value">"120px"</span> <span class="attribute">align</span>=<span class="value">"right"</span> <span class="attribute">nowrap</span>=<span class="value">"nowrap"</span>&gt;</span>封面图：<span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">td</span> <span class="attribute">colspan</span>=<span class="value">"5"</span> <span class="attribute">nowrap</span>=<span class="value">"nowrap"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"file"</span> <span class="attribute">id</span>=<span class="value">"imgUploadBtn"</span> <span class="attribute">style</span>=<span class="value">"width: 180px;"</span> /&gt;</span>
+            <span class="tag">&lt;<span class="title">a</span> <span class="attribute">id</span>=<span class="value">"btnUpLoadImg"</span> <span class="attribute">href</span>=<span class="value">"javaScript:void(0);"</span> <span class="attribute">class</span>=<span class="value">"easyui-linkbutton"</span> <span class="attribute">style</span>=<span class="value">"width: 50px; height: 22px"</span>&gt;</span>上传<span class="tag">&lt;/<span class="title">a</span>&gt;</span>(宽&gt;=540）
+            <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"showImgDiv"</span> <span class="attribute">align</span>=<span class="value">"left"</span>&gt;</span>
+                                <span class="tag">&lt;<span class="title">img</span> <span class="attribute">id</span>=<span class="value">"imgUrl"</span> <span class="attribute">onload</span>=<span class="value">"JsUtils.autoResizeImage(300,100,this)"</span> /&gt;</span>
+                            <span class="tag">&lt;/<span class="title">div</span>&gt;</span> <span class="tag">&lt;<span class="title">s:textfield</span> <span class="attribute">id</span>=<span class="value">"imgUrlIn"</span> <span class="attribute">type</span>=<span class="value">"hidden"</span> /&gt;</span>
+            <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+</code></pre><p>topic-upadte.js:</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">uploadImg</span>(<span class="params"></span>)</span>{
+     $.ajaxFileUpload( {
+            url : <span class="string">'admin/info/upload.action'</span>, <span class="comment">//需要链接到服务器地址</span>
+            secureuri : <span class="literal">false</span>,
+            fileElementId : <span class="string">'imgUploadBtn'</span>, <span class="comment">//文件选择框的id属性 name</span>
+            width:<span class="number">540</span>,
+            height:<span class="number">0</span>,
+            dataType : <span class="string">'text'</span>, 
+            success : <span class="function"><span class="keyword">function</span>(<span class="params">data, status</span>)</span>{
+                <span class="keyword">var</span> jsonData = strToJson(data);
+                <span class="keyword">if</span>(jsonData.err)
+                {
+                    $.messager.alert(<span class="string">'温馨提示'</span>,jsonData.err,<span class="string">'warning'</span>);
+                }
+                <span class="keyword">else</span>
+                {
+                    <span class="keyword">var</span> url = jsonData.msg.url;
+                    $(<span class="string">"#imgUrl"</span>).attr(<span class="string">"src"</span>,url);
+                    imgUrl = url;
+                    $(<span class="string">"#imgUrlIn"</span>).val(url);
+                }
+        }
+    });
+}
+</code></pre><p>action：<em>filedata,filedataFileName,fileWidth,fileHeight getter/setter省略</em></p>
+<pre><code>/**
+ * 图片上传
+ */
+public void uploadImg(){
+    topicSerivice.upload(filedata,filedataFileName,fileWidth,fileHeight)<span class="comment">;</span>
 }
 
-<span class="keyword">public</span> <span class="built_in">int</span> indexOf(<span class="keyword">Object</span> obj)
-{
-    <span class="keyword">if</span>(obj == <span class="keyword">null</span>)
-    {
-        <span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="built_in">size</span>; i++)
-            <span class="keyword">if</span>(elementData[i] == <span class="keyword">null</span>)
-                <span class="keyword">return</span> i;
+    public <span class="built_in">String</span> upload(File filedata, <span class="built_in">String</span> fileName, <span class="built_in">int</span> fileWidth,
+        <span class="built_in">int</span> fileHeight) {
+    ServletActionContext.getResponse().setContentType(<span class="string">"text/html; charset=utf-8"</span>)<span class="comment">;</span>
+    <span class="built_in">String</span> json= <span class="string">""</span><span class="comment">;</span>
+      <span class="built_in">String</span> path1=<span class="string">""</span><span class="comment">;</span>
+      <span class="keyword">if</span>(filedata!=<span class="literal">null</span>){
 
-    } <span class="keyword">else</span>
-    {
-        <span class="keyword">for</span>(<span class="built_in">int</span> j = <span class="number">0</span>; j &lt; <span class="built_in">size</span>; j++)
-            <span class="keyword">if</span>(obj.equals(elementData[j]))
-                <span class="keyword">return</span> j;
+        // 获取缩略图保存的文件夹
+        <span class="built_in">String</span> filePath = PropertyUtils.getProperty(<span class="string">"temp"</span>)<span class="comment">;</span>
+            // 获取网站基础路径
+        <span class="built_in">String</span> baseurl = PropertyUtils.getProperty(<span class="string">"baseurl"</span>)<span class="comment">;</span>
 
-    }
-    <span class="keyword">return</span> -<span class="number">1</span>;
-} 
-</code></pre><p>多用反编译查看原理，才能了解其底层 以便更好的优化和操作List.</p>
+        // 获取到文件的绝对路径
+        <span class="built_in">String</span> fd = DateUtil.formatDate(new Date(), <span class="string">"yyyyMMdd"</span>)<span class="comment">;</span>
+        <span class="built_in">String</span> uploadPath =  filePath + fd<span class="comment">;</span>
+        <span class="built_in">String</span> newFileName = System.nanoTime()
+                + UploadFileUtil.getFileName(fileName)<span class="comment">;</span>
+        path1 = UploadFileUtil.uploadFileInfo(filedata,uploadPath+<span class="string">"/"</span>, newFileName.toLowerCase())<span class="comment">;</span>
+        <span class="built_in">String</span> path = ServletActionContext.getServletContext().getContextPath()<span class="comment">;</span>
+        path1 = baseurl + path + path1<span class="comment">;            </span>
+      }
+     /* <span class="built_in">String</span> tempWH=path1.substring(path1.indexOf(<span class="string">"?"</span>)+<span class="number">1</span>)<span class="comment">;</span>
+        <span class="keyword">if</span>(tempWH.indexOf(<span class="string">"*"</span>)&gt;<span class="number">0</span>){
+            <span class="built_in">String</span> _width=tempWH.substring(<span class="number">0</span>,tempWH.indexOf(<span class="string">"*"</span>))<span class="comment">;</span>
+            <span class="built_in">String</span> _height=tempWH.substring(tempWH.indexOf(<span class="string">"*"</span>)+<span class="number">1</span>)<span class="comment">;</span>
+            <span class="keyword">if</span>(_width.matches(<span class="string">"\\d+"</span>) &amp;&amp; _height.matches(<span class="string">"\\d+"</span>))
+            {
+                <span class="keyword">if</span>(Integer.parseInt(_width) &lt;= width) 
+                {
+                    json=<span class="string">"{\"</span>err\<span class="string">":\"</span>宽度需要大于:<span class="string">"+width+"</span>\<span class="string">",\"</span>msg\<span class="string">":{\"</span>url\<span class="string">":\""+path1+"</span>\<span class="string">"}}"</span><span class="comment">;</span>
+                }
+                <span class="keyword">else</span> <span class="keyword">if</span>(Integer.parseInt(_height) &lt;= height)
+                {
+                    json=<span class="string">"{\"</span>err\<span class="string">":\"</span>长度需要大于:<span class="string">"+height+"</span>\<span class="string">",\"</span>msg\<span class="string">":{\"</span>url\<span class="string">":\""+path1+"</span>\<span class="string">"}}"</span><span class="comment">;</span>
+                }
+                <span class="keyword">else</span>
+                {
+                    json=<span class="string">"{\"</span>err\<span class="string">":\"</span>\<span class="string">",\"</span>msg\<span class="string">":{\"</span>url\<span class="string">":\""+path1+"</span>\<span class="string">"}}"</span><span class="comment">; </span>
+                }
+            }
+        }*/
+      json=<span class="string">"{\"</span>err\<span class="string">":\"</span>\<span class="string">",\"</span>msg\<span class="string">":{\"</span>url\<span class="string">":\""+path1+"</span>\<span class="string">"}}"</span><span class="comment">; </span>
+        try {
+            ServletActionContext.getResponse().getWriter().write(json)<span class="comment">;</span>
+        } catch (IOException e) {
+            e.printStackTrace()<span class="comment">;</span>
+        }
+      <span class="keyword">return</span> <span class="literal">null</span><span class="comment">;</span>
+}
+</code></pre><p>顺便提一句：<a href="http://fex.baidu.com/webuploader/getting-started.html" target="_blank" rel="external">http://fex.baidu.com/webuploader/getting-started.html</a>这个上传插件也不错。大家各取所需。</p>
 </span>
       
     </div>
@@ -264,9 +338,7 @@ By the way,contains(Object)也是需要">
       
         <div class="post-tags">
           
-            <a href="/tags/List/" rel="tag">#List</a>
-          
-            <a href="/tags/java/" rel="tag">#java</a>
+            <a href="/tags/uploadImg/" rel="tag">#uploadImg</a>
           
         </div>
       
@@ -275,13 +347,13 @@ By the way,contains(Object)也是需要">
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/09/28/ajaxfileupload图片上传/" rel="prev">ajaxfileupload图片上传</a>
+              <a href="/2015/10/10/jianpan/" rel="prev">程序员必备之机械键盘</a>
             
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/09/23/java-sort/" rel="next">java-sort排序问题</a>
+              <a href="/2015/09/24/java-revmoveAll/" rel="next">java List remove,contains底层</a>
             
           </div>
         </div>
@@ -296,10 +368,10 @@ By the way,contains(Object)也是需要">
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2015/09/24/java-revmoveAll/"
-     data-title="java List remove,contains底层"
+        <div class="ds-share flat" data-thread-key="2015/09/28/ajaxfileupload图片上传/"
+     data-title="ajaxfileupload图片上传"
      data-content=""
-     data-url="http://blog.chen777.com/2015/09/24/java-revmoveAll/">
+     data-url="http://blog.chen777.com/2015/09/28/ajaxfileupload图片上传/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -329,8 +401,8 @@ By the way,contains(Object)也是需要">
         
           <div class="comments" id="comments">
             
-              <div class="ds-thread" data-thread-key="2015/09/24/java-revmoveAll/"
-                   data-title="java List remove,contains底层" data-url="http://blog.chen777.com/2015/09/24/java-revmoveAll/">
+              <div class="ds-thread" data-thread-key="2015/09/28/ajaxfileupload图片上传/"
+                   data-title="ajaxfileupload图片上传" data-url="http://blog.chen777.com/2015/09/28/ajaxfileupload图片上传/">
               </div>
             
           </div>

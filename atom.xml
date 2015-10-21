@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2015-10-16T03:00:22.414Z</updated>
+  <updated>2015-10-21T03:19:41.351Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -13,6 +13,19 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[webuploader(ssi)图片上传]]></title>
+    <link href="http://blog.chen777.com/2015/10/21/webuploader-ssi-%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0/"/>
+    <id>http://blog.chen777.com/2015/10/21/webuploader-ssi-图片上传/</id>
+    <published>2015-10-21T03:19:20.000Z</published>
+    <updated>2015-10-21T03:19:41.351Z</updated>
+    <content type="html"></content>
+    <summary type="html">
+    
+    </summary>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[markdown其他用法]]></title>
@@ -428,12 +441,12 @@ $(<span class="string">'#submitForm'</span>).click(<span class="function"><span 
   </entry>
   
   <entry>
-    <title><![CDATA[easyui做后台]]></title>
-    <link href="http://blog.chen777.com/2015/09/28/easyui/"/>
-    <id>http://blog.chen777.com/2015/09/28/easyui/</id>
+    <title><![CDATA[ajaxfileupload图片上传]]></title>
+    <link href="http://blog.chen777.com/2015/09/28/ajaxfileupload%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0/"/>
+    <id>http://blog.chen777.com/2015/09/28/ajaxfileupload图片上传/</id>
     <published>2015-09-28T02:00:32.000Z</published>
-    <updated>2015-10-19T02:06:08.416Z</updated>
-    <content type="html"><![CDATA[<p>首先看页面构造<br><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1ewhxyxv3rjj30vb0mrgoi.jpg" alt="">还是比较复杂的页面构成，图片上传预览压缩，多选combobox,tree，以及xheditor。<br>页面比较传统的 我就不做介绍，讲封面图、推送机型、推送渠道、地域标签、发布时间、详情内容。</p>
+    <updated>2015-10-21T03:22:55.784Z</updated>
+    <content type="html"><![CDATA[<p><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1ewhxyxv3rjj30vb0mrgoi.jpg" alt=""></p>
 <p><strong>封面图</strong></p>
 <p>我这里使用的是ajaxfileupload控件做的上传，引用的CSS JS如图<img src="http://ww1.sinaimg.cn/large/0063lLoQgw1ewhz3u3ppqj30sy09yjze.jpg" alt=""><br>下载地址：<a href="http://url.cn/SP3S7c" target="_blank" rel="external">http://url.cn/SP3S7c</a><br>没有的去网上对应找就可以的，topic-update.js是业务的JS其他的全是插件,各位看官酌情添加。<br>JSP页面：</p>
 <pre><code><span class="tag">&lt;<span class="title">tr</span>&gt;</span>
@@ -531,12 +544,12 @@ public void uploadImg(){
 </code></pre><p>顺便提一句：<a href="http://fex.baidu.com/webuploader/getting-started.html" target="_blank" rel="external">http://fex.baidu.com/webuploader/getting-started.html</a>这个上传插件也不错。大家各取所需。</p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<p>首先看页面构造<br><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1ewhxyxv3rjj30vb0mrgoi.jpg" alt="">还是比较复杂的页面构成，图片上传预览压缩，多选combobox,tree，以及xhed]]>
+    <![CDATA[<p><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1ewhxyxv3rjj30vb0mrgoi.jpg" alt=""></p>
+<p><strong>封面图</strong></p>
+<p>我这里使用的是ajaxfileupl]]>
     </summary>
     
-      <category term="easyui" scheme="http://blog.chen777.com/tags/easyui/"/>
-    
-      <category term="图片上传" scheme="http://blog.chen777.com/tags/%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0/"/>
+      <category term="uploadImg" scheme="http://blog.chen777.com/tags/uploadImg/"/>
     
   </entry>
   
