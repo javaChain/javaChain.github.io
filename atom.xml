@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2015-10-21T03:19:41.351Z</updated>
+  <updated>2015-10-21T03:45:18.015Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -19,11 +19,181 @@
     <link href="http://blog.chen777.com/2015/10/21/webuploader-ssi-%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0/"/>
     <id>http://blog.chen777.com/2015/10/21/webuploader-ssi-图片上传/</id>
     <published>2015-10-21T03:19:20.000Z</published>
-    <updated>2015-10-21T03:19:41.351Z</updated>
-    <content type="html"></content>
+    <updated>2015-10-21T03:45:18.015Z</updated>
+    <content type="html"><![CDATA[<h1 id="背景">背景</h1><p>前面项目中使用的是ajaxfileupload作为上传工具我感觉这个工具不是很方便，而且很多参数校验要到后台去处理，扩展性和可维护性低。我希望有一个插件在前台做更多的校验，不需要到后台做检验。这个时候<a href="http://fex.baidu.com/webuploader/" target="_blank" rel="external">webuploader</a>出来了。并且极为重要的一点是支持跨域上传文件或者图片。</p>
+<h1 id="使用">使用</h1><p>首先你需要到webuploader去了解基本用法和参数，我使用的是ssi架构。</p>
+<h2 id="js">js</h2><pre><code>// 图片上传demo
+jQuery(<span class="keyword">function</span>() {
+var $ = jQuery,
+    <span class="variable">$list</span> = $(<span class="string">'#fileList'</span>),
+    // 优化retina, 在retina下这个值是<span class="number">2</span>
+    ratio = window.devicePixelRatio || <span class="number">1</span>,
+
+    // 缩略图大小
+    thumbnailWidth = <span class="number">200</span> * ratio,
+    thumbnailHeight = <span class="number">200</span> * ratio,
+
+    // Web Uploader实例
+    uploader;
+
+// 初始化Web Uploader
+uploader = WebUploader.create({
+
+    // 自动上传。
+    auto: true,
+
+    // swf文件路径
+    swf: <span class="string">'Uploader.swf'</span>,
+
+    // 文件接收服务端。
+    server: <span class="string">'admin/subscribe/uploadImg.action'</span>,
+
+    // 选择文件的按钮。可选。
+    // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+    pick: <span class="string">'#filePicker'</span>,
+
+    // 只允许选择文件，可选。
+    accept: {
+        title: <span class="string">'Images'</span>,
+        extensions: <span class="string">'gif,jpg,jpeg,bmp,png'</span>,
+        mimeTypes: <span class="string">'image/*'</span>
+    },
+    fileVal:<span class="string">'filedata'</span>, //fileVal {Object} [可选] [默认值：<span class="string">'file'</span>] 设置文件上传域的name。
+
+    fileNumLimit : <span class="number">1</span> 
+});
+
+
+// 当有文件添加进来的时候
+uploader.on( <span class="string">'fileQueued'</span>, function( file ) {
+    var <span class="variable">$li</span> = $(
+            <span class="string">'&lt;div id="'</span> + file.id + <span class="string">'" class="file-item thumbnail"&gt;'</span> +
+                <span class="string">'&lt;img&gt;'</span> +
+                <span class="string">'&lt;div class="info"&gt;'</span> + file.name + <span class="string">'&lt;/div&gt;'</span> +
+            <span class="string">'&lt;/div&gt;'</span>
+            ),
+        <span class="variable">$img</span> = <span class="variable">$li</span>.find(<span class="string">'img'</span>);
+
+    <span class="variable">$list</span>.append( <span class="variable">$li</span> );
+
+    // 创建缩略图
+    uploader.makeThumb( file, function( error, src ) {
+        if ( error ) {
+            <span class="variable">$img</span>.replaceWith(<span class="string">'&lt;span&gt;不能预览&lt;/span&gt;'</span>);
+            return;
+        }
+
+        <span class="variable">$img</span>.attr( <span class="string">'src'</span>, src );
+    }, thumbnailWidth, thumbnailHeight );
+});
+
+// 文件上传过程中创建进度条实时显示。
+uploader.on( <span class="string">'uploadProgress'</span>, function( file, percentage ) {
+    var <span class="variable">$li</span> = $( <span class="string">'#'</span>+file.id ),
+        <span class="variable">$percent</span> = <span class="variable">$li</span>.find(<span class="string">'.progress span'</span>);
+
+    // 避免重复创建
+    if ( !<span class="variable">$percent</span>.length ) {
+        <span class="variable">$percent</span> = $(<span class="string">'&lt;p class="progress"&gt;&lt;span&gt;&lt;/span&gt;&lt;/p&gt;'</span>)
+                .appendTo( <span class="variable">$li</span> )
+                .find(<span class="string">'span'</span>);
+    }
+
+    <span class="variable">$percent</span>.css( <span class="string">'width'</span>, percentage * <span class="number">100</span> + <span class="string">'%'</span> );
+});
+
+// 文件上传成功，给item添加成功class, 用样式标记上传成功。
+uploader.on( <span class="string">'uploadSuccess'</span>, function( file ) {
+    $( <span class="string">'#'</span>+file.id ).addClass(<span class="string">'upload-state-done'</span>);
+});
+
+// 文件上传失败，现实上传出错。
+uploader.on( <span class="string">'uploadError'</span>, function( file ) {
+    var <span class="variable">$li</span> = $( <span class="string">'#'</span>+file.id ),
+        <span class="variable">$error</span> = <span class="variable">$li</span>.find(<span class="string">'div.error'</span>);
+
+    // 避免重复创建
+    if ( !<span class="variable">$error</span>.length ) {
+        <span class="variable">$error</span> = $(<span class="string">'&lt;div class="error"&gt;&lt;/div&gt;'</span>).appendTo( <span class="variable">$li</span> );
+    }
+
+    <span class="variable">$error</span>.text(<span class="string">'上传失败'</span>);
+});
+
+// 完成上传完了，成功或者失败，先删除进度条。
+uploader.on( <span class="string">'uploadComplete'</span>, function( file ) {
+    $( <span class="string">'#'</span>+file.id ).find(<span class="string">'.progress'</span>).remove();
+});
+}); 
+</code></pre><h2 id="jsp">jsp</h2><pre><code><span class="xml"></span>&lt;%<span class="ruby">@ page language=<span class="string">"java"</span> contentType=<span class="string">"text/html; charset=UTF-8"</span>
+pageEncoding=<span class="string">"UTF-8"</span></span>%&gt;<span class="xml">
+</span>&lt;%<span class="ruby">@ <span class="keyword">include</span> file=<span class="string">"/admin/common/jsp/globalManagement.jsp"</span></span>%&gt;<span class="xml">    
+
+<span class="doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;<span class="title">html</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">head</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">charset</span>=<span class="value">"utf-8"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">title</span>&gt;</span>webuploader<span class="tag">&lt;/<span class="title">title</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">base</span> <span class="attribute">href</span>=<span class="value">"</span></span></span>&lt;%=<span class="ruby">basePath</span>%&gt;<span class="xml"><span class="tag"><span class="value">"</span>&gt;</span>
+        <span class="comment">&lt;!--引入CSS--&gt;</span>
+        <span class="tag">&lt;<span class="title">link</span> <span class="attribute">rel</span>=<span class="value">"stylesheet"</span> <span class="attribute">type</span>=<span class="value">"text/css"</span> <span class="attribute">href</span>=<span class="value">"</span></span></span>&lt;%=<span class="ruby">basePath</span>%&gt;<span class="xml"><span class="tag"><span class="value">admin/webuploader/webuploader.css"</span>&gt;</span>
+
+        <span class="comment">&lt;!--引入JS--&gt;</span>
+        <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"</span></span></span>&lt;%=<span class="ruby">basePath</span>%&gt;<span class="xml"><span class="tag"><span class="value">common/js/jquery-1.7.2.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"</span></span></span>&lt;%=<span class="ruby">basePath</span>%&gt;<span class="xml"><span class="tag"><span class="value">admin/webuploader/webuploader.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"</span></span></span>&lt;%=<span class="ruby">basePath</span>%&gt;<span class="xml"><span class="tag"><span class="value">admin/webuploader/upload.js"</span> &gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+
+    <span class="tag">&lt;<span class="title">body</span>&gt;</span>
+        <span class="comment">&lt;!--dom结构部分--&gt;</span>
+        <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"uploader-demo"</span>&gt;</span>
+            <span class="comment">&lt;!--用来存放item--&gt;</span>
+            <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"hidden"</span>  <span class="attribute">name</span>=<span class="value">"fileName"</span> /&gt;</span><span class="tag">&lt;<span class="title">br</span>/&gt;</span>    
+             <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"fileList"</span> <span class="attribute">class</span>=<span class="value">"uploader-list"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span> 
+            <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"filePicker"</span>&gt;</span>选择图片<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span></span>
+</code></pre><h2 id="action">action</h2><pre><code><span class="comment">/**
+ * 图片上传
+ */</span>
+<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">uploadImg</span><span class="params">()</span></span>{
+    subscribeService.upload(filedata,filedataFileName);
+}
+</code></pre><h2 id="service">service</h2><pre><code><span class="keyword">public</span> <span class="keyword">String</span> upload(File filedata,<span class="keyword">String</span> fileName,<span class="built_in">int</span> <span class="variable">width</span>,<span class="built_in">int</span> <span class="variable">height</span>){
+    ServletActionContext.getResponse().setContentType(<span class="string">"text/html; charset=utf-8"</span>);
+    <span class="keyword">String</span> json= <span class="string">""</span>;
+      <span class="keyword">String</span> path1=<span class="string">""</span>;
+      <span class="keyword">if</span>(filedata!=<span class="keyword">null</span>){
+
+        <span class="comment">// 获取缩略图保存的文件夹</span>
+        <span class="keyword">String</span> filePath = PropertyUtils.getProperty(<span class="string">"ccsimgupload"</span>);
+            <span class="comment">// 获取网站基础路径</span>
+        <span class="keyword">String</span> baseurl = PropertyUtils.getProperty(<span class="string">"baseurl"</span>);
+
+        <span class="comment">// 获取到文件的绝对路径</span>
+        <span class="keyword">String</span> fd = DateUtil.formatDate(<span class="keyword">new</span> Date(), <span class="string">"yyyyMMdd"</span>);
+        <span class="keyword">String</span> uploadPath =  filePath + fd;
+        <span class="keyword">String</span> newFileName = System.nanoTime()
+                + UploadFileUtil.getFileName(fileName);
+        path1 = UploadFileUtil.uploadFileInfo(filedata,uploadPath+<span class="string">"/"</span>, newFileName.toLowerCase());
+        <span class="keyword">String</span> path = ServletActionContext.getServletContext().getContextPath();
+        path1 = baseurl + path + path1;            
+      }
+        <span class="keyword">try</span> {
+            ServletActionContext.getResponse().getWriter().write(json);
+        } <span class="keyword">catch</span> (IOException e) {
+            e.printStackTrace();
+        }
+      <span class="keyword">return</span> <span class="keyword">null</span>;
+ }
+</code></pre><p>页面效果如图：<br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1ex8lyaxc1tj307v06y3yt.jpg" alt="大功告成"></p>
+]]></content>
     <summary type="html">
-    
+    <![CDATA[<h1 id="背景">背景</h1><p>前面项目中使用的是ajaxfileupload作为上传工具我感觉这个工具不是很方便，而且很多参数校验要到后台去处理，扩展性和可维护性低。我希望有一个插件在前台做更多的校验，不需要到后台做检验。这个时候<a href="http://fe]]>
     </summary>
+    
+      <category term="webuploader" scheme="http://blog.chen777.com/tags/webuploader/"/>
     
   </entry>
   
@@ -445,7 +615,7 @@ $(<span class="string">'#submitForm'</span>).click(<span class="function"><span 
     <link href="http://blog.chen777.com/2015/09/28/ajaxfileupload%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0/"/>
     <id>http://blog.chen777.com/2015/09/28/ajaxfileupload图片上传/</id>
     <published>2015-09-28T02:00:32.000Z</published>
-    <updated>2015-10-21T03:22:55.784Z</updated>
+    <updated>2015-10-21T03:29:36.695Z</updated>
     <content type="html"><![CDATA[<p><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1ewhxyxv3rjj30vb0mrgoi.jpg" alt=""></p>
 <p><strong>封面图</strong></p>
 <p>我这里使用的是ajaxfileupload控件做的上传，引用的CSS JS如图<img src="http://ww1.sinaimg.cn/large/0063lLoQgw1ewhz3u3ppqj30sy09yjze.jpg" alt=""><br>下载地址：<a href="http://url.cn/SP3S7c" target="_blank" rel="external">http://url.cn/SP3S7c</a><br>没有的去网上对应找就可以的，topic-update.js是业务的JS其他的全是插件,各位看官酌情添加。<br>JSP页面：</p>
@@ -549,7 +719,7 @@ public void uploadImg(){
 <p>我这里使用的是ajaxfileupl]]>
     </summary>
     
-      <category term="uploadImg" scheme="http://blog.chen777.com/tags/uploadImg/"/>
+      <category term="ajaxfileupload" scheme="http://blog.chen777.com/tags/ajaxfileupload/"/>
     
   </entry>
   
