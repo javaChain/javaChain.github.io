@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2015-10-21T03:45:18.015Z</updated>
+  <updated>2015-10-22T00:53:00.551Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -19,8 +19,9 @@
     <link href="http://blog.chen777.com/2015/10/21/webuploader-ssi-%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0/"/>
     <id>http://blog.chen777.com/2015/10/21/webuploader-ssi-图片上传/</id>
     <published>2015-10-21T03:19:20.000Z</published>
-    <updated>2015-10-21T03:45:18.015Z</updated>
+    <updated>2015-10-22T00:53:00.551Z</updated>
     <content type="html"><![CDATA[<h1 id="背景">背景</h1><p>前面项目中使用的是ajaxfileupload作为上传工具我感觉这个工具不是很方便，而且很多参数校验要到后台去处理，扩展性和可维护性低。我希望有一个插件在前台做更多的校验，不需要到后台做检验。这个时候<a href="http://fex.baidu.com/webuploader/" target="_blank" rel="external">webuploader</a>出来了。并且极为重要的一点是支持跨域上传文件或者图片。</p>
+<a id="more"></a>
 <h1 id="使用">使用</h1><p>首先你需要到webuploader去了解基本用法和参数，我使用的是ssi架构。</p>
 <h2 id="js">js</h2><pre><code>// 图片上传demo
 jQuery(<span class="keyword">function</span>() {
@@ -190,7 +191,8 @@ pageEncoding=<span class="string">"UTF-8"</span></span>%&gt;<span class="xml">
 </code></pre><p>页面效果如图：<br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1ex8lyaxc1tj307v06y3yt.jpg" alt="大功告成"></p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<h1 id="背景">背景</h1><p>前面项目中使用的是ajaxfileupload作为上传工具我感觉这个工具不是很方便，而且很多参数校验要到后台去处理，扩展性和可维护性低。我希望有一个插件在前台做更多的校验，不需要到后台做检验。这个时候<a href="http://fe]]>
+    <![CDATA[<h1 id="背景">背景</h1><p>前面项目中使用的是ajaxfileupload作为上传工具我感觉这个工具不是很方便，而且很多参数校验要到后台去处理，扩展性和可维护性低。我希望有一个插件在前台做更多的校验，不需要到后台做检验。这个时候<a href="http://fex.baidu.com/webuploader/">webuploader</a>出来了。并且极为重要的一点是支持跨域上传文件或者图片。</p>]]>
+    
     </summary>
     
       <category term="webuploader" scheme="http://blog.chen777.com/tags/webuploader/"/>
