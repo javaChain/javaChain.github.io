@@ -346,7 +346,7 @@
           
           
             
-              <a class="post-title-link" href="/2015/09/18/postName/" itemprop="url">
+              <a class="post-title-link" href="/2015/09/18/java-timer/" itemprop="url">
                 java timer设置
               </a>
             
@@ -383,8 +383,8 @@
           
             <span class="post-comments-count">
               &nbsp; | &nbsp;
-              <a href="/2015/09/18/postName/#comments" itemprop="discussionUrl">
-                <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/18/postName/" itemprop="commentsCount"></span>
+              <a href="/2015/09/18/java-timer/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/18/java-timer/" itemprop="commentsCount"></span>
               </a>
             </span>
           
@@ -399,22 +399,9 @@
 
       
         
-          <p>创建timer类实现接口：ServletContextListener然后在web.xml中配置listener    </p>
-<pre><code><span class="keyword">public</span> <span class="keyword">static</span> final Logger LOG = LoggerFactory.make();
-
-<span class="comment">//时间间隔(一天)  </span>
-<span class="keyword">private</span> <span class="keyword">static</span> final <span class="keyword">long</span> PERIOD_DAY = <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>;  
-
-<span class="keyword">private</span> Timer timer;
-
-<span class="comment">//容器摧毁</span>
-<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">contextDestroyed</span><span class="params">(ServletContextEvent arg0)</span> </span>{
-    timer.cancel();
-
-}
-</code></pre>
+          <p>Java自带的java.util.Timer类，通过调度一个java.util.TimerTask任务。<br>基本流程：在web.xml中配置listener调用timer类，timer类实现接口ServletContextListener,调用schedule中task。task中实现业务逻辑。<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2015/09/18/postName/#more" rel="contents">
+            <a class="btn" href="/2015/09/18/java-timer/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -488,7 +475,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">12</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

@@ -41,34 +41,16 @@
   <link rel="shorticon icon" type="image/x-icon" href="/myBlog.ico" />
 
 
-<meta name="description" content="创建timer类实现接口：ServletContextListener然后在web.xml中配置listener    
-public static final Logger LOG = LoggerFactory.make();
-
-//时间间隔(一天)  
-private static final long PERIOD_DAY = 24 * 60 * 60 * 1000;  
-
-private">
+<meta name="description" content="Java自带的java.util.Timer类，通过调度一个java.util.TimerTask任务。基本流程：在web.xml中配置listener调用timer类，timer类实现接口ServletContextListener,调用schedule中task。task中实现业务逻辑。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java timer设置">
-<meta property="og:url" content="http://blog.chen777.com/2015/09/18/postName/index.html">
+<meta property="og:url" content="http://blog.chen777.com/2015/09/18/java-timer/index.html">
 <meta property="og:site_name" content="陈西西">
-<meta property="og:description" content="创建timer类实现接口：ServletContextListener然后在web.xml中配置listener    
-public static final Logger LOG = LoggerFactory.make();
-
-//时间间隔(一天)  
-private static final long PERIOD_DAY = 24 * 60 * 60 * 1000;  
-
-private">
-<meta property="og:updated_time" content="2015-09-21T11:54:49.047Z">
+<meta property="og:description" content="Java自带的java.util.Timer类，通过调度一个java.util.TimerTask任务。基本流程：在web.xml中配置listener调用timer类，timer类实现接口ServletContextListener,调用schedule中task。task中实现业务逻辑。">
+<meta property="og:updated_time" content="2015-10-27T01:53:21.051Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java timer设置">
-<meta name="twitter:description" content="创建timer类实现接口：ServletContextListener然后在web.xml中配置listener    
-public static final Logger LOG = LoggerFactory.make();
-
-//时间间隔(一天)  
-private static final long PERIOD_DAY = 24 * 60 * 60 * 1000;  
-
-private">
+<meta name="twitter:description" content="Java自带的java.util.Timer类，通过调度一个java.util.TimerTask任务。基本流程：在web.xml中配置listener调用timer类，timer类实现接口ServletContextListener,调用schedule中task。task中实现业务逻辑。">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -241,8 +223,8 @@ private">
           
             <span class="post-comments-count">
               &nbsp; | &nbsp;
-              <a href="/2015/09/18/postName/#comments" itemprop="discussionUrl">
-                <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/18/postName/" itemprop="commentsCount"></span>
+              <a href="/2015/09/18/java-timer/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/18/java-timer/" itemprop="commentsCount"></span>
               </a>
             </span>
           
@@ -256,69 +238,69 @@ private">
       
 
       
-        <span itemprop="articleBody"><p>创建timer类实现接口：ServletContextListener然后在web.xml中配置listener    </p>
-<pre><code><span class="keyword">public</span> <span class="keyword">static</span> final Logger LOG = LoggerFactory.make();
+        <span itemprop="articleBody"><p>Java自带的java.util.Timer类，通过调度一个java.util.TimerTask任务。<br>基本流程：在web.xml中配置listener调用timer类，timer类实现接口ServletContextListener,调用schedule中task。task中实现业务逻辑。<br><a id="more"></a></p>
+<p>TimerManager.java</p>
+<pre><code>package com<span class="built_in">.</span>inveno<span class="built_in">.</span>ccs<span class="built_in">.</span>timer;
 
-<span class="comment">//时间间隔(一天)  </span>
-<span class="keyword">private</span> <span class="keyword">static</span> final <span class="keyword">long</span> PERIOD_DAY = <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>;  
+<span class="keyword">import</span> java<span class="built_in">.</span>util<span class="built_in">.</span>Calendar;
+<span class="keyword">import</span> java<span class="built_in">.</span>util<span class="built_in">.</span><span class="built_in">Date</span>;
+<span class="keyword">import</span> java<span class="built_in">.</span>util<span class="built_in">.</span>Timer;
 
-<span class="keyword">private</span> Timer timer;
+<span class="keyword">import</span> javax<span class="built_in">.</span>servlet<span class="built_in">.</span>ServletContextEvent;
+<span class="keyword">import</span> javax<span class="built_in">.</span>servlet<span class="built_in">.</span>ServletContextListener;
 
-<span class="comment">//容器摧毁</span>
-<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">contextDestroyed</span><span class="params">(ServletContextEvent arg0)</span> </span>{
-    timer.cancel();
+<span class="keyword">import</span> org<span class="built_in">.</span>apache<span class="built_in">.</span>log4j<span class="built_in">.</span>Logger;
 
-}
-</code></pre><a id="more"></a>
-<pre><code><span class="comment">//容器初始化</span>
-<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">contextInitialized</span><span class="params">(ServletContextEvent arg0)</span> </span>{
-    LOG.info(<span class="string">"start timer"</span>);
-    Calendar calendar = Calendar.getInstance();
-      <span class="comment">/*** 定制每日2:00执行方法 ***/</span>
-      calendar.<span class="built_in">set</span>(Calendar.HOUR_OF_DAY, <span class="number">2</span>);
-      calendar.<span class="built_in">set</span>(Calendar.MINUTE, <span class="number">0</span>);
-      calendar.<span class="built_in">set</span>(Calendar.SECOND, <span class="number">0</span>);
-      Date date=calendar.getTime(); <span class="comment">//第一次执行定时任务的时间</span>
+<span class="keyword">import</span> com<span class="built_in">.</span>inveno<span class="built_in">.</span>ccs<span class="built_in">.</span>common<span class="built_in">.</span>util<span class="built_in">.</span>LoggerFactory;
 
-      <span class="comment">//如果第一次执行定时任务的时间 小于 当前的时间</span>
-      <span class="comment">//此时要在 第一次执行定时任务的时间 加一天，以便此任务*在下个时间点执行。如果不加一天，任务会立即执行。</span>
-      <span class="keyword">if</span> (date.before(<span class="keyword">new</span> Date())) {
-          date = <span class="keyword">this</span>.addDay(date, <span class="number">1</span>);
-      }*
-    timer = <span class="keyword">new</span> Timer();  
-    Task task = <span class="keyword">new</span> Task();  
-    <span class="comment">//安排指定的任务在指定的时间开始进行重复的固定延迟执行。  </span>
-    timer.schedule(task,date,PERIOD_DAY);  
-    LOG.info(<span class="string">"start end"</span>);
-}  
+<span class="keyword">public</span> class TimerManager implements ServletContextListener{
+    <span class="keyword">public</span> static final Logger <span class="keyword">LOG</span> = LoggerFactory<span class="built_in">.</span>make();
 
-<span class="comment">// 增加或减少天数</span>
- <span class="function"><span class="keyword">public</span> Date <span class="title">addDay</span><span class="params">(Date date, <span class="keyword">int</span> num)</span> </span>{
-  Calendar startDT = Calendar.getInstance();
-  startDT.setTime(date);
-  startDT.add(Calendar.DAY_OF_MONTH, num);
-  <span class="keyword">return</span> startDT.getTime();
- }
-<span class="comment">/** 
- * 执行内容 
- * 
- */</span>  
-<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{ 
-    ApplicationContext ctx= GetApplicationContext.getInstance();
-    HotWordsDao hotWordsDao = (HotWordsDao) ctx.getBean(<span class="string">"hotWordsDao"</span>); 
-    <span class="keyword">try</span> {
-        List&lt;DailyHotWordDTO&gt; dailyList=hotWordsDao.getDailyHotWordList();
-        <span class="keyword">if</span>(dailyList!=null &amp;&amp; dailyList.size()&gt;<span class="number">0</span>){
-            hotWordsDao.insertHotWords(dailyList);
-        }
-    } <span class="keyword">catch</span> (Exception e) {
-        e.printStackTrace();
+    <span class="comment">//时间间隔(一天)  </span>
+    <span class="keyword">private</span> static final long PERIOD_DAY = <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>;  
+
+    <span class="keyword">private</span> Timer timer;
+
+    <span class="comment">//容器摧毁</span>
+    <span class="keyword">public</span> <span class="literal">void</span> contextDestroyed(ServletContextEvent arg0) {
+        timer<span class="built_in">.</span>cancel();
+
     }
-}
 
-    <span class="comment">//获得注解的hotWordsDao</span>
-    <span class="keyword">public</span> <span class="keyword">class</span> GetApplicationContext {
-    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> ApplicationContextHolder {  
+    <span class="comment">//容器初始化</span>
+    <span class="keyword">public</span> <span class="literal">void</span> contextInitialized(ServletContextEvent arg0) {
+        <span class="keyword">LOG</span><span class="built_in">.</span>info(<span class="string">"start timer"</span>);
+        Calendar calendar = Calendar<span class="built_in">.</span>getInstance();
+          <span class="comment">/*** 定制每日17:30执行方法 ***/</span>
+          calendar<span class="built_in">.</span><span class="built_in">set</span>(Calendar<span class="built_in">.</span>HOUR_OF_DAY, <span class="number">17</span>);
+          calendar<span class="built_in">.</span><span class="built_in">set</span>(Calendar<span class="built_in">.</span>MINUTE, <span class="number">30</span>);
+          calendar<span class="built_in">.</span><span class="built_in">set</span>(Calendar<span class="built_in">.</span>SECOND, <span class="number">0</span>);
+          <span class="built_in">Date</span> <span class="built_in">date</span>=calendar<span class="built_in">.</span>getTime(); <span class="comment">//第一次执行定时任务的时间</span>
+
+          <span class="comment">//如果第一次执行定时任务的时间 小于 当前的时间</span>
+          <span class="comment">//此时要在 第一次执行定时任务的时间 加一天，以便此任务在下个时间点执行。如果不加一天，任务会立即执行。</span>
+          <span class="keyword">if</span> (<span class="built_in">date</span><span class="built_in">.</span>before(<span class="literal">new</span> <span class="built_in">Date</span>())) {
+              <span class="built_in">date</span> = this<span class="built_in">.</span>addDay(<span class="built_in">date</span>, <span class="number">1</span>);
+          }
+        timer = <span class="literal">new</span> Timer();  
+        Task task = <span class="literal">new</span> Task();  
+        <span class="comment">//安排指定的任务在指定的时间开始进行重复的固定延迟执行。  </span>
+        timer<span class="built_in">.</span>schedule(task,<span class="built_in">date</span>,PERIOD_DAY);  
+        <span class="keyword">LOG</span><span class="built_in">.</span>info(<span class="string">"start end"</span>);
+    }  
+
+    <span class="comment">// 增加或减少天数</span>
+     <span class="keyword">public</span> <span class="built_in">Date</span> addDay(<span class="built_in">Date</span> <span class="built_in">date</span>, int num) {
+      Calendar startDT = Calendar<span class="built_in">.</span>getInstance();
+      startDT<span class="built_in">.</span>setTime(<span class="built_in">date</span>);
+      startDT<span class="built_in">.</span>add(Calendar<span class="built_in">.</span>DAY_OF_MONTH, num);
+      <span class="keyword">return</span> startDT<span class="built_in">.</span>getTime();
+     }
+}
+</code></pre><p>GetApplicationContext.java</p>
+<pre><code>    <span class="comment">//获得注解的hotWordsDao</span>
+    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">GetApplicationContext</span> {
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">ApplicationContextHolder</span> {  
         <span class="comment">// 单例变量  </span>
         <span class="keyword">private</span> <span class="keyword">static</span> ApplicationContext AC = <span class="keyword">new</span> FileSystemXmlApplicationContext(  
                 <span class="string">"classpath:applicationContext-*.xml"</span>);  
@@ -326,23 +308,80 @@ private">
 
 
     <span class="comment">// 私有化的构造方法，保证外部的类不能通过构造器来实例化。  </span>
-    <span class="function"><span class="keyword">private</span> <span class="title">GetApplicationContext</span><span class="params">()</span> </span>{  
+    <span class="function"><span class="keyword">private</span> <span class="title">GetApplicationContext</span>(<span class="params"></span>) </span>{  
 
 
     }  
 
 
     <span class="comment">// 获取单例对象实例  </span>
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ApplicationContext <span class="title">getInstance</span><span class="params">()</span> </span>{  
-        <span class="keyword">if</span> (ApplicationContextHolder.AC == null) {  
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ApplicationContext <span class="title">getInstance</span>(<span class="params"></span>) </span>{  
+        <span class="keyword">if</span> (ApplicationContextHolder.AC == <span class="keyword">null</span>) {  
             ApplicationContextHolder.AC = <span class="keyword">new</span> FileSystemXmlApplicationContext(  
                     <span class="string">"classpath:applicationContext-*.xml"</span>);  
         }  
         <span class="keyword">return</span> ApplicationContextHolder.AC;  
     }  
 }
-</code></pre><p>web.xml中配置listener：<br><code>&lt;listener&gt;&lt;listener-class&gt;com.inveno.ccs.Timer.TimerManager&lt;listener-class&gt;&lt;/listener&gt;</code></p>
-<p>总结：功能开发完成了，在完成的时候有几个地方遇到了问题:<br>1.获取不到hotWordsDao，然后折腾半天，终于搞定。<br>2.只要是服务重启就会调用task，这样业务就产生问题，然后我百度找了一个判断。</p>
+</code></pre><p>Task.java</p>
+<pre><code><span class="keyword">package</span> com.inveno.ccs.timer;
+
+<span class="keyword">import</span> java.util.List;
+<span class="keyword">import</span> java.util.TimerTask;
+
+<span class="keyword">import</span> org.springframework.context.ApplicationContext;
+
+<span class="keyword">import</span> com.inveno.ccs.dao.FirmDao;
+<span class="keyword">import</span> com.inveno.ccs.dao.HotWordsDao;
+<span class="keyword">import</span> com.inveno.ccs.dto.DailyHotWordDTO;
+<span class="keyword">import</span> com.inveno.ccs.dto.HotWordsDTO;
+<span class="keyword">import</span> com.inveno.ccs.dto.TreeDTO;
+<span class="keyword">import</span> com.inveno.ccs.service.HotWordsServer;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="keyword">Task</span> <span class="keyword">extends</span> TimerTask{
+
+<span class="comment">/** 
+ * 执行内容 
+ * 
+ */</span>  
+    <span class="keyword">public</span> <span class="keyword">void</span> run() { 
+        ApplicationContext ctx= GetApplicationContext.getInstance();
+        HotWordsDao hotWordsDao = (HotWordsDao) ctx.getBean(<span class="string">"hotWordsDao"</span>); 
+        HotWordsServer hotWordsServer = (HotWordsServer) ctx.getBean(<span class="string">"hotWordsServer"</span>); 
+        FirmDao firmDao = (FirmDao) ctx.getBean(<span class="string">"firmDao"</span>);
+        List&lt;TreeDTO&gt; firmList=firmDao.findTreeDTO();
+
+        <span class="keyword">try</span> {
+            List&lt;DailyHotWordDTO&gt; dailyList=hotWordsDao.getDailyHotWordList();
+            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; dailyList.<span class="keyword">size</span>(); i++) {
+                DailyHotWordDTO dailyHotWordDTO=dailyList.get(i);
+                List&lt;HotWordsDTO&gt; dtoList=hotWordsServer.getHotWords(dailyHotWordDTO.getWord());
+                <span class="keyword">if</span>(dtoList.<span class="keyword">size</span>()&gt;<span class="number">0</span>){
+                    dailyList.remove(i);
+                    <span class="keyword">continue</span>;
+                }
+            }
+
+            <span class="keyword">if</span>(dailyList!=<span class="keyword">null</span> &amp;&amp; dailyList.<span class="keyword">size</span>()&gt;<span class="number">0</span>){
+                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; firmList.<span class="keyword">size</span>(); j++) {
+                    TreeDTO treeDTO=firmList.get(j);
+                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; dailyList.<span class="keyword">size</span>(); i++) {
+                        DailyHotWordDTO dailyHotWordDTO=dailyList.get(i);
+                        dailyHotWordDTO.setFirmId(treeDTO.getId()+<span class="string">""</span>);
+                        dailyHotWordDTO.setFirmName(treeDTO.<span class="keyword">getText</span>());
+                        hotWordsDao.insertDailyHotWordDTO(dailyHotWordDTO);
+                    }
+
+                }
+            }
+        } <span class="keyword">catch</span> (Exception e) {
+            e.printStackTrace();
+        }
+    }    
+}
+</code></pre><p>web.xml中配置listener：</p>
+<pre><code>&lt;listener&gt;&lt;listener-<span class="class"><span class="keyword">class</span>&gt;<span class="title">com</span>.<span class="title">inveno</span>.<span class="title">ccs</span>.<span class="title">Timer</span>.<span class="title">TimerManager</span><span class="inheritance">&lt;<span class="parent">listener</span></span>-<span class="title">class</span>&gt;<span class="inheritance">&lt;</span>/<span class="title">listener</span>&gt;</span>
+</code></pre><p>总结：功能开发完成了，在完成的时候有几个地方遇到了问题:<br>1.获取不到hotWordsDao，然后折腾半天，终于搞定。<br>2.只要是服务重启就会调用task，这样业务就产生问题，只需要判断一下即可。</p>
 <p>定时任务其实有很多，也很灵活，spring quartz/timer等等。</p>
 </span>
       
@@ -380,10 +419,10 @@ private">
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2015/09/18/postName/"
+        <div class="ds-share flat" data-thread-key="2015/09/18/java-timer/"
      data-title="java timer设置"
      data-content=""
-     data-url="http://blog.chen777.com/2015/09/18/postName/">
+     data-url="http://blog.chen777.com/2015/09/18/java-timer/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -413,8 +452,8 @@ private">
         
           <div class="comments" id="comments">
             
-              <div class="ds-thread" data-thread-key="2015/09/18/postName/"
-                   data-title="java timer设置" data-url="http://blog.chen777.com/2015/09/18/postName/">
+              <div class="ds-thread" data-thread-key="2015/09/18/java-timer/"
+                   data-title="java timer设置" data-url="http://blog.chen777.com/2015/09/18/java-timer/">
               </div>
             
           </div>
@@ -468,7 +507,7 @@ private">
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">12</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
