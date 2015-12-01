@@ -1,0 +1,992 @@
+<!doctype html>
+<html class="theme-next  theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+    <meta name="description" content="学而不思则罔，思而不学则殆" />
+
+
+
+  <meta name="keywords" content="easyui," />
+
+
+
+  <link rel="alternate" href="/atom.xml" title="陈西西" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/myBlog.ico" />
+
+
+<meta name="description" content="介绍jQuery EasyUI是一组基于jQuery的UI插件集合体，而jQuery EasyUI的目标就是帮助web开发者更轻松的打造出功能丰富并且美观的UI界面。开发者不需要编写复杂的javascript，也不需要对css样式有深入的了解，开发者需要了解的只有一些简单的html标签。
+英文官网,建议翻墙访问英文官网
+中文官网,垃圾广告多。可以使用Chrome集成AdBlock拦截广告插件
+使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="easyui作后台(一)">
+<meta property="og:url" content="http://blog.chen777.com/2015/11/30/easyui作后台-一/index.html">
+<meta property="og:site_name" content="陈西西">
+<meta property="og:description" content="介绍jQuery EasyUI是一组基于jQuery的UI插件集合体，而jQuery EasyUI的目标就是帮助web开发者更轻松的打造出功能丰富并且美观的UI界面。开发者不需要编写复杂的javascript，也不需要对css样式有深入的了解，开发者需要了解的只有一些简单的html标签。
+英文官网,建议翻墙访问英文官网
+中文官网,垃圾广告多。可以使用Chrome集成AdBlock拦截广告插件
+使用">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/0063lLoQjw1eyk5e7ueevj31hc0qc0x4.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/0063lLoQjw1eyk69oeo0oj30fr0a3mzr.jpg">
+<meta property="og:updated_time" content="2015-12-01T07:25:11.937Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="easyui作后台(一)">
+<meta name="twitter:description" content="介绍jQuery EasyUI是一组基于jQuery的UI插件集合体，而jQuery EasyUI的目标就是帮助web开发者更轻松的打造出功能丰富并且美观的UI界面。开发者不需要编写复杂的javascript，也不需要对css样式有深入的了解，开发者需要了解的只有一些简单的html标签。
+英文官网,建议翻墙访问英文官网
+中文官网,垃圾广告多。可以使用Chrome集成AdBlock拦截广告插件
+使用">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> easyui作后台(一) | 陈西西 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">陈西西</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <form class="site-search-form">
+    <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+  </form>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'oDjVXLFebsVH9TQC_FsZ','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              easyui作后台(一)
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2015-11-30T10:50:31+08:00" content="2015-11-30">
+            2015-11-30
+          </time>
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2015/11/30/easyui作后台-一/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/30/easyui作后台-一/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h1 id="介绍">介绍</h1><p>jQuery EasyUI是一组基于jQuery的UI插件集合体，而jQuery EasyUI的目标就是帮助web开发者更轻松的打造出功能丰富并且美观的UI界面。开发者不需要编写复杂的javascript，也不需要对css样式有深入的了解，开发者需要了解的只有一些简单的html标签。</p>
+<p><a href="http://www.jeasyui.com/" target="_blank" rel="external">英文官网,建议翻墙访问英文官网</a></p>
+<p><a href="http://www.jeasyui.net/plugins/183.html" target="_blank" rel="external">中文官网,垃圾广告多。可以使用Chrome集成AdBlock拦截广告插件</a></p>
+<h1 id="使用">使用</h1><pre><code>去官网去下载一个easyui的包，然后<span class="keyword">copy</span>到java项目中，放在js文件夹下。（可以先用Hbuilder试玩一下easyui的各种需求）然后就开始搞首页啦。
+</code></pre><p><img src="http://ww4.sinaimg.cn/large/0063lLoQjw1eyk5e7ueevj31hc0qc0x4.jpg" alt="index.jsp"></p>
+<h1 id="首页功能分析">首页功能分析</h1><pre><code>左边的树形菜单，<span class="keyword">tabs</span>右键菜单，国际化。
+</code></pre><h1 id="实现">实现</h1><pre><code>第一节只展示页面渲染，实现页面整体构造
+</code></pre><h2 id="index-jsp">index.jsp</h2><pre><code><span class="xml"><span class="tag">&lt;<span class="title">%@</span> <span class="attribute">page</span> <span class="attribute">language</span>=<span class="value">"java"</span> <span class="attribute">import</span>=<span class="value">"java.util.*"</span> <span class="attribute">pageEncoding</span>=<span class="value">"UTF-8"</span><span class="value">%</span>&gt;</span>
+<span class="tag">&lt;<span class="title">%@include</span> <span class="attribute">file</span>=<span class="value">"/WEB-INF/jsp/common/taglibs.jsp"</span> %&gt;</span>
+<span class="doctype">&lt;!DOCTYPE HTML&gt;</span>
+<span class="tag">&lt;<span class="title">html</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">title</span>&gt;</span><span class="tag">&lt;/<span class="title">title</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">http-equiv</span>=<span class="value">"pragma"</span> <span class="attribute">content</span>=<span class="value">"no-cache"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">http-equiv</span>=<span class="value">"cache-control"</span> <span class="attribute">content</span>=<span class="value">"no-cache"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">http-equiv</span>=<span class="value">"expires"</span> <span class="attribute">content</span>=<span class="value">"0"</span>&gt;</span>    
+    <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">http-equiv</span>=<span class="value">"keywords"</span> <span class="attribute">content</span>=<span class="value">"keyword1,keyword2,keyword3"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">http-equiv</span>=<span class="value">"description"</span> <span class="attribute">content</span>=<span class="value">"This is my page"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">link</span> <span class="attribute">rel</span>=<span class="value">"stylesheet"</span> <span class="attribute">type</span>=<span class="value">"text/css"</span> <span class="attribute">href</span>=<span class="value">"${ctx}/css/index.css"</span>/&gt;</span>
+    <span class="tag">&lt;<span class="title">link</span> <span class="attribute">rel</span>=<span class="value">"stylesheet"</span> <span class="attribute">type</span>=<span class="value">"text/css"</span> <span class="attribute">href</span>=<span class="value">"${ctx}/css/zTreeStyle.css"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="title">link</span> <span class="attribute">href</span>=<span class="value">"${ctx}/favicon.ico"</span> <span class="attribute">type</span>=<span class="value">"image/x-icon"</span> <span class="attribute">rel</span>=<span class="value">"icon"</span>/&gt;</span>
+    <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"${ctx}/js/jquery.ztree.core-3.5.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"${ctx}/js/index.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+
+ <span class="tag">&lt;<span class="title">body</span> <span class="attribute">class</span>=<span class="value">"easyui-layout"</span> <span class="attribute">id</span>=<span class="value">"mainBody"</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">div</span> <span class="attribute">region</span>=<span class="value">"north"</span> <span class="attribute">split</span>=<span class="value">"true"</span> <span class="attribute">class</span>=<span class="value">"header"</span>&gt;</span>
+           <span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">"${ctx}/images/logo.png"</span> <span class="attribute">class</span>=<span class="value">"logo l"</span>&gt;</span>
+
+           <span class="tag">&lt;<span class="title">p</span> <span class="attribute">class</span>=<span class="value">"r"</span> <span class="attribute">style</span>=<span class="value">"color: red"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">span</span> <span class="attribute">id</span>=<span class="value">"theTime"</span>&gt;</span><span class="tag">&lt;/<span class="title">span</span>&gt;</span>&amp;nbsp;&amp;nbsp;&amp;nbsp;<span class="tag">&lt;<span class="title">spring:message</span> <span class="attribute">code</span>=<span class="value">"top.hello"</span>/&gt;</span>!
+            <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">'javascript:void(0)'</span> <span class="attribute">id</span>=<span class="value">"setLanguage"</span> <span class="attribute">class</span>=<span class="value">"pwd_reset"</span>&gt;</span>语言设置<span class="tag">&lt;/<span class="title">a</span>&gt;</span> 
+            <span class="tag">&lt;<span class="title">c:if</span> <span class="attribute">test</span>=<span class="value">"${userType=='1'}"</span>&gt;</span><span class="tag">&lt;<span class="title">spring:message</span> <span class="attribute">code</span>=<span class="value">"top.username"</span>/&gt;</span><span class="tag">&lt;/<span class="title">c:if</span>&gt;</span>
+            ${adminInfo.nickname}<span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"javascript:void(0);"</span> <span class="attribute">id</span>=<span class="value">"pwdReset"</span> <span class="attribute">class</span>=<span class="value">"pwd_reset"</span>&gt;</span><span class="tag">&lt;<span class="title">spring:message</span> <span class="attribute">code</span>=<span class="value">"top.reset"</span>/&gt;</span><span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"${ctx}/admin/exitAdmin.do"</span> <span class="attribute">class</span>=<span class="value">"exit_system"</span>&gt;</span><span class="tag">&lt;<span class="title">spring:message</span> <span class="attribute">code</span>=<span class="value">"top.outsystem"</span>/&gt;</span><span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">p</span>&gt;</span> 
+    <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">region</span>=<span class="value">"west"</span> <span class="attribute">split</span>=<span class="value">"true"</span> <span class="attribute">title</span>=<span class="value">"导航菜单"</span> <span class="attribute">style</span>=<span class="value">"width: 180px;overflow:hidden;"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"menuId"</span> <span class="attribute">class</span>=<span class="value">"easyui-accordion"</span> <span class="attribute">fit</span>=<span class="value">"true"</span> <span class="attribute">border</span>=<span class="value">"false"</span>&gt;</span>
+
+        <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">region</span>=<span class="value">"center"</span> <span class="attribute">id</span>=<span class="value">"mainPanle"</span> <span class="attribute">style</span>=<span class="value">"background: #eee;overflow:hidden;"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"tabs"</span> <span class="attribute">class</span>=<span class="value">"easyui-tabs"</span> <span class="attribute">fit</span>=<span class="value">"true"</span> <span class="attribute">border</span>=<span class="value">"false"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">div</span> <span class="attribute">title</span>=<span class="value">"主页"</span> <span class="attribute">style</span>=<span class="value">"padding: 20px;"</span> <span class="attribute">id</span>=<span class="value">"home"</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">h1</span>&gt;</span> Welcome...<span class="tag">&lt;/<span class="title">h1</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+
+        <span class="comment">&lt;!-- tabs右键菜单 --&gt;</span>
+        <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"rightMenu"</span> <span class="attribute">class</span>=<span class="value">"easyui-menu"</span> <span class="attribute">style</span>=<span class="value">"position: absolute;margin: 0;padding: 2px;border-width: 1px;border-style: solid; overflow: hidden;"</span>&gt;</span>
+             <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"mm-tabclose"</span> <span class="attribute">data-options</span>=<span class="value">"name:1"</span> &gt;</span>关闭<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"mm-tabcloseall"</span> <span class="attribute">data-options</span>=<span class="value">"name:2"</span>&gt;</span>全部关闭<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"mm-tabcloseother"</span> <span class="attribute">data-options</span>=<span class="value">"name:3"</span>&gt;</span>除此之外全部关闭<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+             <span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"menu-sep"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"mm-tabcloseright"</span> <span class="attribute">data-options</span>=<span class="value">"name:4"</span>&gt;</span>当前页右侧全部关闭<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"mm-tabcloseleft"</span> <span class="attribute">data-options</span>=<span class="value">"name:5"</span>&gt;</span>当前页左侧全部关闭<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"mm-tabclose"</span> <span class="attribute">name</span>=<span class="value">"6"</span>&gt;</span>刷新<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+
+        <span class="comment">&lt;!-- 重置密码 --&gt;</span>
+        <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"resetWin"</span> <span class="attribute">class</span>=<span class="value">"easyui-window"</span>  <span class="attribute">style</span>=<span class="value">"height: 160px;width: 380px; overflow-y:auto;"</span> <span class="attribute">data-options</span>=<span class="value">"modal:true,closed:true"</span> &gt;</span>
+            <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">hidden</span> <span class="attribute">id</span>=<span class="value">"id"</span> <span class="attribute">value</span>=<span class="value">"${USER_SESSION_INFO.ADMIN_ID}"</span>/&gt;</span>
+            <span class="tag">&lt;<span class="title">div</span> <span class="attribute">style</span>=<span class="value">"margin-left:10px;"</span>&gt;</span>
+                  <span class="tag">&lt;<span class="title">table</span> <span class="attribute">class</span>=<span class="value">"mainTable"</span>&gt;</span>
+                      <span class="tag">&lt;<span class="title">tr</span>&gt;</span><span class="tag">&lt;<span class="title">td</span> &gt;</span>旧密码：<span class="tag">&lt;/<span class="title">td</span>&gt;</span><span class="tag">&lt;<span class="title">td</span>&gt;</span>
+                        <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"password"</span> <span class="attribute">id</span>=<span class="value">"password_old"</span> /&gt;</span> 
+                    <span class="tag">&lt;/<span class="title">td</span>&gt;</span><span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">tr</span>&gt;</span><span class="tag">&lt;<span class="title">td</span> &gt;</span>新密码：<span class="tag">&lt;/<span class="title">td</span>&gt;</span><span class="tag">&lt;<span class="title">td</span>&gt;</span>
+                        <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"password"</span> <span class="attribute">id</span>=<span class="value">"password"</span> /&gt;</span>
+                    <span class="tag">&lt;/<span class="title">td</span>&gt;</span><span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">tr</span>&gt;</span><span class="tag">&lt;<span class="title">td</span> &gt;</span>确认新密码：<span class="tag">&lt;/<span class="title">td</span>&gt;</span><span class="tag">&lt;<span class="title">td</span>&gt;</span>
+                        <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"password"</span> <span class="attribute">id</span>=<span class="value">"password1"</span> /&gt;</span>
+                    <span class="tag">&lt;/<span class="title">td</span>&gt;</span><span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">tr</span>&gt;</span><span class="tag">&lt;<span class="title">td</span> <span class="attribute">colspan</span>=<span class="value">"2"</span> <span class="attribute">style</span>=<span class="value">"text-align: right"</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">a</span> <span class="attribute">type</span>=<span class="value">"button"</span> <span class="attribute">class</span>=<span class="value">"easyui-linkbutton"</span> <span class="attribute">onclick</span>=<span class="value">"resetPassword()"</span> <span class="attribute">id</span>=<span class="value">"baocunid"</span>&gt;</span>保存<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">a</span> <span class="attribute">type</span>=<span class="value">"button"</span> <span class="attribute">class</span>=<span class="value">"easyui-linkbutton"</span> <span class="attribute">onclick</span>=<span class="value">"closeResetWin()"</span>&gt;</span>取消<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+                    <span class="tag">&lt;/<span class="title">td</span>&gt;</span><span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+                <span class="tag">&lt;/<span class="title">table</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+
+       <span class="comment">&lt;!-- 语言选择 --&gt;</span> 
+       <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"languageWin"</span> <span class="attribute">class</span>=<span class="value">"easyui-window"</span>  <span class="attribute">style</span>=<span class="value">"height: 160px;width: 380px; overflow-y:auto;"</span> <span class="attribute">data-options</span>=<span class="value">"modal:true,closed:true"</span> &gt;</span>
+               <span class="tag">&lt;<span class="title">form</span> <span class="attribute">style</span>=<span class="value">"padding:20px;"</span>&gt;</span>
+                   <span class="tag">&lt;<span class="title">table</span> <span class="attribute">style</span>=<span class="value">"width:320px;"</span>&gt;</span>
+                   <span class="tag">&lt;<span class="title">tr</span>&gt;</span><span class="tag">&lt;<span class="title">c:if</span> <span class="attribute">test</span>=<span class="value">""</span>&gt;</span><span class="tag">&lt;/<span class="title">c:if</span>&gt;</span>
+                       <span class="tag">&lt;<span class="title">td</span>&gt;</span><span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"radio"</span> <span class="attribute">name</span>=<span class="value">'language'</span> &lt;<span class="attribute">c:if</span> <span class="attribute">test</span>=<span class="value">"${localeLanguage=='zh_CN'}"</span>&gt;</span>checked='checked'<span class="tag">&lt;/<span class="title">c:if</span>&gt;</span> value='zh_CN'/&gt;简体中文<span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+                       <span class="tag">&lt;<span class="title">td</span>&gt;</span><span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"radio"</span> <span class="attribute">name</span>=<span class="value">'language'</span> &lt;<span class="attribute">c:if</span> <span class="attribute">test</span>=<span class="value">"${localeLanguage=='zh_HK'}"</span>&gt;</span>checked='checked'<span class="tag">&lt;/<span class="title">c:if</span>&gt;</span> value='zh_HK'/&gt;繁体中文<span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+                       <span class="tag">&lt;<span class="title">td</span>&gt;</span><span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"radio"</span> <span class="attribute">name</span>=<span class="value">'language'</span> &lt;<span class="attribute">c:if</span> <span class="attribute">test</span>=<span class="value">"${localeLanguage=='en_US'}"</span>&gt;</span>checked='checked'<span class="tag">&lt;/<span class="title">c:if</span>&gt;</span> value='en_US'/&gt;English<span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+                   <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+                   <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+                       <span class="tag">&lt;<span class="title">td</span> <span class="attribute">colspan</span>=<span class="value">"2"</span> <span class="attribute">align</span>=<span class="value">"center"</span>&gt;</span>
+                        <span class="tag">&lt;<span class="title">a</span> <span class="attribute">type</span>=<span class="value">"button"</span> <span class="attribute">class</span>=<span class="value">"easyui-linkbutton"</span> <span class="attribute">onclick</span>=<span class="value">"setLanguage()"</span> <span class="attribute">id</span>=<span class="value">"baocunid"</span>&gt;</span>保存<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+                        <span class="tag">&lt;<span class="title">a</span> <span class="attribute">type</span>=<span class="value">"button"</span> <span class="attribute">class</span>=<span class="value">"easyui-linkbutton"</span> <span class="attribute">onclick</span>=<span class="value">"closeLanguageWin()"</span>&gt;</span>取消<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+                    <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+                   <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+                   <span class="tag">&lt;/<span class="title">table</span>&gt;</span>
+               <span class="tag">&lt;/<span class="title">form</span>&gt;</span>
+       <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span></span>
+</code></pre><h2 id="taglibs-jsp(共用的东西，提取出一个jsp页面，其他页面只用引入即可)">taglibs.jsp(共用的东西，提取出一个jsp页面，其他页面只用引入即可)</h2><pre><code><span class="xml"></span>&lt;%<span class="ruby">@ page language=<span class="string">"java"</span> import=<span class="string">"java.util.*"</span> pageEncoding=<span class="string">"utf-8"</span></span>%&gt;<span class="xml">
+</span>&lt;%<span class="ruby"><span class="variable">@taglib</span> uri=<span class="string">"http://java.sun.com/jsp/jstl/core"</span> prefix=<span class="string">"c"</span></span>%&gt;<span class="xml">
+</span>&lt;%<span class="ruby"><span class="variable">@taglib</span> prefix=<span class="string">"spring"</span> uri=<span class="string">"http://www.springframework.org/tags"</span> </span>%&gt;<span class="xml">
+</span>&lt;%<span class="ruby"><span class="variable">@taglib</span> uri=<span class="string">"http://java.sun.com/jsp/jstl/fmt"</span> prefix=<span class="string">"fmt"</span> </span>%&gt;<span class="xml">
+</span>&lt;%<span class="ruby"><span class="variable">@taglib</span> uri=<span class="string">"http://v.365sji.com/hksj/fmt"</span> prefix=<span class="string">"hksj"</span></span>%&gt;<span class="xml">
+
+<span class="tag">&lt;<span class="title">c:set</span> <span class="attribute">var</span>=<span class="value">"ctx"</span> <span class="attribute">value</span>=<span class="value">"${pageContext.request.contextPath}"</span>/&gt;</span>
+<span class="tag">&lt;<span class="title">c:set</span> <span class="attribute">var</span>=<span class="value">"localeLanguage"</span> <span class="attribute">value</span>=<span class="value">"${myLocale==null?pageContext.request.locale:myLocale}"</span>/&gt;</span>
+<span class="tag">&lt;<span class="title">link</span> <span class="attribute">rel</span>=<span class="value">"stylesheet"</span> <span class="attribute">href</span>=<span class="value">"${ctx}/js/easyui/themes/default/easyui.css"</span>/&gt;</span>
+<span class="tag">&lt;<span class="title">link</span> <span class="attribute">rel</span>=<span class="value">"stylesheet"</span> <span class="attribute">href</span>=<span class="value">"${ctx}/js/easyui/themes/icon.css"</span>/&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"${ctx}/js/languages/messages_${localeLanguage}.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"${ctx}/js/jsUtils.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"${ctx}/js/easyui/jquery.min.js"</span> &gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"${ctx}/js/easyui/jquery.easyui.min.js"</span> &gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"${ctx}/js/easyui/locale/easyui-lang-${localeLanguage}.js"</span> &gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></span>
+</code></pre><h2 id="index-js">index.js</h2><pre><code>    $(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{
+    initTime();
+
+    InitLeftMenu();
+
+    $(<span class="string">'body'</span>).layout();
+
+  <span class="comment">//监听右键事件，创建右键菜单</span>
+    $(<span class="string">'#tabs'</span>).tabs({
+        onContextMenu:<span class="function"><span class="keyword">function</span>(<span class="params">e, title,index</span>)</span>{
+            e.preventDefault();
+            <span class="keyword">if</span>(index&gt;<span class="number">0</span>){
+                $(<span class="string">'#rightMenu'</span>).menu(<span class="string">'show'</span>, {
+                    left: e.pageX,
+                    top: e.pageY
+                }).data(<span class="string">"tabTitle"</span>, title);
+            }
+        }
+    });
+
+    <span class="comment">//右键菜单click</span>
+    $(<span class="string">"#rightMenu"</span>).menu({
+        onClick : <span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>{
+            closeTab(<span class="keyword">this</span>, item.name);
+        }
+    });
+
+    <span class="comment">//设置语言</span>
+    $(<span class="string">'#setLanguage'</span>).click(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+        $(<span class="string">'#languageWin'</span>).window(<span class="string">'open'</span>); 
+    });
+});
+
+<span class="comment">/**
+ * 初始化左边的菜单栏
+ */</span>
+<span class="function"><span class="keyword">function</span> <span class="title">InitLeftMenu</span>(<span class="params"></span>) </span>{
+    hoverMenuItem();
+    $.post(<span class="string">'getLeftMenu.do'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">menus</span>)</span>{
+        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; menus.length; i++) 
+        {
+            <span class="keyword">var</span> str=<span class="string">""</span>;
+            <span class="keyword">if</span>(menus[i].leaf==<span class="string">"1"</span>)
+            {
+                str+=<span class="string">"&lt;div title='"</span>+menus[i].menu_name+<span class="string">"' style='overflow:auto;' icon='icon-edit' &gt;"</span>;
+                str+=<span class="string">"&lt;div&gt;&lt;ul&gt;&lt;li&gt;"</span>;
+                <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">0</span>; j &lt; menus.length; j++)  <span class="comment">//拼接子目录</span>
+                {
+                    <span class="keyword">if</span>(menus[i].menu_id==menus[j].parent_menu)
+                    {
+                        str+=<span class="string">"&lt;div&gt;&lt;a href=\"javascript:void(0);\" onclick=\"addTab('"</span>+JsUtils.getRootPath()+<span class="string">'/'</span>+menus[j].url+<span class="string">"','"</span>+menus[j].menu_name+<span class="string">"')\"&gt;"</span>+menus[j].menu_name+<span class="string">"&lt;/a&gt;&lt;/div&gt;"</span>;
+                    }
+                }
+                str+=<span class="string">"&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/div&gt;"</span>;
+
+                $(<span class="string">'#menuId'</span>).accordion(<span class="string">'add'</span>, {
+                    title : menus[i].menu_name,
+                    content : str,
+                  <span class="comment">//  iconCls : 'icon ' + sm.icon</span>
+                });
+
+            }
+        }
+
+        <span class="keyword">var</span> pp = $(<span class="string">'#menuId'</span>).accordion(<span class="string">'panels'</span>);
+        <span class="keyword">var</span> t = pp[<span class="number">0</span>].panel(<span class="string">'options'</span>).title;
+        $(<span class="string">'#menuId'</span>).accordion(<span class="string">'select'</span>, t);
+    });
+
+
+}
+
+<span class="comment">/**
+ * 菜单项鼠标Hover
+ */</span>
+<span class="function"><span class="keyword">function</span> <span class="title">hoverMenuItem</span>(<span class="params"></span>) </span>{
+    $(<span class="string">".easyui-accordion"</span>).find(<span class="string">'a'</span>).hover(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
+        $(<span class="keyword">this</span>).parent().addClass(<span class="string">"hover"</span>);
+    }, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{
+        $(<span class="keyword">this</span>).parent().removeClass(<span class="string">"hover"</span>);
+    });
+}
+
+<span class="comment">/**
+ * 添加tab
+ * @param url
+ * @param tabTitle
+ */</span>
+<span class="function"><span class="keyword">function</span> <span class="title">addTab</span>(<span class="params">url ,tabTitle</span>) </span>{
+    <span class="keyword">if</span> (!$(<span class="string">'#tabs'</span>).tabs(<span class="string">'exists'</span>, tabTitle)) {
+        $(<span class="string">'#tabs'</span>).tabs(<span class="string">'add'</span>, {
+            title: tabTitle,
+            content: createFrame(url),
+            closable: <span class="literal">true</span>,
+            width: $(<span class="string">'#mainPanle'</span>).width() - <span class="number">10</span>,
+            height: $(<span class="string">'#mainPanle'</span>).height() - <span class="number">26</span>
+        });
+    } <span class="keyword">else</span> {
+        $(<span class="string">'#tabs'</span>).tabs(<span class="string">'select'</span>, tabTitle);
+    }
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">createFrame</span>(<span class="params">url</span>) </span>{
+    <span class="keyword">var</span> s = <span class="string">'&lt;iframe name="mainFrame" scrolling="no" frameborder="0"  src="'</span> + url + <span class="string">'" style="width:100%;height:100%;"&gt;&lt;/iframe&gt;'</span>;
+    <span class="keyword">return</span> s;
+}
+
+<span class="comment">//删除Tabs</span>
+<span class="function"><span class="keyword">function</span> <span class="title">closeTab</span>(<span class="params">menu, type</span>) </span>{
+    <span class="keyword">var</span> allTabs = $(<span class="string">"#tabs"</span>).tabs(<span class="string">'tabs'</span>);
+    <span class="keyword">var</span> allTabtitle = [];
+    $.each(allTabs, <span class="function"><span class="keyword">function</span> (<span class="params">i, n</span>) </span>{
+        <span class="keyword">var</span> opt = $(n).panel(<span class="string">'options'</span>);
+        <span class="keyword">if</span> (opt.closable)
+            allTabtitle.push(opt.title);
+    });
+    <span class="keyword">var</span> curTabTitle = $(menu).data(<span class="string">"tabTitle"</span>);
+    <span class="keyword">var</span> curTabIndex = $(<span class="string">"#tabs"</span>).tabs(<span class="string">"getTabIndex"</span>, $(<span class="string">"#tabs"</span>).tabs(<span class="string">"getTab"</span>, curTabTitle));
+    <span class="keyword">switch</span> (type) {
+        <span class="keyword">case</span> <span class="number">1</span>:<span class="comment">//关闭当前</span>
+            $(<span class="string">"#tabs"</span>).tabs(<span class="string">"close"</span>, curTabIndex);
+            <span class="keyword">break</span>;
+        <span class="keyword">case</span> <span class="number">2</span>:<span class="comment">//全部关闭</span>
+            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; allTabtitle.length; i++) {
+                $(<span class="string">'#tabs'</span>).tabs(<span class="string">'close'</span>, allTabtitle[i]);
+            }
+            <span class="keyword">break</span>;
+        <span class="keyword">case</span> <span class="number">3</span>:<span class="comment">//除此之外全部关闭</span>
+            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; allTabtitle.length; i++) {
+                <span class="keyword">if</span> (curTabTitle != allTabtitle[i])
+                    $(<span class="string">'#tabs'</span>).tabs(<span class="string">'close'</span>, allTabtitle[i]);
+            }
+            $(<span class="string">'#tabs'</span>).tabs(<span class="string">'select'</span>, curTabTitle);
+            <span class="keyword">break</span>;
+        <span class="keyword">case</span> <span class="number">4</span>:<span class="comment">//当前侧面右边</span>
+            <span class="keyword">for</span> (<span class="keyword">var</span> i = curTabIndex; i &lt; allTabtitle.length; i++) {
+                $(<span class="string">'#tabs'</span>).tabs(<span class="string">'close'</span>, allTabtitle[i]);
+            }
+            $(<span class="string">'#tabs'</span>).tabs(<span class="string">'select'</span>, curTabTitle);
+            <span class="keyword">break</span>;
+        <span class="keyword">case</span> <span class="number">5</span>: <span class="comment">//当前侧面左边</span>
+            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; curTabIndex - <span class="number">1</span>; i++) {
+                $(<span class="string">'#tabs'</span>).tabs(<span class="string">'close'</span>, allTabtitle[i]);
+            }
+            $(<span class="string">'#tabs'</span>).tabs(<span class="string">'select'</span>, curTabTitle);
+            <span class="keyword">break</span>;
+        <span class="keyword">case</span> <span class="number">6</span>: <span class="comment">//刷新</span>
+            <span class="keyword">var</span> panel = $(<span class="string">"#tabs"</span>).tabs(<span class="string">"getTab"</span>, curTabTitle).panel(<span class="string">"refresh"</span>);
+            <span class="keyword">break</span>;
+    }
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">initTime</span>(<span class="params"></span>)</span>{
+    <span class="comment">/**
+     * 显示系统时钟
+     */</span>
+    <span class="keyword">var</span> date = <span class="keyword">new</span> <span class="built_in">Date</span>();
+    <span class="keyword">var</span> y=date.getFullYear();
+    <span class="keyword">var</span> mon=date.getMonth()+<span class="number">1</span>;
+    mon = mon &lt; <span class="number">10</span> ? <span class="string">'0'</span> + mon : mon;
+    <span class="keyword">var</span> day=date.getDate();
+    day = day &lt; <span class="number">10</span> ? <span class="string">'0'</span> + day : day;
+    <span class="keyword">var</span> h = date.getHours();
+    h = h &lt; <span class="number">10</span> ? <span class="string">'0'</span> + h : h;
+    <span class="keyword">var</span> m = date.getMinutes();
+    m = m &lt; <span class="number">10</span> ? <span class="string">'0'</span> + m : m;
+    <span class="keyword">var</span> s = date.getSeconds();
+    s = s &lt; <span class="number">10</span> ? <span class="string">'0'</span> + s : s;
+    $(<span class="string">'#theTime'</span>).html(getLanValue_(<span class="string">"root_showtime"</span>)+y+<span class="string">"-"</span>+mon+<span class="string">"-"</span>+day+<span class="string">" "</span>+h + <span class="string">":"</span> + m + <span class="string">":"</span> + s);
+}
+setInterval(<span class="string">"initTime()"</span>, <span class="number">1000</span>);
+
+
+<span class="function"><span class="keyword">function</span> <span class="title">setLanguage</span>(<span class="params"></span>)</span>{
+    <span class="keyword">var</span> locale=$(<span class="string">':radio:checked'</span>).val();
+    $.post(JsUtils.getRootPath()+<span class="string">'/admin/setLanguage.do'</span>,{locale:locale},<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+        closeLanguageWin();
+        location.reload(<span class="literal">true</span>); 
+    });
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">closeLanguageWin</span>(<span class="params"></span>)</span>{
+    $(<span class="string">'#languageWin'</span>).window(<span class="string">'close'</span>);
+}
+</code></pre><h2 id="左边菜单栏的表结构">左边菜单栏的表结构</h2><p><img src="http://ww3.sinaimg.cn/large/0063lLoQjw1eyk69oeo0oj30fr0a3mzr.jpg" alt="表结构"></p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/easyui/" rel="tag">#easyui</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/10/21/webuploader-ssi-图片上传/" rel="next">webuploader(ssi)图片上传</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2015/11/30/easyui作后台-一/"
+     data-title="easyui作后台(一)"
+     data-content=""
+     data-url="http://blog.chen777.com/2015/11/30/easyui作后台-一/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+            <!-- 多说热评文章-->
+            <p>热评文章</p>
+            <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+        
+
+        
+          <div class="comments" id="comments">
+            
+              <div class="ds-thread" data-thread-key="2015/11/30/easyui作后台-一/"
+                   data-title="easyui作后台(一)" data-url="http://blog.chen777.com/2015/11/30/easyui作后台-一/">
+              </div>
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Xixi Chain" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Xixi Chain</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">学而不思则罔，思而不学则殆</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/javaChain/javaChain.github.io" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5546313096/profile?topnav=1&wvr=6" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/u/1242040" target="_blank">OsChina</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用"><span class="nav-number">2.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#首页功能分析"><span class="nav-number">3.</span> <span class="nav-text">首页功能分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现"><span class="nav-number">4.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#index-jsp"><span class="nav-number">4.1.</span> <span class="nav-text">index.jsp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#taglibs-jsp(共用的东西，提取出一个jsp页面，其他页面只用引入即可)"><span class="nav-number">4.2.</span> <span class="nav-text">taglibs.jsp(共用的东西，提取出一个jsp页面，其他页面只用引入即可)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#index-js"><span class="nav-number">4.3.</span> <span class="nav-text">index.js</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#左边菜单栏的表结构"><span class="nav-number">4.4.</span> <span class="nav-text">左边菜单栏的表结构</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; &nbsp; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xixi Chain</span>
+	 <span id="busuanzi_container_site_pv" style='display:none'>
+		本站总访问量<span id="busuanzi_value_site_pv"></span>次
+	</span>
+	<span id="busuanzi_container_site_uv">
+	  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+	</span>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"chainxixi"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+     
+  	<script src="/js/ua-parser.min.js"></script>
+  	<script src="/js/hook-duoshuo.js"></script>
+  
+
+    
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/js/motion_fallback.js?v=0.4.5.1" id="motion.fallback"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>
