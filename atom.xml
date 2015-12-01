@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2015-12-01T07:25:11.937Z</updated>
+  <updated>2015-12-01T07:51:16.973Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -19,8 +19,8 @@
     <link href="http://blog.chen777.com/2015/11/30/easyui%E4%BD%9C%E5%90%8E%E5%8F%B0-%E4%B8%80/"/>
     <id>http://blog.chen777.com/2015/11/30/easyui作后台-一/</id>
     <published>2015-11-30T02:50:31.000Z</published>
-    <updated>2015-12-01T07:25:11.937Z</updated>
-    <content type="html"><![CDATA[<h1 id="介绍">介绍</h1><p>jQuery EasyUI是一组基于jQuery的UI插件集合体，而jQuery EasyUI的目标就是帮助web开发者更轻松的打造出功能丰富并且美观的UI界面。开发者不需要编写复杂的javascript，也不需要对css样式有深入的了解，开发者需要了解的只有一些简单的html标签。</p>
+    <updated>2015-12-01T07:51:16.973Z</updated>
+    <content type="html"><![CDATA[<h1 id="介绍">介绍</h1><p>jQuery EasyUI是一组基于jQuery的UI插件集合体，而jQuery EasyUI的目标就是帮助web开发者更轻松的打造出功能丰富并且美观的UI界面。开发者不需要编写复杂的javascript，也不需要对css样式有深入的了解，开发者需要了解的只有一些简单的html标签。<br><a id="more"></a></p>
 <p><a href="http://www.jeasyui.com/" target="_blank" rel="external">英文官网,建议翻墙访问英文官网</a></p>
 <p><a href="http://www.jeasyui.net/plugins/183.html" target="_blank" rel="external">中文官网,垃圾广告多。可以使用Chrome集成AdBlock拦截广告插件</a></p>
 <h1 id="使用">使用</h1><pre><code>去官网去下载一个easyui的包，然后<span class="keyword">copy</span>到java项目中，放在js文件夹下。（可以先用Hbuilder试玩一下easyui的各种需求）然后就开始搞首页啦。
@@ -325,7 +325,8 @@ setInterval(<span class="string">"initTime()"</span>, <span class="number">1000<
 </code></pre><h2 id="左边菜单栏的表结构">左边菜单栏的表结构</h2><p><img src="http://ww3.sinaimg.cn/large/0063lLoQjw1eyk69oeo0oj30fr0a3mzr.jpg" alt="表结构"></p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<h1 id="介绍">介绍</h1><p>jQuery EasyUI是一组基于jQuery的UI插件集合体，而jQuery EasyUI的目标就是帮助web开发者更轻松的打造出功能丰富并且美观的UI界面。开发者不需要编写复杂的javascript，也不需要对css样式有深入的了]]>
+    <![CDATA[<h1 id="介绍">介绍</h1><p>jQuery EasyUI是一组基于jQuery的UI插件集合体，而jQuery EasyUI的目标就是帮助web开发者更轻松的打造出功能丰富并且美观的UI界面。开发者不需要编写复杂的javascript，也不需要对css样式有深入的了解，开发者需要了解的只有一些简单的html标签。<br>]]>
+    
     </summary>
     
       <category term="easyui" scheme="http://blog.chen777.com/tags/easyui/"/>
