@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2015-12-01T07:51:16.973Z</updated>
+  <updated>2015-12-15T09:39:05.302Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -13,6 +13,134 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[easyui作后台(二)]]></title>
+    <link href="http://blog.chen777.com/2015/12/02/easyui%E4%BD%9C%E5%90%8E%E5%8F%B0-%E4%BA%8C/"/>
+    <id>http://blog.chen777.com/2015/12/02/easyui作后台-二/</id>
+    <published>2015-12-02T09:17:39.000Z</published>
+    <updated>2015-12-15T09:39:05.302Z</updated>
+    <content type="html"><![CDATA[<h1 id="介绍">介绍</h1><p>easyui作为后台，第一节讲了构造整个系统，然后为了支持欧美等国家，所以我们要国际化。</p>
+<a id="more"></a>
+<h1 id="实现">实现</h1><p>依赖于springmvc的国际化，我们是使用的是cookie方式。</p>
+<pre><code>springmvc.xml
+<span class="comment">&lt;!-- i18n --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"messageSource"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.context.support.ResourceBundleMessageSource"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"basenames"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">list</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">value</span>&gt;</span>i18n/messages<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">list</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"localeResolver"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.web.servlet.i18n.CookieLocaleResolver"</span> /&gt;</span>
+
+spring.xml
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"messageSource"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.context.support.ResourceBundleMessageSource"</span>&gt;</span>
+<span class="comment">&lt;!-- 国际化信息所在的文件名 --&gt;</span>                     
+<span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"basename"</span> <span class="attribute">value</span>=<span class="value">"messages"</span> /&gt;</span>   
+<span class="comment">&lt;!-- 如果在国际化资源文件中找不到对应代码的信息，就用这个代码作为名称  --&gt;</span>               
+<span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"useCodeAsDefaultMessage"</span> <span class="attribute">value</span>=<span class="value">"true"</span> /&gt;</span>           
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span> 
+
+
+实现分为数据层面、JS层面、JSP层面
+</code></pre><h2 id="数据库">数据库</h2><p>数据库我们有一个字典表专门是做通用的国际化的，例如：状态的启用禁用，常规的下拉列表等等。那么使用数据字典那么肯定会关联数据字典查询，这样很多同学会说这样效率会低，我们数据库层面添加了redis缓存，数据字典的东西全部都加载在redis缓存中，不会给数据库造成压力。</p>
+<p><img src="http://ww2.sinaimg.cn/large/0063lLoQjw1ez0fvqp916j30cf05yaba.jpg" alt="字典表"></p>
+<h3 id="常规的国际化">常规的国际化</h3><p>还有就是一些常规内容，我们是添加了3个字段,比如中文标题，英文标题，和繁体标题，这样插入的时候要插入三个字段，查询的时候就要带上request里面的locale，第一个存的是locale对象，后面存的是locale字符串，因为底层开始使用的是对象而我所有的页面处理全是用locale字符串处理的，为了做最少的改动上线就重复了。</p>
+<pre><code><span class="comment">/**
+ * 国际化设置语言
+ * @throws IOException 
+ */</span>
+
+@RequestMapping(<span class="string">"setLanguage"</span>)
+<span class="keyword">public</span> <span class="literal">void</span> setLanguage(<span class="built_in">String</span> <span class="built_in">locale</span>) throws IOException{
+     <span class="built_in">Locale</span> currentLocale = <span class="literal">new</span> <span class="built_in">Locale</span>(<span class="built_in">locale</span>);
+     (<span class="literal">new</span> CookieLocaleResolver())<span class="built_in">.</span>setLocale (request, response, currentLocale);
+     request<span class="built_in">.</span>getSession()<span class="built_in">.</span>setAttribute(<span class="string">"myLocale"</span>, <span class="literal">new</span> <span class="built_in">Locale</span>(<span class="built_in">locale</span>));
+     request<span class="built_in">.</span>getSession()<span class="built_in">.</span>setAttribute(<span class="string">"hehindLocale"</span>, <span class="built_in">locale</span>);
+     response<span class="built_in">.</span>getWriter()<span class="built_in">.</span>write(<span class="string">"true"</span>);
+}
+</code></pre><p><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1ez0g1zuqo1j30eo0a876y.jpg" alt="帮助中心"><br>easyui渲染表格展示字段，只想展示当前语言的某字段的值可以这么处理：</p>
+<pre><code><span class="number">1</span>,controller里面获得当前语言的<span class="built_in">locale</span><span class="built_in">.</span>传入SQL中
+
+<span class="keyword">protected</span> <span class="built_in">String</span> getLocale(){
+    <span class="comment">//如果session里面没有设置国际化信息，则使用request中的国际化设置</span>
+    <span class="built_in">Locale</span> <span class="built_in">locale</span> = request<span class="built_in">.</span>getLocale();
+    <span class="keyword">if</span>(request<span class="built_in">.</span>getSession()<span class="built_in">.</span>getAttribute(<span class="string">"myLocale"</span>) != <span class="built_in">null</span>) <span class="built_in">locale</span> = (<span class="built_in">Locale</span>) request<span class="built_in">.</span>getSession()<span class="built_in">.</span>getAttribute(<span class="string">"myLocale"</span>);
+    <span class="keyword">return</span> <span class="built_in">locale</span><span class="built_in">.</span>toString();
+}
+
+<span class="number">2</span>,SQL处理:
+<span class="keyword">select</span> HELP_ID,STATUS,SORT_PC_OR_APP
+&lt;<span class="keyword">if</span> test=<span class="string">"LOCALE_LANGUAGE!=null and  LOCALE_LANGUAGE!=''"</span>&gt;
+        HELP_MATTER_${LOCALE_LANGUAGE} as HELP_MATTER,
+&lt;/<span class="keyword">if</span>&gt;
+FROM t_help_conter
+
+这样就可以根据语言动态的查出对应的字段的值。
+</code></pre><h2 id="JSP页面">JSP页面</h2><p>JSP页面肯定会引入easyui的语言包,或者其他插件的语言包，也要做到动态处理,文字也要动态处理，文字是配置在properties里面的.使用fmt标签输出    </p>
+<pre><code><span class="xml"><span class="tag">&lt;<span class="title">fmt:message</span> <span class="attribute">key</span>=<span class="value">"user.email"</span>/&gt;</span>：
+
+引入这个common.JSP页面所有后台都可以全自动的切换语言
+</span>&lt;%<span class="ruby">@ page language=<span class="string">"java"</span> import=<span class="string">"java.util.*"</span> pageEncoding=<span class="string">"utf-8"</span></span>%&gt;<span class="xml">
+</span>&lt;%<span class="ruby"><span class="variable">@taglib</span> uri=<span class="string">"http://java.sun.com/jsp/jstl/core"</span> prefix=<span class="string">"c"</span></span>%&gt;<span class="xml">
+</span>&lt;%<span class="ruby"><span class="variable">@taglib</span> prefix=<span class="string">"spring"</span> uri=<span class="string">"http://www.springframework.org/tags"</span> </span>%&gt;<span class="xml">
+</span>&lt;%<span class="ruby"><span class="variable">@taglib</span> uri=<span class="string">"http://java.sun.com/jsp/jstl/fmt"</span> prefix=<span class="string">"fmt"</span> </span>%&gt;<span class="xml">
+</span>&lt;%<span class="ruby"><span class="variable">@taglib</span> uri=<span class="string">"http://v.365sji.com/hksj/fmt"</span> prefix=<span class="string">"hksj"</span></span>%&gt;<span class="xml">
+
+<span class="tag">&lt;<span class="title">c:set</span> <span class="attribute">var</span>=<span class="value">"ctx"</span> <span class="attribute">value</span>=<span class="value">"${pageContext.request.contextPath}"</span>/&gt;</span>
+<span class="tag">&lt;<span class="title">c:set</span> <span class="attribute">var</span>=<span class="value">"localeLanguage"</span> <span class="attribute">value</span>=<span class="value">"${hehindLocale==null?pageContext.request.locale:hehindLocale}"</span>/&gt;</span>
+<span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="actionscript">
+<span class="comment">//环境上下文地址 </span>
+    <span class="keyword">var</span> webcontext=<span class="string">'${ctx}'</span>;
+<span class="comment">//切換語言后的語言 zh_CN</span>
+    <span class="keyword">var</span> localeLanguage = <span class="string">'${localeLanguage}'</span>;
+</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+
+<span class="tag">&lt;<span class="title">link</span> <span class="attribute">rel</span>=<span class="value">"stylesheet"</span> <span class="attribute">href</span>=<span class="value">"${ctx}/js/easyui/themes/default/easyui.css"</span>/&gt;</span>
+<span class="tag">&lt;<span class="title">link</span> <span class="attribute">rel</span>=<span class="value">"stylesheet"</span> <span class="attribute">href</span>=<span class="value">"${ctx}/js/easyui/themes/icon.css"</span>/&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"${ctx}/js/languages/messages_${localeLanguage}.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"${ctx}/js/jsUtils.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"${ctx}/js/easyui/jquery.min.js"</span> &gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"${ctx}/js/easyui/jquery.easyui.min.js"</span> &gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"${ctx}/js/easyui/locale/easyui-lang-${localeLanguage}.js"</span> &gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></span>
+</code></pre><h2 id="JS">JS</h2><p>JS和properties一样有三个文件，中英繁</p>
+<pre><code>messages_zh_CN.js
+
+<span class="keyword">var</span> localSetting = {
+    test : <span class="string">'測試'</span>,
+    user_userName:<span class="string">'用户名'</span>
+
+};
+
+<span class="function"><span class="keyword">function</span> <span class="title">getLanValue_</span><span class="params">(key)</span> </span>{
+    <span class="keyword">return</span> localSetting[key];
+}
+
+每个JS文件大概都是如上的构造，然后直接调用getLanValue(<span class="string">'test'</span>)就能取出<span class="string">'测试'</span>,
+灵活使用比如渲染easyui的表格的时候列头就可以这么取出:
+
+{
+      field:<span class="string">'USER_NAME'</span>,
+      title:getLanValue_(<span class="string">'user_userName'</span>),
+      width:<span class="number">40</span>,
+      sortable:<span class="literal">true</span>,
+      align:<span class="string">'center'</span>,
+}
+</code></pre><p>参考：<br><a href="http://my.oschina.net/u/615618/blog/161638" target="_blank" rel="external">springmvc国际化</a><br>细节太多，说的很乱，而且散，有什么问题直接留言。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="介绍">介绍</h1><p>easyui作为后台，第一节讲了构造整个系统，然后为了支持欧美等国家，所以我们要国际化。</p>]]>
+    
+    </summary>
+    
+      <category term="easyui" scheme="http://blog.chen777.com/tags/easyui/"/>
+    
+      <category term="springmvc" scheme="http://blog.chen777.com/tags/springmvc/"/>
+    
+      <category term="国际化" scheme="http://blog.chen777.com/tags/%E5%9B%BD%E9%99%85%E5%8C%96/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[easyui作后台(一)]]></title>
