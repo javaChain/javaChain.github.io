@@ -189,6 +189,89 @@
           
           
             
+              <a class="post-title-link" href="/2016/03/16/jvm条用工具之VisualVM/" itemprop="url">
+                jvm条用工具之VisualVM
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2016-03-16T17:38:53+08:00" content="2016-03-16">
+            2016-03-16
+          </time>
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2016/03/16/jvm条用工具之VisualVM/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/16/jvm条用工具之VisualVM/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+            JVM调优工具Jconsole，jProfile，VisualVM,Jconsole : jdk自带，功能简单，但是可以在系统有一定负荷的情况下使用。对垃圾回收算法有很详细的跟踪。详细说明参考这里
+JProfiler：商业软件，需要付费。功能强大。详细说明参考这里
+VisualVM：JDK自带，功能强大，与JProfiler类似。推荐。
+Jstat工具特别强大，有众多的可选项，详细查看堆内各个部分的使用量，以及加载类的数量。使用时，需加上查看进程的进程id，和所选参数。
+现在我先使用jdk自带的工具VisualVM，
+visualvm入门指南visualvm下载
+
+            
+          </span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/16/jvm条用工具之VisualVM/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
               <a class="post-title-link" href="/2016/03/16/java堆栈了解/" itemprop="url">
                 java堆栈了解
               </a>
@@ -229,12 +312,18 @@
         
           <span itemprop="articleBody">
             
-            Java中堆内存和栈内存详解　　Java把内存划分成两种：一种是栈内存，一种是堆内存。 
-　　在函数中定义的一些基本类型的变量和对象的引用变量都在函数的栈内存中分配。 
-　　当在一段代码块定义一个变量时，Java就在栈中为这个变量分配内存空间，当超过变量的作用域后，Java会自动释放掉为该变量所分配的内存空间，该内存空间可以立即被另作他用。 
-　　堆内存用来存放由new创建的对象和数组。 
-　　在堆中分配的内存，由Java虚拟机的自动垃圾回收器来管理。 
-　　在堆中产生了一个数组或对象后，还可以在栈中定义一个特殊的变量，让栈中这个变量的取值等于数组或对象在堆内存中的首地址，栈中的这个变量就成了
+            　　JAVA的JVM的内存可分为3个区：堆(heap)、栈(stack)和方法区(method)
+堆区:
+1.存储的全部是对象，每个对象都包含一个与之对应的class的信息。(class的目的是得到操作指令)
+2.jvm只有一个堆区(heap)被所有线程共享，堆中不存放基本类型和对象引用，只存放对象本身
+
+栈区:
+1.每个线程包含一个栈区，栈中只保存基础数据类型的对象和自定义对象的引用(不是对象)，对象都存放在堆区中
+2.每个栈中的数据(原始类型和对象引用)都是私有的，其他栈不能访问。
+3.栈分为3个部分：基本类型变量区、执行环境上下文、操作指令区(存放操作指令)。
+
+方法区:
+1.又叫静态区
             ...
           </span>
           <div class="post-more-link text-center">
@@ -494,89 +583,11 @@ Web前端系统SouthEas为了达到不同应
 
 
     
-      
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      
-      
-        <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-              <a class="post-title-link" href="/2015/12/21/Java工程师成神之路/" itemprop="url">
-                Java工程师成神之路
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于
-          <time itemprop="dateCreated" datetime="2015-12-21T09:08:46+08:00" content="2015-12-21">
-            2015-12-21
-          </time>
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-              &nbsp; | &nbsp;
-              <a href="/2015/12/21/Java工程师成神之路/#comments" itemprop="discussionUrl">
-                <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/21/Java工程师成神之路/" itemprop="commentsCount"></span>
-              </a>
-            </span>
-          
-        
-      </div>
-    </header>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-            Java工程师成神之路一、基础篇1.1 JVM1.1.1. Java内存模型，Java内存管理，Java堆和栈，垃圾回收http://www.jcp.org/en/jsr/detail?id=133http://ifeve.com/jmm-faq/
-1.1.2. 了解JVM各种参数及调优1.1.3. 学习使用Java工具jps, jstack, jmap, jconsole, jinfo, jhat, javap, …http://kenai.com/projects/btracehttp://www.crashub.org/https://github.com/taobao/TProfile
-            ...
-          </span>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/12/21/Java工程师成神之路/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">&raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">&raquo;</a>
   </nav>
 
  </div>
@@ -610,7 +621,7 @@ Web前端系统SouthEas为了达到不同应
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -624,7 +635,7 @@ Web前端系统SouthEas为了达到不同应
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

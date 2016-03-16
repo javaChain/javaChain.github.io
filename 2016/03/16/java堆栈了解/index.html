@@ -41,28 +41,34 @@
   <link rel="shorticon icon" type="image/x-icon" href="/myBlog.ico" />
 
 
-<meta name="description" content="Java中堆内存和栈内存详解　　Java把内存划分成两种：一种是栈内存，一种是堆内存。 
-　　在函数中定义的一些基本类型的变量和对象的引用变量都在函数的栈内存中分配。 
-　　当在一段代码块定义一个变量时，Java就在栈中为这个变量分配内存空间，当超过变量的作用域后，Java会自动释放掉为该变量所分配的内存空间，该内存空间可以立即被另作他用。 
-　　堆内存用来存放由new创建的对象和数组。 
-　　在">
+<meta name="description" content="JAVA的JVM的内存可分为3个区：堆(heap)、栈(stack)和方法区(method)
+堆区:
+1.存储的全部是对象，每个对象都包含一个与之对应的class的信息。(class的目的是得到操作指令)
+2.jvm只有一个堆区(heap)被所有线程共享，堆中不存放基本类型和对象引用，只存放对象本身
+
+栈区:
+1.每个线程包含一个栈区，栈中只保存基础数据类型的对象和自定义对象的引用(不是对象)，对">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java堆栈了解">
 <meta property="og:url" content="http://blog.chen777.com/2016/03/16/java堆栈了解/index.html">
 <meta property="og:site_name" content="陈西西">
-<meta property="og:description" content="Java中堆内存和栈内存详解　　Java把内存划分成两种：一种是栈内存，一种是堆内存。 
-　　在函数中定义的一些基本类型的变量和对象的引用变量都在函数的栈内存中分配。 
-　　当在一段代码块定义一个变量时，Java就在栈中为这个变量分配内存空间，当超过变量的作用域后，Java会自动释放掉为该变量所分配的内存空间，该内存空间可以立即被另作他用。 
-　　堆内存用来存放由new创建的对象和数组。 
-　　在">
-<meta property="og:updated_time" content="2016-03-16T09:32:51.598Z">
+<meta property="og:description" content="JAVA的JVM的内存可分为3个区：堆(heap)、栈(stack)和方法区(method)
+堆区:
+1.存储的全部是对象，每个对象都包含一个与之对应的class的信息。(class的目的是得到操作指令)
+2.jvm只有一个堆区(heap)被所有线程共享，堆中不存放基本类型和对象引用，只存放对象本身
+
+栈区:
+1.每个线程包含一个栈区，栈中只保存基础数据类型的对象和自定义对象的引用(不是对象)，对">
+<meta property="og:updated_time" content="2016-03-16T09:54:53.318Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java堆栈了解">
-<meta name="twitter:description" content="Java中堆内存和栈内存详解　　Java把内存划分成两种：一种是栈内存，一种是堆内存。 
-　　在函数中定义的一些基本类型的变量和对象的引用变量都在函数的栈内存中分配。 
-　　当在一段代码块定义一个变量时，Java就在栈中为这个变量分配内存空间，当超过变量的作用域后，Java会自动释放掉为该变量所分配的内存空间，该内存空间可以立即被另作他用。 
-　　堆内存用来存放由new创建的对象和数组。 
-　　在">
+<meta name="twitter:description" content="JAVA的JVM的内存可分为3个区：堆(heap)、栈(stack)和方法区(method)
+堆区:
+1.存储的全部是对象，每个对象都包含一个与之对应的class的信息。(class的目的是得到操作指令)
+2.jvm只有一个堆区(heap)被所有线程共享，堆中不存放基本类型和对象引用，只存放对象本身
+
+栈区:
+1.每个线程包含一个栈区，栈中只保存基础数据类型的对象和自定义对象的引用(不是对象)，对">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -235,22 +241,20 @@
       
 
       
-        <span itemprop="articleBody"><h1 id="Java中堆内存和栈内存详解">Java中堆内存和栈内存详解</h1><p>　　Java把内存划分成两种：一种是栈内存，一种是堆内存。 </p>
-<p>　　在函数中定义的一些基本类型的变量和对象的引用变量都在函数的栈内存中分配。 </p>
-<p>　　当在一段代码块定义一个变量时，Java就在栈中为这个变量分配内存空间，当超过变量的作用域后，Java会自动释放掉为该变量所分配的内存空间，该内存空间可以立即被另作他用。 </p>
-<p>　　堆内存用来存放由new创建的对象和数组。 </p>
-<p>　　在堆中分配的内存，由Java虚拟机的自动垃圾回收器来管理。 </p>
-<p>　　在堆中产生了一个数组或对象后，还可以在栈中定义一个特殊的变量，让栈中这个变量的取值等于数组或对象在堆内存中的首地址，栈中的这个变量就成了数组或对象的引用变量。 </p>
-<p>　　引用变量就相当于是为数组或对象起的一个名称，以后就可以在程序中使用栈中的引用变量来访问堆中的数组或对象。 </p>
-<p>　　具体的说： </p>
-<p>　　栈与堆都是Java用来在Ram中存放数据的地方。与C++不同，Java自动管理栈和堆，程序员不能直接地设置栈或堆。 </p>
-<p>　　Java的堆是一个运行时数据区,类的(对象从中分配空间。这些对象通过new、newarray、anewarray和multianewarray等指令建立，它们不需要程序代码来显式的释放。堆是由垃圾回收来负责的，堆的优势是可以动态地分配内存大小，生存期也不必事先告诉编译器，因为它是在运行时动态分配内存的，Java的垃圾收集器会自动收走这些不再使用的数据。但缺点是，由于要在运行时动态分配内存，存取速度较慢。 </p>
-<p>　　栈的优势是，存取速度比堆要快，仅次于寄存器，栈数据可以共享。但缺点是，存在栈中的数据大小与生存期必须是确定的，缺乏灵活性。栈中主要存放一些基本类型的变量(,int, short, long, byte, float, double, boolean, char)和对象句柄。 </p>
-<p>　　栈有一个很重要的特殊性，就是存在栈中的数据可以共享。假设我们同时定义： </p>
-<p>　　int a = 3; </p>
-<p>　　int b = 3; </p>
-<p>　　编译器先处理int a = 3;首先它会在栈中创建一个变量为a的引用，然后查找栈中是否有3这个值，如果没找到，就将3存放进来，然后将a指向3。接着处理int b = 3;在创建完b的引用变量后，因为在栈中已经有3这个值，便将b直接指向3。这样，就出现了a与b同时均指向3的情况。这时，如果再令a=4;那么编译器会重新搜索栈中是否有4值，如果没有，则将4存放进来，并令a指向4;如果已经有了，则直接将a指向这个地址。因此a值的改变不会影响到b的值。要注意这种数据的共享与两个对象的引用同时指向一个对象的这种共享是不同的，因为这种情况a的修改并不会影响到b, 它是由编译器完成的，它有利于节省空间。而一个对象引用变量修改了这个对象的内部状态，会影响到另一个对象引用变量 </p>
-</span>
+        <span itemprop="articleBody"><p>　　JAVA的JVM的内存可分为3个区：堆(heap)、栈(stack)和方法区(method)</p>
+<pre><code>堆区:
+<span class="number">1.</span>存储的全部是对象，每个对象都包含一个与之对应的<span class="keyword">class</span>的信息。(<span class="keyword">class</span>的目的是得到操作指令)
+<span class="number">2.</span>jvm只有一个堆区(heap)被所有线程共享，堆中不存放基本类型和对象引用，只存放对象本身
+
+栈区:
+<span class="number">1.</span>每个线程包含一个栈区，栈中只保存基础数据类型的对象和自定义对象的引用(不是对象)，对象都存放在堆区中
+<span class="number">2.</span>每个栈中的数据(原始类型和对象引用)都是私有的，其他栈不能访问。
+<span class="number">3.</span>栈分为<span class="number">3</span>个部分：基本类型变量区、执行环境上下文、操作指令区(存放操作指令)。
+
+方法区:
+<span class="number">1.</span>又叫静态区，跟堆一样，被所有的线程共享。方法区包含所有的<span class="keyword">class</span>和<span class="keyword">static</span>变量。
+<span class="number">2.</span>方法区中包含的都是在整个程序中永远唯一的元素，如<span class="keyword">class</span>，<span class="keyword">static</span>变量。
+</code></pre></span>
       
     </div>
 
@@ -268,6 +272,8 @@
       
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/16/jvm条用工具之VisualVM/" rel="prev">jvm条用工具之VisualVM</a>
             
           </div>
 
@@ -362,7 +368,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -376,7 +382,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -431,7 +437,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java中堆内存和栈内存详解"><span class="nav-number">1.</span> <span class="nav-text">Java中堆内存和栈内存详解</span></a></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
