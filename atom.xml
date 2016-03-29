@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2016-03-16T09:54:53.318Z</updated>
+  <updated>2016-03-29T08:20:39.545Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -13,6 +13,205 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[spring-quartz]]></title>
+    <link href="http://blog.chen777.com/2016/03/28/spring-quartz/"/>
+    <id>http://blog.chen777.com/2016/03/28/spring-quartz/</id>
+    <published>2016-03-28T02:40:09.000Z</published>
+    <updated>2016-03-29T08:20:39.545Z</updated>
+    <content type="html"><![CDATA[<p>CronTrigger</p>
+<p>CronTriggers往往比SimpleTrigger更有用，如果您需要基于日历的概念，而非SimpleTrigger完全指定的时间间隔，复发的发射工作的时间表。<br>CronTrigger，你可以指定触发的时间表如“每星期五中午”，或“每个工作日9:30时”，甚至“每5分钟一班9:00和10:00逢星期一上午，星期三星期五“。<br>即便如此，SimpleTrigger一样，CronTrigger拥有的startTime指定的时间表时生效，指定的时间表时，应停止（可选）结束时间。</p>
+<p>Cron Expressions</p>
+<p>cron的表达式被用来配置CronTrigger实例。 cron的表达式是字符串，实际上是由七子表达式，描述个别细节的时间表。这些子表达式是分开的空白，代表：</p>
+<ol>
+<li>Seconds</li>
+<li>Minutes</li>
+<li>Hours</li>
+<li>Day-of-Month</li>
+<li>Month</li>
+<li>Day-of-Week</li>
+<li>Year (可选字段)<br>例  “0 0 12 ? * WED” 在每星期三下午12:00 执行,</li>
+</ol>
+<p>个别子表达式可以包含范围, 例如，在前面的例子里(“WED”)可以替换成 “MON-FRI”, “MON, WED, FRI”甚至”MON-WED,SAT”.</p>
+<p>“*” 代表整个时间段.</p>
+<p>每一个字段都有一套可以指定有效值，如</p>
+<p>Seconds (秒)         ：可以用数字0－59 表示，</p>
+<p>Minutes(分)          ：可以用数字0－59 表示，</p>
+<p>Hours(时)             ：可以用数字0-23表示,</p>
+<p>Day-of-Month(天) ：可以用数字1-31 中的任一一个值，但要注意一些特别的月份</p>
+<p>Month(月)            ：可以用0-11 或用字符串  “JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV and DEC” 表示</p>
+<p>Day-of-Week(每周)：可以用数字1-7表示（1 ＝ 星期日）或用字符口串“SUN, MON, TUE, WED, THU, FRI and SAT”表示</p>
+<p>“/”：为特别单位，表示为“每”如“0/15”表示每隔15分钟执行一次,“0”表示为从“0”分开始, “3/20”表示表示每隔20分钟执行一次，“3”表示从第3分钟开始执行</p>
+<p>“?”：表示每月的某一天，或第周的某一天</p>
+<p>“L”：用于每月，或每周，表示为每月的最后一天，或每个月的最后星期几如“6L”表示“每月的最后一个星期五”</p>
+<p>“W”：表示为最近工作日，如“15W”放在每月（day-of-month）字段上表示为“到本月15日最近的工作日”</p>
+<p>““#”：是用来指定“的”每月第n个工作日,例 在每周（day-of-week）这个字段中内容为”6#3” or “FRI#3” 则表示“每月第三个星期五”</p>
+<p>1）Cron表达式的格式：秒 分 时 日 月 周 年(可选)。</p>
+<pre><code>字段名                 允许的值                        允许的特殊字符  
+秒                         <span class="number">0</span>-<span class="number">59</span>                               , - * /  
+分                         <span class="number">0</span>-<span class="number">59</span>                               , - * /  
+小时                     <span class="number">0</span>-<span class="number">23</span>                               , - * /  
+日                         <span class="number">1</span>-<span class="number">31</span>                               , - * ? / L W C  
+月                         <span class="number">1</span>-<span class="number">12</span> or JAN-DEC         , - * /  
+周几                     <span class="number">1</span>-<span class="number">7</span> or SUN-SAT           , - * ? / L C <span class="preprocessor">#  </span>
+年 (可选字段)     empty, <span class="number">1970</span>-<span class="number">2099</span>      , - * /
+
+
+
+“?”字符：表示不确定的值
+
+“,”字符：指定数个值
+
+“-”字符：指定一个值的范围
+
+“/”字符：指定一个值的增加幅度。n/m表示从n开始，每次增加m
+
+“L”字符：用在日表示一个月中的最后一天，用在周表示该月最后一个星期X
+
+“W”字符：指定离给定日期最近的工作日(周一到周五)
+
+“<span class="preprocessor">#”字符：表示该月第几个周X。<span class="number">6</span>#<span class="number">3</span>表示该月第<span class="number">3</span>个周五</span>
+</code></pre><p>  2）Cron表达式范例：</p>
+<pre><code>每隔<span class="number">5</span>秒执行一次：*/<span class="number">5</span> * * * * ?
+
+每隔<span class="number">1</span>分钟执行一次：<span class="number">0</span> */<span class="number">1</span> * * * ?
+
+每天<span class="number">23</span>点执行一次：<span class="number">0</span> <span class="number">0</span> <span class="number">23</span> * * ?
+
+每天凌晨<span class="number">1</span>点执行一次：<span class="number">0</span> <span class="number">0</span> <span class="number">1</span> * * ?
+
+每月<span class="number">1</span>号凌晨<span class="number">1</span>点执行一次：<span class="number">0</span> <span class="number">0</span> <span class="number">1</span> <span class="number">1</span> * ?
+
+每月最后一天<span class="number">23</span>点执行一次：<span class="number">0</span> <span class="number">0</span> <span class="number">23</span> L * ?
+
+每周星期天凌晨<span class="number">1</span>点实行一次：<span class="number">0</span> <span class="number">0</span> <span class="number">1</span> ? * L
+
+在<span class="number">26</span>分、<span class="number">29</span>分、<span class="number">33</span>分执行一次：<span class="number">0</span> <span class="number">26</span>,<span class="number">29</span>,<span class="number">33</span> * * * ?
+
+每天的<span class="number">0</span>点、<span class="number">13</span>点、<span class="number">18</span>点、<span class="number">21</span>点都执行一次：<span class="number">0</span> <span class="number">0</span> <span class="number">0</span>,<span class="number">13</span>,<span class="number">18</span>,<span class="number">21</span> * * ?
+</code></pre><p><a href="http://www.jeasyuicn.com/cron/" target="_blank" rel="external">quartz 表达式生成器</a></p>
+<p>添加相关jar包：quartz-1.8.3.jar，spring 相关jar包</p>
+<ol>
+<li><p>web.xml中加载 applicationContext-quartz.xml</p>
+<pre><code>&lt;context-param&gt;
+    &lt;param-name&gt;contextConfigLocation&lt;<span class="regexp">/param-name&gt;
+    &lt;param-value&gt;
+        classpath*:/application</span>Context.xml,
+        classpath*<span class="symbol">:/applicationContext-shiro</span>.xml
+        classpath*<span class="symbol">:/applicationContext-quartz</span>.xml
+    &lt;<span class="regexp">/param-value&gt;
+&lt;/context</span>-param&gt;
+</code></pre></li>
+<li><p>applicationContext-quartz.xml</p>
+<pre><code><span class="xml"><span class="pi">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">beans</span> <span class="attribute">xmlns</span>=<span class="value">"http://www.springframework.org/schema/beans"</span> <span class="attribute">xmlns:xsi</span>=<span class="value">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="attribute">xmlns:context</span>=<span class="value">"http://www.springframework.org/schema/context"</span>
+    <span class="attribute">xmlns:tx</span>=<span class="value">"http://www.springframework.org/schema/tx"</span> <span class="attribute">xmlns:cache</span>=<span class="value">"http://www.springframework.org/schema/cache"</span> <span class="attribute">xmlns:task</span>=<span class="value">"http://www.springframework.org/schema/task"</span>
+    <span class="attribute">xsi:schemaLocation</span>=<span class="value">"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+    http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-3.2.xsd
+    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd"</span>
+    &gt;</span>
+
+     <span class="comment">&lt;!-- 要调用的工作类 --&gt;</span>
+        <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"quartzJob"</span> <span class="attribute">class</span>=<span class="value">"net.wit.test.QuartzJob"</span>&gt;</span><span class="tag">&lt;/<span class="title">bean</span>&gt;</span> 
+         <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"quartzJobTwo"</span> <span class="attribute">class</span>=<span class="value">"net.wit.test.QuartzJob2"</span>&gt;</span><span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+      <span class="comment">&lt;!-- 可继续加新的任务   --&gt;</span> 
+         <span class="comment">&lt;!-- 要调用的工作类结束 --&gt;</span> 
+
+         <span class="comment">&lt;!-- 定义调用对象和调用对象的方法 --&gt;</span> 
+         <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"jobtask"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"</span>&gt;</span> 
+             <span class="comment">&lt;!-- 调用的类 --&gt;</span> 
+             <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"targetObject"</span>&gt;</span> 
+                 <span class="tag">&lt;<span class="title">ref</span> <span class="attribute">bean</span>=<span class="value">"quartzJob"</span>/&gt;</span> 
+             <span class="tag">&lt;/<span class="title">property</span>&gt;</span> 
+             <span class="comment">&lt;!-- 调用类中的方法 --&gt;</span> 
+             <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"targetMethod"</span>&gt;</span> 
+                 <span class="tag">&lt;<span class="title">value</span>&gt;</span>work<span class="tag">&lt;/<span class="title">value</span>&gt;</span> 
+             <span class="tag">&lt;/<span class="title">property</span>&gt;</span> 
+         <span class="tag">&lt;/<span class="title">bean</span>&gt;</span> 
+
+         <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"jobtask2"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"</span>&gt;</span> 
+             <span class="comment">&lt;!-- 调用的类 --&gt;</span> 
+             <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"targetObject"</span>&gt;</span> 
+                 <span class="tag">&lt;<span class="title">ref</span> <span class="attribute">bean</span>=<span class="value">"quartzJobTwo"</span>/&gt;</span> 
+             <span class="tag">&lt;/<span class="title">property</span>&gt;</span> 
+             <span class="comment">&lt;!-- 调用类中的方法 --&gt;</span> 
+             <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"targetMethod"</span>&gt;</span> 
+                 <span class="tag">&lt;<span class="title">value</span>&gt;</span>work<span class="tag">&lt;/<span class="title">value</span>&gt;</span> 
+             <span class="tag">&lt;/<span class="title">property</span>&gt;</span> 
+         <span class="tag">&lt;/<span class="title">bean</span>&gt;</span> 
+         <span class="comment">&lt;!-- 可继续加新的   --&gt;</span> 
+       <span class="comment">&lt;!-- 定义调用对象和调用对象的方法结束 --&gt;</span> 
+
+         <span class="comment">&lt;!-- 定义触发时间 --&gt;</span> 
+         <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"doTime"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.scheduling.quartz.CronTriggerBean"</span>&gt;</span> 
+             <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"jobDetail"</span>&gt;</span> 
+                 <span class="tag">&lt;<span class="title">ref</span> <span class="attribute">bean</span>=<span class="value">"jobtask"</span>/&gt;</span> 
+             <span class="tag">&lt;/<span class="title">property</span>&gt;</span> 
+             <span class="comment">&lt;!-- cron表达式 此处定义为一直触发执行任务 --&gt;</span> 
+             <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"cronExpression"</span>&gt;</span> 
+                 <span class="tag">&lt;<span class="title">value</span>&gt;</span>10,15,20,25,30,35,40,45,50,55 * * * * ?<span class="tag">&lt;/<span class="title">value</span>&gt;</span> 
+             <span class="tag">&lt;/<span class="title">property</span>&gt;</span> 
+         <span class="tag">&lt;/<span class="title">bean</span>&gt;</span> 
+
+         <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"doTime2"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.scheduling.quartz.CronTriggerBean"</span>&gt;</span> 
+             <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"jobDetail"</span>&gt;</span> 
+                 <span class="tag">&lt;<span class="title">ref</span> <span class="attribute">bean</span>=<span class="value">"jobtask2"</span>/&gt;</span> 
+             <span class="tag">&lt;/<span class="title">property</span>&gt;</span> 
+             <span class="comment">&lt;!-- cron表达式   此处定义周一至周日的下午13:15触发--&gt;</span> 
+             <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"cronExpression"</span>&gt;</span> 
+                 <span class="tag">&lt;<span class="title">value</span>&gt;</span>0 15 13 ? * SUN-SAT<span class="tag">&lt;/<span class="title">value</span>&gt;</span> 
+             <span class="tag">&lt;/<span class="title">property</span>&gt;</span> 
+         <span class="tag">&lt;/<span class="title">bean</span>&gt;</span> 
+         <span class="comment">&lt;!-- 可继续加新的   --&gt;</span> 
+         <span class="comment">&lt;!-- 定义触发时间结束 --&gt;</span> 
+
+  <span class="comment">&lt;!-- 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序   --&gt;</span> 
+         <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"startQuertz"</span> <span class="attribute">lazy-init</span>=<span class="value">"false"</span> <span class="attribute">autowire</span>=<span class="value">"no"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.scheduling.quartz.SchedulerFactoryBean"</span>&gt;</span> 
+             <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"triggers"</span>&gt;</span> 
+                 <span class="tag">&lt;<span class="title">list</span>&gt;</span> 
+                     <span class="tag">&lt;<span class="title">ref</span> <span class="attribute">bean</span>=<span class="value">"doTime"</span>/&gt;</span> 
+                     <span class="tag">&lt;<span class="title">ref</span> <span class="attribute">bean</span>=<span class="value">"doTime2"</span>/&gt;</span> 
+                   <span class="comment">&lt;!-- 可继续加新的   --&gt;</span> 
+
+                 <span class="tag">&lt;/<span class="title">list</span>&gt;</span> 
+             <span class="tag">&lt;/<span class="title">property</span>&gt;</span> 
+         <span class="tag">&lt;/<span class="title">bean</span>&gt;</span> 
+       <span class="comment">&lt;!-- 总管理类结束   --&gt;</span>     
+<span class="tag">&lt;/<span class="title">beans</span>&gt;</span>
+
+public class QuartzJob 
+</span><span class="expression">{ 
+     <span class="variable">public</span> <span class="variable">void</span> <span class="variable">work</span>() 
+     { 
+             <span class="variable">System.out.println</span>(<span class="string">"Spring Quartz的任务调度1被调用！"</span>); 
+             //定时调用的业务逻辑 
+     }</span><span class="xml"> 
+} 
+
+public class QuartzJob2
+</span><span class="expression">{ 
+     <span class="variable">public</span> <span class="variable">void</span> <span class="variable">work</span>() 
+     { 
+             <span class="variable">System.out.println</span>(<span class="string">"Spring Quartz的任务调度2被调用！"</span>); 
+             //定时调用的业务逻辑 
+     }</span><span class="xml"> 
+}</span>
+</code></pre></li>
+</ol>
+<p>console:<br><img src="http://ww4.sinaimg.cn/large/0063lLoQgw1f2dt1qlbsmj309e02a0t2.jpg" alt="http://ww4.sinaimg.cn/large/0063lLoQgw1f2dt1qlbsmj309e02a0t2.jpg"></p>
+<p><strong><p style="color:red;">如果报错可能是jar版本问题</p><p></p></strong><br> <img src="http://ww4.sinaimg.cn/large/0063lLoQgw1f2dsxasihnj30jz09dwjo.jpg" alt="http://ww4.sinaimg.cn/large/0063lLoQgw1f2dsxasihnj30jz09dwjo.jpg"></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>CronTrigger</p>
+<p>CronTriggers往往比SimpleTrigger更有用，如果您需要基于日历的概念，而非SimpleTrigger完全指定的时间间隔，复发的发射工作的时间表。<br>CronTrigger，你可以指定触发的时间表如“每星期五中午”]]>
+    </summary>
+    
+      <category term="任务调度" scheme="http://blog.chen777.com/tags/%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[java堆栈了解]]></title>
@@ -1571,169 +1770,6 @@ TopicDTO dto=<span class="built_in">JSON</span>.parseObject(topicStr, topicDTO.g
     </summary>
     
       <category term="json" scheme="http://blog.chen777.com/tags/json/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[java timer设置]]></title>
-    <link href="http://blog.chen777.com/2015/09/18/java-timer/"/>
-    <id>http://blog.chen777.com/2015/09/18/java-timer/</id>
-    <published>2015-09-18T02:38:44.000Z</published>
-    <updated>2015-10-27T01:53:21.051Z</updated>
-    <content type="html"><![CDATA[<p>Java自带的java.util.Timer类，通过调度一个java.util.TimerTask任务。<br>基本流程：在web.xml中配置listener调用timer类，timer类实现接口ServletContextListener,调用schedule中task。task中实现业务逻辑。<br><a id="more"></a></p>
-<p>TimerManager.java</p>
-<pre><code>package com<span class="built_in">.</span>inveno<span class="built_in">.</span>ccs<span class="built_in">.</span>timer;
-
-<span class="keyword">import</span> java<span class="built_in">.</span>util<span class="built_in">.</span>Calendar;
-<span class="keyword">import</span> java<span class="built_in">.</span>util<span class="built_in">.</span><span class="built_in">Date</span>;
-<span class="keyword">import</span> java<span class="built_in">.</span>util<span class="built_in">.</span>Timer;
-
-<span class="keyword">import</span> javax<span class="built_in">.</span>servlet<span class="built_in">.</span>ServletContextEvent;
-<span class="keyword">import</span> javax<span class="built_in">.</span>servlet<span class="built_in">.</span>ServletContextListener;
-
-<span class="keyword">import</span> org<span class="built_in">.</span>apache<span class="built_in">.</span>log4j<span class="built_in">.</span>Logger;
-
-<span class="keyword">import</span> com<span class="built_in">.</span>inveno<span class="built_in">.</span>ccs<span class="built_in">.</span>common<span class="built_in">.</span>util<span class="built_in">.</span>LoggerFactory;
-
-<span class="keyword">public</span> class TimerManager implements ServletContextListener{
-    <span class="keyword">public</span> static final Logger <span class="keyword">LOG</span> = LoggerFactory<span class="built_in">.</span>make();
-
-    <span class="comment">//时间间隔(一天)  </span>
-    <span class="keyword">private</span> static final long PERIOD_DAY = <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>;  
-
-    <span class="keyword">private</span> Timer timer;
-
-    <span class="comment">//容器摧毁</span>
-    <span class="keyword">public</span> <span class="literal">void</span> contextDestroyed(ServletContextEvent arg0) {
-        timer<span class="built_in">.</span>cancel();
-
-    }
-
-    <span class="comment">//容器初始化</span>
-    <span class="keyword">public</span> <span class="literal">void</span> contextInitialized(ServletContextEvent arg0) {
-        <span class="keyword">LOG</span><span class="built_in">.</span>info(<span class="string">"start timer"</span>);
-        Calendar calendar = Calendar<span class="built_in">.</span>getInstance();
-          <span class="comment">/*** 定制每日17:30执行方法 ***/</span>
-          calendar<span class="built_in">.</span><span class="built_in">set</span>(Calendar<span class="built_in">.</span>HOUR_OF_DAY, <span class="number">17</span>);
-          calendar<span class="built_in">.</span><span class="built_in">set</span>(Calendar<span class="built_in">.</span>MINUTE, <span class="number">30</span>);
-          calendar<span class="built_in">.</span><span class="built_in">set</span>(Calendar<span class="built_in">.</span>SECOND, <span class="number">0</span>);
-          <span class="built_in">Date</span> <span class="built_in">date</span>=calendar<span class="built_in">.</span>getTime(); <span class="comment">//第一次执行定时任务的时间</span>
-
-          <span class="comment">//如果第一次执行定时任务的时间 小于 当前的时间</span>
-          <span class="comment">//此时要在 第一次执行定时任务的时间 加一天，以便此任务在下个时间点执行。如果不加一天，任务会立即执行。</span>
-          <span class="keyword">if</span> (<span class="built_in">date</span><span class="built_in">.</span>before(<span class="literal">new</span> <span class="built_in">Date</span>())) {
-              <span class="built_in">date</span> = this<span class="built_in">.</span>addDay(<span class="built_in">date</span>, <span class="number">1</span>);
-          }
-        timer = <span class="literal">new</span> Timer();  
-        Task task = <span class="literal">new</span> Task();  
-        <span class="comment">//安排指定的任务在指定的时间开始进行重复的固定延迟执行。  </span>
-        timer<span class="built_in">.</span>schedule(task,<span class="built_in">date</span>,PERIOD_DAY);  
-        <span class="keyword">LOG</span><span class="built_in">.</span>info(<span class="string">"start end"</span>);
-    }  
-
-    <span class="comment">// 增加或减少天数</span>
-     <span class="keyword">public</span> <span class="built_in">Date</span> addDay(<span class="built_in">Date</span> <span class="built_in">date</span>, int num) {
-      Calendar startDT = Calendar<span class="built_in">.</span>getInstance();
-      startDT<span class="built_in">.</span>setTime(<span class="built_in">date</span>);
-      startDT<span class="built_in">.</span>add(Calendar<span class="built_in">.</span>DAY_OF_MONTH, num);
-      <span class="keyword">return</span> startDT<span class="built_in">.</span>getTime();
-     }
-}
-</code></pre><p>GetApplicationContext.java</p>
-<pre><code>    <span class="comment">//获得注解的hotWordsDao</span>
-    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">GetApplicationContext</span> {
-    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">ApplicationContextHolder</span> {  
-        <span class="comment">// 单例变量  </span>
-        <span class="keyword">private</span> <span class="keyword">static</span> ApplicationContext AC = <span class="keyword">new</span> FileSystemXmlApplicationContext(  
-                <span class="string">"classpath:applicationContext-*.xml"</span>);  
-    }  
-
-
-    <span class="comment">// 私有化的构造方法，保证外部的类不能通过构造器来实例化。  </span>
-    <span class="function"><span class="keyword">private</span> <span class="title">GetApplicationContext</span>(<span class="params"></span>) </span>{  
-
-
-    }  
-
-
-    <span class="comment">// 获取单例对象实例  </span>
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ApplicationContext <span class="title">getInstance</span>(<span class="params"></span>) </span>{  
-        <span class="keyword">if</span> (ApplicationContextHolder.AC == <span class="keyword">null</span>) {  
-            ApplicationContextHolder.AC = <span class="keyword">new</span> FileSystemXmlApplicationContext(  
-                    <span class="string">"classpath:applicationContext-*.xml"</span>);  
-        }  
-        <span class="keyword">return</span> ApplicationContextHolder.AC;  
-    }  
-}
-</code></pre><p>Task.java</p>
-<pre><code><span class="keyword">package</span> com.inveno.ccs.timer;
-
-<span class="keyword">import</span> java.util.List;
-<span class="keyword">import</span> java.util.TimerTask;
-
-<span class="keyword">import</span> org.springframework.context.ApplicationContext;
-
-<span class="keyword">import</span> com.inveno.ccs.dao.FirmDao;
-<span class="keyword">import</span> com.inveno.ccs.dao.HotWordsDao;
-<span class="keyword">import</span> com.inveno.ccs.dto.DailyHotWordDTO;
-<span class="keyword">import</span> com.inveno.ccs.dto.HotWordsDTO;
-<span class="keyword">import</span> com.inveno.ccs.dto.TreeDTO;
-<span class="keyword">import</span> com.inveno.ccs.service.HotWordsServer;
-
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="keyword">Task</span> <span class="keyword">extends</span> TimerTask{
-
-<span class="comment">/** 
- * 执行内容 
- * 
- */</span>  
-    <span class="keyword">public</span> <span class="keyword">void</span> run() { 
-        ApplicationContext ctx= GetApplicationContext.getInstance();
-        HotWordsDao hotWordsDao = (HotWordsDao) ctx.getBean(<span class="string">"hotWordsDao"</span>); 
-        HotWordsServer hotWordsServer = (HotWordsServer) ctx.getBean(<span class="string">"hotWordsServer"</span>); 
-        FirmDao firmDao = (FirmDao) ctx.getBean(<span class="string">"firmDao"</span>);
-        List&lt;TreeDTO&gt; firmList=firmDao.findTreeDTO();
-
-        <span class="keyword">try</span> {
-            List&lt;DailyHotWordDTO&gt; dailyList=hotWordsDao.getDailyHotWordList();
-            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; dailyList.<span class="keyword">size</span>(); i++) {
-                DailyHotWordDTO dailyHotWordDTO=dailyList.get(i);
-                List&lt;HotWordsDTO&gt; dtoList=hotWordsServer.getHotWords(dailyHotWordDTO.getWord());
-                <span class="keyword">if</span>(dtoList.<span class="keyword">size</span>()&gt;<span class="number">0</span>){
-                    dailyList.remove(i);
-                    <span class="keyword">continue</span>;
-                }
-            }
-
-            <span class="keyword">if</span>(dailyList!=<span class="keyword">null</span> &amp;&amp; dailyList.<span class="keyword">size</span>()&gt;<span class="number">0</span>){
-                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; firmList.<span class="keyword">size</span>(); j++) {
-                    TreeDTO treeDTO=firmList.get(j);
-                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; dailyList.<span class="keyword">size</span>(); i++) {
-                        DailyHotWordDTO dailyHotWordDTO=dailyList.get(i);
-                        dailyHotWordDTO.setFirmId(treeDTO.getId()+<span class="string">""</span>);
-                        dailyHotWordDTO.setFirmName(treeDTO.<span class="keyword">getText</span>());
-                        hotWordsDao.insertDailyHotWordDTO(dailyHotWordDTO);
-                    }
-
-                }
-            }
-        } <span class="keyword">catch</span> (Exception e) {
-            e.printStackTrace();
-        }
-    }    
-}
-</code></pre><p>web.xml中配置listener：</p>
-<pre><code>&lt;listener&gt;&lt;listener-<span class="class"><span class="keyword">class</span>&gt;<span class="title">com</span>.<span class="title">inveno</span>.<span class="title">ccs</span>.<span class="title">Timer</span>.<span class="title">TimerManager</span><span class="inheritance">&lt;<span class="parent">listener</span></span>-<span class="title">class</span>&gt;<span class="inheritance">&lt;</span>/<span class="title">listener</span>&gt;</span>
-</code></pre><p>总结：功能开发完成了，在完成的时候有几个地方遇到了问题:<br>1.获取不到hotWordsDao，然后折腾半天，终于搞定。<br>2.只要是服务重启就会调用task，这样业务就产生问题，只需要判断一下即可。</p>
-<p>定时任务其实有很多，也很灵活，spring quartz/timer等等。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>Java自带的java.util.Timer类，通过调度一个java.util.TimerTask任务。<br>基本流程：在web.xml中配置listener调用timer类，timer类实现接口ServletContextListener,调用schedule中task。task中实现业务逻辑。<br>]]>
-    
-    </summary>
-    
-      <category term="timer" scheme="http://blog.chen777.com/tags/timer/"/>
-    
-      <category term="timer" scheme="http://blog.chen777.com/categories/timer/"/>
     
   </entry>
   

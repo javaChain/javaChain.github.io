@@ -1,0 +1,866 @@
+<!doctype html>
+<html class="theme-next  theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+    <meta name="description" content="学而不思则罔，思而不学则殆" />
+
+
+
+  <meta name="keywords" content="任务调度," />
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Coding Chain" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/myBlog.ico" />
+
+
+<meta name="description" content="CronTrigger
+CronTriggers往往比SimpleTrigger更有用，如果您需要基于日历的概念，而非SimpleTrigger完全指定的时间间隔，复发的发射工作的时间表。CronTrigger，你可以指定触发的时间表如“每星期五中午”，或“每个工作日9:30时”，甚至“每5分钟一班9:00和10:00逢星期一上午，星期三星期五“。即便如此，SimpleTrigger一样，Cron">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring-quartz">
+<meta property="og:url" content="http://blog.chen777.com/2016/03/28/spring-quartz/index.html">
+<meta property="og:site_name" content="Coding Chain">
+<meta property="og:description" content="CronTrigger
+CronTriggers往往比SimpleTrigger更有用，如果您需要基于日历的概念，而非SimpleTrigger完全指定的时间间隔，复发的发射工作的时间表。CronTrigger，你可以指定触发的时间表如“每星期五中午”，或“每个工作日9:30时”，甚至“每5分钟一班9:00和10:00逢星期一上午，星期三星期五“。即便如此，SimpleTrigger一样，Cron">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/0063lLoQgw1f2dt1qlbsmj309e02a0t2.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/0063lLoQgw1f2dsxasihnj30jz09dwjo.jpg">
+<meta property="og:updated_time" content="2016-03-29T08:20:39.545Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="spring-quartz">
+<meta name="twitter:description" content="CronTrigger
+CronTriggers往往比SimpleTrigger更有用，如果您需要基于日历的概念，而非SimpleTrigger完全指定的时间间隔，复发的发射工作的时间表。CronTrigger，你可以指定触发的时间表如“每星期五中午”，或“每个工作日9:30时”，甚至“每5分钟一班9:00和10:00逢星期一上午，星期三星期五“。即便如此，SimpleTrigger一样，Cron">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> spring-quartz | Coding Chain </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">Coding Chain</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <form class="site-search-form">
+    <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+  </form>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'oDjVXLFebsVH9TQC_FsZ','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              spring-quartz
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2016-03-28T10:40:09+08:00" content="2016-03-28">
+            2016-03-28
+          </time>
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2016/03/28/spring-quartz/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/28/spring-quartz/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>CronTrigger</p>
+<p>CronTriggers往往比SimpleTrigger更有用，如果您需要基于日历的概念，而非SimpleTrigger完全指定的时间间隔，复发的发射工作的时间表。<br>CronTrigger，你可以指定触发的时间表如“每星期五中午”，或“每个工作日9:30时”，甚至“每5分钟一班9:00和10:00逢星期一上午，星期三星期五“。<br>即便如此，SimpleTrigger一样，CronTrigger拥有的startTime指定的时间表时生效，指定的时间表时，应停止（可选）结束时间。</p>
+<p>Cron Expressions</p>
+<p>cron的表达式被用来配置CronTrigger实例。 cron的表达式是字符串，实际上是由七子表达式，描述个别细节的时间表。这些子表达式是分开的空白，代表：</p>
+<ol>
+<li>Seconds</li>
+<li>Minutes</li>
+<li>Hours</li>
+<li>Day-of-Month</li>
+<li>Month</li>
+<li>Day-of-Week</li>
+<li>Year (可选字段)<br>例  “0 0 12 ? * WED” 在每星期三下午12:00 执行,</li>
+</ol>
+<p>个别子表达式可以包含范围, 例如，在前面的例子里(“WED”)可以替换成 “MON-FRI”, “MON, WED, FRI”甚至”MON-WED,SAT”.</p>
+<p>“*” 代表整个时间段.</p>
+<p>每一个字段都有一套可以指定有效值，如</p>
+<p>Seconds (秒)         ：可以用数字0－59 表示，</p>
+<p>Minutes(分)          ：可以用数字0－59 表示，</p>
+<p>Hours(时)             ：可以用数字0-23表示,</p>
+<p>Day-of-Month(天) ：可以用数字1-31 中的任一一个值，但要注意一些特别的月份</p>
+<p>Month(月)            ：可以用0-11 或用字符串  “JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV and DEC” 表示</p>
+<p>Day-of-Week(每周)：可以用数字1-7表示（1 ＝ 星期日）或用字符口串“SUN, MON, TUE, WED, THU, FRI and SAT”表示</p>
+<p>“/”：为特别单位，表示为“每”如“0/15”表示每隔15分钟执行一次,“0”表示为从“0”分开始, “3/20”表示表示每隔20分钟执行一次，“3”表示从第3分钟开始执行</p>
+<p>“?”：表示每月的某一天，或第周的某一天</p>
+<p>“L”：用于每月，或每周，表示为每月的最后一天，或每个月的最后星期几如“6L”表示“每月的最后一个星期五”</p>
+<p>“W”：表示为最近工作日，如“15W”放在每月（day-of-month）字段上表示为“到本月15日最近的工作日”</p>
+<p>““#”：是用来指定“的”每月第n个工作日,例 在每周（day-of-week）这个字段中内容为”6#3” or “FRI#3” 则表示“每月第三个星期五”</p>
+<p>1）Cron表达式的格式：秒 分 时 日 月 周 年(可选)。</p>
+<pre><code>字段名                 允许的值                        允许的特殊字符  
+秒                         <span class="number">0</span>-<span class="number">59</span>                               , - * /  
+分                         <span class="number">0</span>-<span class="number">59</span>                               , - * /  
+小时                     <span class="number">0</span>-<span class="number">23</span>                               , - * /  
+日                         <span class="number">1</span>-<span class="number">31</span>                               , - * ? / L W C  
+月                         <span class="number">1</span>-<span class="number">12</span> or JAN-DEC         , - * /  
+周几                     <span class="number">1</span>-<span class="number">7</span> or SUN-SAT           , - * ? / L C <span class="preprocessor">#  </span>
+年 (可选字段)     empty, <span class="number">1970</span>-<span class="number">2099</span>      , - * /
+
+
+
+“?”字符：表示不确定的值
+
+“,”字符：指定数个值
+
+“-”字符：指定一个值的范围
+
+“/”字符：指定一个值的增加幅度。n/m表示从n开始，每次增加m
+
+“L”字符：用在日表示一个月中的最后一天，用在周表示该月最后一个星期X
+
+“W”字符：指定离给定日期最近的工作日(周一到周五)
+
+“<span class="preprocessor">#”字符：表示该月第几个周X。<span class="number">6</span>#<span class="number">3</span>表示该月第<span class="number">3</span>个周五</span>
+</code></pre><p>  2）Cron表达式范例：</p>
+<pre><code>每隔<span class="number">5</span>秒执行一次：*/<span class="number">5</span> * * * * ?
+
+每隔<span class="number">1</span>分钟执行一次：<span class="number">0</span> */<span class="number">1</span> * * * ?
+
+每天<span class="number">23</span>点执行一次：<span class="number">0</span> <span class="number">0</span> <span class="number">23</span> * * ?
+
+每天凌晨<span class="number">1</span>点执行一次：<span class="number">0</span> <span class="number">0</span> <span class="number">1</span> * * ?
+
+每月<span class="number">1</span>号凌晨<span class="number">1</span>点执行一次：<span class="number">0</span> <span class="number">0</span> <span class="number">1</span> <span class="number">1</span> * ?
+
+每月最后一天<span class="number">23</span>点执行一次：<span class="number">0</span> <span class="number">0</span> <span class="number">23</span> L * ?
+
+每周星期天凌晨<span class="number">1</span>点实行一次：<span class="number">0</span> <span class="number">0</span> <span class="number">1</span> ? * L
+
+在<span class="number">26</span>分、<span class="number">29</span>分、<span class="number">33</span>分执行一次：<span class="number">0</span> <span class="number">26</span>,<span class="number">29</span>,<span class="number">33</span> * * * ?
+
+每天的<span class="number">0</span>点、<span class="number">13</span>点、<span class="number">18</span>点、<span class="number">21</span>点都执行一次：<span class="number">0</span> <span class="number">0</span> <span class="number">0</span>,<span class="number">13</span>,<span class="number">18</span>,<span class="number">21</span> * * ?
+</code></pre><p><a href="http://www.jeasyuicn.com/cron/" target="_blank" rel="external">quartz 表达式生成器</a></p>
+<p>添加相关jar包：quartz-1.8.3.jar，spring 相关jar包</p>
+<ol>
+<li><p>web.xml中加载 applicationContext-quartz.xml</p>
+<pre><code>&lt;context-param&gt;
+    &lt;param-name&gt;contextConfigLocation&lt;<span class="regexp">/param-name&gt;
+    &lt;param-value&gt;
+        classpath*:/application</span>Context.xml,
+        classpath*<span class="symbol">:/applicationContext-shiro</span>.xml
+        classpath*<span class="symbol">:/applicationContext-quartz</span>.xml
+    &lt;<span class="regexp">/param-value&gt;
+&lt;/context</span>-param&gt;
+</code></pre></li>
+<li><p>applicationContext-quartz.xml</p>
+<pre><code><span class="xml"><span class="pi">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">beans</span> <span class="attribute">xmlns</span>=<span class="value">"http://www.springframework.org/schema/beans"</span> <span class="attribute">xmlns:xsi</span>=<span class="value">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="attribute">xmlns:context</span>=<span class="value">"http://www.springframework.org/schema/context"</span>
+    <span class="attribute">xmlns:tx</span>=<span class="value">"http://www.springframework.org/schema/tx"</span> <span class="attribute">xmlns:cache</span>=<span class="value">"http://www.springframework.org/schema/cache"</span> <span class="attribute">xmlns:task</span>=<span class="value">"http://www.springframework.org/schema/task"</span>
+    <span class="attribute">xsi:schemaLocation</span>=<span class="value">"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+    http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-3.2.xsd
+    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd"</span>
+    &gt;</span>
+
+     <span class="comment">&lt;!-- 要调用的工作类 --&gt;</span>
+        <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"quartzJob"</span> <span class="attribute">class</span>=<span class="value">"net.wit.test.QuartzJob"</span>&gt;</span><span class="tag">&lt;/<span class="title">bean</span>&gt;</span> 
+         <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"quartzJobTwo"</span> <span class="attribute">class</span>=<span class="value">"net.wit.test.QuartzJob2"</span>&gt;</span><span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+      <span class="comment">&lt;!-- 可继续加新的任务   --&gt;</span> 
+         <span class="comment">&lt;!-- 要调用的工作类结束 --&gt;</span> 
+
+         <span class="comment">&lt;!-- 定义调用对象和调用对象的方法 --&gt;</span> 
+         <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"jobtask"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"</span>&gt;</span> 
+             <span class="comment">&lt;!-- 调用的类 --&gt;</span> 
+             <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"targetObject"</span>&gt;</span> 
+                 <span class="tag">&lt;<span class="title">ref</span> <span class="attribute">bean</span>=<span class="value">"quartzJob"</span>/&gt;</span> 
+             <span class="tag">&lt;/<span class="title">property</span>&gt;</span> 
+             <span class="comment">&lt;!-- 调用类中的方法 --&gt;</span> 
+             <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"targetMethod"</span>&gt;</span> 
+                 <span class="tag">&lt;<span class="title">value</span>&gt;</span>work<span class="tag">&lt;/<span class="title">value</span>&gt;</span> 
+             <span class="tag">&lt;/<span class="title">property</span>&gt;</span> 
+         <span class="tag">&lt;/<span class="title">bean</span>&gt;</span> 
+
+         <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"jobtask2"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"</span>&gt;</span> 
+             <span class="comment">&lt;!-- 调用的类 --&gt;</span> 
+             <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"targetObject"</span>&gt;</span> 
+                 <span class="tag">&lt;<span class="title">ref</span> <span class="attribute">bean</span>=<span class="value">"quartzJobTwo"</span>/&gt;</span> 
+             <span class="tag">&lt;/<span class="title">property</span>&gt;</span> 
+             <span class="comment">&lt;!-- 调用类中的方法 --&gt;</span> 
+             <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"targetMethod"</span>&gt;</span> 
+                 <span class="tag">&lt;<span class="title">value</span>&gt;</span>work<span class="tag">&lt;/<span class="title">value</span>&gt;</span> 
+             <span class="tag">&lt;/<span class="title">property</span>&gt;</span> 
+         <span class="tag">&lt;/<span class="title">bean</span>&gt;</span> 
+         <span class="comment">&lt;!-- 可继续加新的   --&gt;</span> 
+       <span class="comment">&lt;!-- 定义调用对象和调用对象的方法结束 --&gt;</span> 
+
+         <span class="comment">&lt;!-- 定义触发时间 --&gt;</span> 
+         <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"doTime"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.scheduling.quartz.CronTriggerBean"</span>&gt;</span> 
+             <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"jobDetail"</span>&gt;</span> 
+                 <span class="tag">&lt;<span class="title">ref</span> <span class="attribute">bean</span>=<span class="value">"jobtask"</span>/&gt;</span> 
+             <span class="tag">&lt;/<span class="title">property</span>&gt;</span> 
+             <span class="comment">&lt;!-- cron表达式 此处定义为一直触发执行任务 --&gt;</span> 
+             <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"cronExpression"</span>&gt;</span> 
+                 <span class="tag">&lt;<span class="title">value</span>&gt;</span>10,15,20,25,30,35,40,45,50,55 * * * * ?<span class="tag">&lt;/<span class="title">value</span>&gt;</span> 
+             <span class="tag">&lt;/<span class="title">property</span>&gt;</span> 
+         <span class="tag">&lt;/<span class="title">bean</span>&gt;</span> 
+
+         <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"doTime2"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.scheduling.quartz.CronTriggerBean"</span>&gt;</span> 
+             <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"jobDetail"</span>&gt;</span> 
+                 <span class="tag">&lt;<span class="title">ref</span> <span class="attribute">bean</span>=<span class="value">"jobtask2"</span>/&gt;</span> 
+             <span class="tag">&lt;/<span class="title">property</span>&gt;</span> 
+             <span class="comment">&lt;!-- cron表达式   此处定义周一至周日的下午13:15触发--&gt;</span> 
+             <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"cronExpression"</span>&gt;</span> 
+                 <span class="tag">&lt;<span class="title">value</span>&gt;</span>0 15 13 ? * SUN-SAT<span class="tag">&lt;/<span class="title">value</span>&gt;</span> 
+             <span class="tag">&lt;/<span class="title">property</span>&gt;</span> 
+         <span class="tag">&lt;/<span class="title">bean</span>&gt;</span> 
+         <span class="comment">&lt;!-- 可继续加新的   --&gt;</span> 
+         <span class="comment">&lt;!-- 定义触发时间结束 --&gt;</span> 
+
+  <span class="comment">&lt;!-- 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序   --&gt;</span> 
+         <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"startQuertz"</span> <span class="attribute">lazy-init</span>=<span class="value">"false"</span> <span class="attribute">autowire</span>=<span class="value">"no"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.scheduling.quartz.SchedulerFactoryBean"</span>&gt;</span> 
+             <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"triggers"</span>&gt;</span> 
+                 <span class="tag">&lt;<span class="title">list</span>&gt;</span> 
+                     <span class="tag">&lt;<span class="title">ref</span> <span class="attribute">bean</span>=<span class="value">"doTime"</span>/&gt;</span> 
+                     <span class="tag">&lt;<span class="title">ref</span> <span class="attribute">bean</span>=<span class="value">"doTime2"</span>/&gt;</span> 
+                   <span class="comment">&lt;!-- 可继续加新的   --&gt;</span> 
+
+                 <span class="tag">&lt;/<span class="title">list</span>&gt;</span> 
+             <span class="tag">&lt;/<span class="title">property</span>&gt;</span> 
+         <span class="tag">&lt;/<span class="title">bean</span>&gt;</span> 
+       <span class="comment">&lt;!-- 总管理类结束   --&gt;</span>     
+<span class="tag">&lt;/<span class="title">beans</span>&gt;</span>
+
+public class QuartzJob 
+</span><span class="expression">{ 
+     <span class="variable">public</span> <span class="variable">void</span> <span class="variable">work</span>() 
+     { 
+             <span class="variable">System.out.println</span>(<span class="string">"Spring Quartz的任务调度1被调用！"</span>); 
+             //定时调用的业务逻辑 
+     }</span><span class="xml"> 
+} 
+
+public class QuartzJob2
+</span><span class="expression">{ 
+     <span class="variable">public</span> <span class="variable">void</span> <span class="variable">work</span>() 
+     { 
+             <span class="variable">System.out.println</span>(<span class="string">"Spring Quartz的任务调度2被调用！"</span>); 
+             //定时调用的业务逻辑 
+     }</span><span class="xml"> 
+}</span>
+</code></pre></li>
+</ol>
+<p>console:<br><img src="http://ww4.sinaimg.cn/large/0063lLoQgw1f2dt1qlbsmj309e02a0t2.jpg" alt="http://ww4.sinaimg.cn/large/0063lLoQgw1f2dt1qlbsmj309e02a0t2.jpg"></p>
+<p><strong><p style="color:red;">如果报错可能是jar版本问题</p><p></p></strong><br> <img src="http://ww4.sinaimg.cn/large/0063lLoQgw1f2dsxasihnj30jz09dwjo.jpg" alt="http://ww4.sinaimg.cn/large/0063lLoQgw1f2dsxasihnj30jz09dwjo.jpg"></p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/任务调度/" rel="tag">#任务调度</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/16/java堆栈了解/" rel="next">java堆栈了解</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/03/28/spring-quartz/"
+     data-title="spring-quartz"
+     data-content=""
+     data-url="http://blog.chen777.com/2016/03/28/spring-quartz/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+            <!-- 多说热评文章-->
+            <p>热评文章</p>
+            <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+        
+
+        
+          <div class="comments" id="comments">
+            
+              <div class="ds-thread" data-thread-key="2016/03/28/spring-quartz/"
+                   data-title="spring-quartz" data-url="http://blog.chen777.com/2016/03/28/spring-quartz/">
+              </div>
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Xixi Chain" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Xixi Chain</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">学而不思则罔，思而不学则殆</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/javaChain/javaChain.github.io" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5546313096/profile?topnav=1&wvr=6" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/u/1242040" target="_blank">OsChina</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; &nbsp;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xixi Chain</span>
+	 <span id="busuanzi_container_site_pv" style='display:none'>
+		本站总访问量<span id="busuanzi_value_site_pv"></span>次
+	</span>
+	<span id="busuanzi_container_site_uv">
+	  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+	</span>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"chainxixi"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+     
+  	<script src="/js/ua-parser.min.js"></script>
+  	<script src="/js/hook-duoshuo.js"></script>
+  
+
+    
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/js/motion_fallback.js?v=0.4.5.1" id="motion.fallback"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>
