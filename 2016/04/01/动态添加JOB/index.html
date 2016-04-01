@@ -53,7 +53,7 @@ CREATE TABLE `t_job` (
 首先创建JOB表，启动一个定时调度(上节写了)扫描这个表有没有新增的记录(status=0的记录),如果有就往quartz里面添加job然后修改t_job的status
 CREATE TABLE `t_job` (
   `id` bigint(20) NOT NUL">
-<meta property="og:updated_time" content="2016-04-01T01:30:15.022Z">
+<meta property="og:updated_time" content="2016-04-01T01:32:59.408Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="动态添加JOB">
 <meta name="twitter:description" content="前面一节讲了用spring+quartz 定时调度，这个能满足大多数需求，但是有一些动态的JOB，该如何处理。我大概讲一下我的思路：
@@ -453,7 +453,6 @@ CREATE TABLE `t_job` (
     <span class="comment">/** 
      * <span class="doctag">@Description</span>:关闭所有定时任务 
      * <span class="doctag">@Title</span>: QuartzManager.java 
-     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
      *  
      * <span class="doctag">@version</span> V2.0 
      */</span>  

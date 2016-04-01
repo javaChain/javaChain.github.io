@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2016-04-01T01:30:15.022Z</updated>
+  <updated>2016-04-01T01:32:59.408Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://blog.chen777.com/2016/04/01/%E5%8A%A8%E6%80%81%E6%B7%BB%E5%8A%A0JOB/"/>
     <id>http://blog.chen777.com/2016/04/01/动态添加JOB/</id>
     <published>2016-04-01T01:05:37.000Z</published>
-    <updated>2016-04-01T01:30:15.022Z</updated>
+    <updated>2016-04-01T01:32:59.408Z</updated>
     <content type="html"><![CDATA[<p>前面一节讲了用spring+quartz 定时调度，这个能满足大多数需求，但是有一些动态的JOB，该如何处理。我大概讲一下我的思路：</p>
 <p>首先创建JOB表，启动一个定时调度(上节写了)扫描这个表有没有新增的记录(status=0的记录),如果有就往quartz里面添加job然后修改t_job的status</p>
 <pre><code><span class="operator"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`t_job`</span> (
@@ -241,7 +241,6 @@
     <span class="comment">/** 
      * <span class="doctag">@Description</span>:关闭所有定时任务 
      * <span class="doctag">@Title</span>: QuartzManager.java 
-     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
      *  
      * <span class="doctag">@version</span> V2.0 
      */</span>  
