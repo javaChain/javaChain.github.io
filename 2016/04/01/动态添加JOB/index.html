@@ -53,7 +53,7 @@ CREATE TABLE `t_job` (
 首先创建JOB表，启动一个定时调度(上节写了)扫描这个表有没有新增的记录(status=0的记录),如果有就往quartz里面添加job然后修改t_job的status
 CREATE TABLE `t_job` (
   `id` bigint(20) NOT NUL">
-<meta property="og:updated_time" content="2016-04-01T01:25:51.967Z">
+<meta property="og:updated_time" content="2016-04-01T01:30:15.022Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="动态添加JOB">
 <meta name="twitter:description" content="前面一节讲了用spring+quartz 定时调度，这个能满足大多数需求，但是有一些动态的JOB，该如何处理。我大概讲一下我的思路：
@@ -268,7 +268,6 @@ CREATE TABLE `t_job` (
  * <span class="doctag">@Description</span>: 定时任务管理类 
  *  
  * <span class="doctag">@ClassName</span>: QuartzManager 
- * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
  */</span>  
 <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">QuartzManager</span> </span>{  
     <span class="keyword">private</span> <span class="keyword">static</span> SchedulerFactory gSchedulerFactory = <span class="keyword">new</span> StdSchedulerFactory();  
@@ -348,7 +347,6 @@ CREATE TABLE `t_job` (
      * <span class="doctag">@param</span> time 
      *  
      * <span class="doctag">@Title</span>: QuartzManager.java 
-     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
      */</span>  
     <span class="annotation">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)  
     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">modifyJobTime</span><span class="params">(String jobName, String time)</span> </span>{  
@@ -378,7 +376,6 @@ CREATE TABLE `t_job` (
      * <span class="doctag">@param</span> time 
      *  
      * <span class="doctag">@Title</span>: QuartzManager.java 
-     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
      */</span>  
     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">modifyJobTime</span><span class="params">(String triggerName,  
             String triggerGroupName, String time)</span> </span>{  
@@ -406,7 +403,6 @@ CREATE TABLE `t_job` (
      *  
      * <span class="doctag">@param</span> jobName 
      * <span class="doctag">@Title</span>: QuartzManager.java 
-     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
      */</span>  
     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">removeJob</span><span class="params">(String jobName)</span> </span>{  
         <span class="keyword">try</span> {  
@@ -428,11 +424,6 @@ CREATE TABLE `t_job` (
      * <span class="doctag">@param</span> triggerGroupName 
      *  
      * <span class="doctag">@Title</span>: QuartzManager.java 
-     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
-     *  
-     * <span class="doctag">@author</span> Comsys-LZP 
-     * <span class="doctag">@date</span> 2014-6-26 下午03:50:01 
-     * <span class="doctag">@version</span> V2.0 
      */</span>  
     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">removeJob</span><span class="params">(String jobName, String jobGroupName,  
             String triggerName, String triggerGroupName)</span> </span>{  
@@ -449,7 +440,6 @@ CREATE TABLE `t_job` (
     <span class="comment">/** 
      * <span class="doctag">@Description</span>:启动所有定时任务 
      * <span class="doctag">@Title</span>: QuartzManager.java 
-     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
      */</span>  
     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">startJobs</span><span class="params">()</span> </span>{  
         <span class="keyword">try</span> {  
