@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2016-03-29T08:20:39.545Z</updated>
+  <updated>2016-04-01T01:25:51.967Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -13,6 +13,304 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[动态添加JOB]]></title>
+    <link href="http://blog.chen777.com/2016/04/01/%E5%8A%A8%E6%80%81%E6%B7%BB%E5%8A%A0JOB/"/>
+    <id>http://blog.chen777.com/2016/04/01/动态添加JOB/</id>
+    <published>2016-04-01T01:05:37.000Z</published>
+    <updated>2016-04-01T01:25:51.967Z</updated>
+    <content type="html"><![CDATA[<p>前面一节讲了用spring+quartz 定时调度，这个能满足大多数需求，但是有一些动态的JOB，该如何处理。我大概讲一下我的思路：</p>
+<p>首先创建JOB表，启动一个定时调度(上节写了)扫描这个表有没有新增的记录(status=0的记录),如果有就往quartz里面添加job然后修改t_job的status</p>
+<pre><code><span class="operator"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`t_job`</span> (
+  <span class="string">`id`</span> <span class="built_in">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,
+  <span class="string">`create_date`</span> datetime <span class="keyword">NOT</span> <span class="literal">NULl</span> <span class="keyword">COMMENT</span> <span class="string">'创建时间'</span>,
+  <span class="string">`modify_date`</span> datetime <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'修改时间'</span>,
+  <span class="string">`job_name`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'job名称'</span>,
+  <span class="string">`class`</span> <span class="built_in">varchar</span>(<span class="number">255</span>)<span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'触发类'</span>,
+  <span class="string">`trigger_time`</span> datetime <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'触发时间'</span>,
+  <span class="string">`begin_date`</span> datetime <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'开始时间'</span>,
+  <span class="string">`end_date`</span> datetime <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="string">'结束时间'</span>,
+  <span class="string">`status`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="string">'状态：0未开启,1开启'</span>,
+  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>),
+) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">26</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</span>
+
+
+<span class="operator"><span class="keyword">select</span> * <span class="keyword">from</span> t_job <span class="keyword">where</span> <span class="keyword">status</span> =<span class="string">'0'</span>返回<span class="keyword">List</span>，然后添加JOB。</span>
+</code></pre><p>QuartzManage.java</p>
+<pre><code><span class="comment">/** 
+ * <span class="doctag">@Description</span>:  
+ * 
+ * <span class="doctag">@Title</span>: QuartzManager.java 
+ * <span class="doctag">@Package</span> com.joyce.quartz 
+ * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
+ */</span>  
+
+<span class="keyword">import</span> org.quartz.CronTrigger;  
+<span class="keyword">import</span> org.quartz.JobDetail;  
+<span class="keyword">import</span> org.quartz.Scheduler;  
+<span class="keyword">import</span> org.quartz.SchedulerFactory;  
+<span class="keyword">import</span> org.quartz.impl.StdSchedulerFactory;  
+
+<span class="comment">/** 
+ * <span class="doctag">@Description</span>: 定时任务管理类 
+ *  
+ * <span class="doctag">@ClassName</span>: QuartzManager 
+ * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
+ */</span>  
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">QuartzManager</span> </span>{  
+    <span class="keyword">private</span> <span class="keyword">static</span> SchedulerFactory gSchedulerFactory = <span class="keyword">new</span> StdSchedulerFactory();  
+    <span class="keyword">private</span> <span class="keyword">static</span> String JOB_GROUP_NAME = <span class="string">"EXTJWEB_JOBGROUP_NAME"</span>;  
+    <span class="keyword">private</span> <span class="keyword">static</span> String TRIGGER_GROUP_NAME = <span class="string">"EXTJWEB_TRIGGERGROUP_NAME"</span>;  
+
+    <span class="comment">/** 
+     * <span class="doctag">@Description</span>: 添加一个定时任务，使用默认的任务组名，触发器名，触发器组名 
+     *  
+     * <span class="doctag">@param</span> jobName 
+     *            任务名 
+     * <span class="doctag">@param</span> cls 
+     *            任务 
+     * <span class="doctag">@param</span> time 
+     *            时间设置，参考quartz说明文档 
+     *  
+     * <span class="doctag">@Title</span>: QuartzManager.java 
+     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
+     */</span>  
+    <span class="annotation">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)  
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">addJob</span><span class="params">(String jobName, Class cls, String time)</span> </span>{  
+        <span class="keyword">try</span> {  
+            Scheduler sched = gSchedulerFactory.getScheduler();  
+            JobDetail jobDetail = <span class="keyword">new</span> JobDetail(jobName, JOB_GROUP_NAME, cls);<span class="comment">// 任务名，任务组，任务执行类  </span>
+            <span class="comment">// 触发器  </span>
+            CronTrigger trigger = <span class="keyword">new</span> CronTrigger(jobName, TRIGGER_GROUP_NAME);<span class="comment">// 触发器名,触发器组  </span>
+            trigger.setCronExpression(time);<span class="comment">// 触发器时间设定  </span>
+            sched.scheduleJob(jobDetail, trigger);  
+            <span class="comment">// 启动  </span>
+            <span class="keyword">if</span> (!sched.isShutdown()) {  
+                sched.start();  
+            }  
+        } <span class="keyword">catch</span> (Exception e) {  
+            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);  
+        }  
+    }  
+
+    <span class="comment">/** 
+     * <span class="doctag">@Description</span>: 添加一个定时任务 
+     *  
+     * <span class="doctag">@param</span> jobName 
+     *            任务名 
+     * <span class="doctag">@param</span> jobGroupName 
+     *            任务组名 
+     * <span class="doctag">@param</span> triggerName 
+     *            触发器名 
+     * <span class="doctag">@param</span> triggerGroupName 
+     *            触发器组名 
+     * <span class="doctag">@param</span> jobClass 
+     *            任务 
+     * <span class="doctag">@param</span> time 
+     *            时间设置，参考quartz说明文档 
+     *  
+     * <span class="doctag">@Title</span>: QuartzManager.java 
+     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
+     */</span>  
+    <span class="annotation">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)  
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">addJob</span><span class="params">(String jobName, String jobGroupName,  
+            String triggerName, String triggerGroupName, Class jobClass,  
+            String time)</span> </span>{  
+        <span class="keyword">try</span> {  
+            Scheduler sched = gSchedulerFactory.getScheduler();  
+            JobDetail jobDetail = <span class="keyword">new</span> JobDetail(jobName, jobGroupName, jobClass);<span class="comment">// 任务名，任务组，任务执行类  </span>
+            <span class="comment">// 触发器  </span>
+            CronTrigger trigger = <span class="keyword">new</span> CronTrigger(triggerName, triggerGroupName);<span class="comment">// 触发器名,触发器组  </span>
+            trigger.setCronExpression(time);<span class="comment">// 触发器时间设定  </span>
+            sched.scheduleJob(jobDetail, trigger);  
+        } <span class="keyword">catch</span> (Exception e) {  
+            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);  
+        }  
+    }  
+
+    <span class="comment">/** 
+     * <span class="doctag">@Description</span>: 修改一个任务的触发时间(使用默认的任务组名，触发器名，触发器组名) 
+     *  
+     * <span class="doctag">@param</span> jobName 
+     * <span class="doctag">@param</span> time 
+     *  
+     * <span class="doctag">@Title</span>: QuartzManager.java 
+     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
+     */</span>  
+    <span class="annotation">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)  
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">modifyJobTime</span><span class="params">(String jobName, String time)</span> </span>{  
+        <span class="keyword">try</span> {  
+            Scheduler sched = gSchedulerFactory.getScheduler();  
+            CronTrigger trigger = (CronTrigger) sched.getTrigger(jobName,TRIGGER_GROUP_NAME);  
+            <span class="keyword">if</span> (trigger == <span class="keyword">null</span>) {  
+                <span class="keyword">return</span>;  
+            }  
+            String oldTime = trigger.getCronExpression();  
+            <span class="keyword">if</span> (!oldTime.equalsIgnoreCase(time)) {  
+                JobDetail jobDetail = sched.getJobDetail(jobName,JOB_GROUP_NAME);  
+                Class objJobClass = jobDetail.getJobClass();  
+                removeJob(jobName);  
+                addJob(jobName, objJobClass, time);  
+            }  
+        } <span class="keyword">catch</span> (Exception e) {  
+            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);  
+        }  
+    }  
+
+    <span class="comment">/** 
+     * <span class="doctag">@Description</span>: 修改一个任务的触发时间 
+     *  
+     * <span class="doctag">@param</span> triggerName 
+     * <span class="doctag">@param</span> triggerGroupName 
+     * <span class="doctag">@param</span> time 
+     *  
+     * <span class="doctag">@Title</span>: QuartzManager.java 
+     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
+     */</span>  
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">modifyJobTime</span><span class="params">(String triggerName,  
+            String triggerGroupName, String time)</span> </span>{  
+        <span class="keyword">try</span> {  
+            Scheduler sched = gSchedulerFactory.getScheduler();  
+            CronTrigger trigger = (CronTrigger) sched.getTrigger(triggerName,triggerGroupName);  
+            <span class="keyword">if</span> (trigger == <span class="keyword">null</span>) {  
+                <span class="keyword">return</span>;  
+            }  
+            String oldTime = trigger.getCronExpression();  
+            <span class="keyword">if</span> (!oldTime.equalsIgnoreCase(time)) {  
+                CronTrigger ct = (CronTrigger) trigger;  
+                <span class="comment">// 修改时间  </span>
+                ct.setCronExpression(time);  
+                <span class="comment">// 重启触发器  </span>
+                sched.resumeTrigger(triggerName, triggerGroupName);  
+            }  
+        } <span class="keyword">catch</span> (Exception e) {  
+            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);  
+        }  
+    }  
+
+    <span class="comment">/** 
+     * <span class="doctag">@Description</span>: 移除一个任务(使用默认的任务组名，触发器名，触发器组名) 
+     *  
+     * <span class="doctag">@param</span> jobName 
+     * <span class="doctag">@Title</span>: QuartzManager.java 
+     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
+     */</span>  
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">removeJob</span><span class="params">(String jobName)</span> </span>{  
+        <span class="keyword">try</span> {  
+            Scheduler sched = gSchedulerFactory.getScheduler();  
+            sched.pauseTrigger(jobName, TRIGGER_GROUP_NAME);<span class="comment">// 停止触发器  </span>
+            sched.unscheduleJob(jobName, TRIGGER_GROUP_NAME);<span class="comment">// 移除触发器  </span>
+            sched.deleteJob(jobName, JOB_GROUP_NAME);<span class="comment">// 删除任务  </span>
+        } <span class="keyword">catch</span> (Exception e) {  
+            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);  
+        }  
+    }  
+
+    <span class="comment">/** 
+     * <span class="doctag">@Description</span>: 移除一个任务 
+     *  
+     * <span class="doctag">@param</span> jobName 
+     * <span class="doctag">@param</span> jobGroupName 
+     * <span class="doctag">@param</span> triggerName 
+     * <span class="doctag">@param</span> triggerGroupName 
+     *  
+     * <span class="doctag">@Title</span>: QuartzManager.java 
+     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
+     *  
+     * <span class="doctag">@author</span> Comsys-LZP 
+     * <span class="doctag">@date</span> 2014-6-26 下午03:50:01 
+     * <span class="doctag">@version</span> V2.0 
+     */</span>  
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">removeJob</span><span class="params">(String jobName, String jobGroupName,  
+            String triggerName, String triggerGroupName)</span> </span>{  
+        <span class="keyword">try</span> {  
+            Scheduler sched = gSchedulerFactory.getScheduler();  
+            sched.pauseTrigger(triggerName, triggerGroupName);<span class="comment">// 停止触发器  </span>
+            sched.unscheduleJob(triggerName, triggerGroupName);<span class="comment">// 移除触发器  </span>
+            sched.deleteJob(jobName, jobGroupName);<span class="comment">// 删除任务  </span>
+        } <span class="keyword">catch</span> (Exception e) {  
+            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);  
+        }  
+    }  
+
+    <span class="comment">/** 
+     * <span class="doctag">@Description</span>:启动所有定时任务 
+     * <span class="doctag">@Title</span>: QuartzManager.java 
+     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
+     */</span>  
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">startJobs</span><span class="params">()</span> </span>{  
+        <span class="keyword">try</span> {  
+            Scheduler sched = gSchedulerFactory.getScheduler();  
+            sched.start();  
+        } <span class="keyword">catch</span> (Exception e) {  
+            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);  
+        }  
+    }  
+
+    <span class="comment">/** 
+     * <span class="doctag">@Description</span>:关闭所有定时任务 
+     * <span class="doctag">@Title</span>: QuartzManager.java 
+     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
+     *  
+     * <span class="doctag">@version</span> V2.0 
+     */</span>  
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">shutdownJobs</span><span class="params">()</span> </span>{  
+        <span class="keyword">try</span> {  
+            Scheduler sched = gSchedulerFactory.getScheduler();  
+            <span class="keyword">if</span> (!sched.isShutdown()) {  
+                sched.shutdown();  
+            }  
+        } <span class="keyword">catch</span> (Exception e) {  
+            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);  
+        }  
+    }  
+}  
+</code></pre><p>MemberPrizeJob.java</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MemberPrizeJob</span> <span class="keyword">implements</span> <span class="title">Job</span></span>{
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(JobExecutionContext arg0)</span> <span class="keyword">throws</span> JobExecutionException </span>{
+         <span class="comment">//do something for your service</span>
+    } 
+}
+</code></pre><p>QuartzTest.java</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">QuartzTest</span> {  
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>) </span>{  
+        <span class="keyword">try</span> {  
+            String job_name = <span class="string">"动态任务调度"</span>;  
+            System.<span class="keyword">out</span>.println(<span class="string">"【系统启动】开始(每1秒输出一次)..."</span>);    
+            QuartzManager.addJob(job_name, MemberPrizeJob.class, <span class="string">"0/1 * * * * ?"</span>);    
+
+            Thread.sleep(<span class="number">5000</span>);    
+            System.<span class="keyword">out</span>.println(<span class="string">"【修改时间】开始(每2秒输出一次)..."</span>);    
+            QuartzManager.modifyJobTime(job_name, <span class="string">"10/2 * * * * ?"</span>);    
+            Thread.sleep(<span class="number">6000</span>);    
+            System.<span class="keyword">out</span>.println(<span class="string">"【移除定时】开始..."</span>);    
+            QuartzManager.removeJob(job_name);    
+            System.<span class="keyword">out</span>.println(<span class="string">"【移除定时】成功"</span>);    
+
+            System.<span class="keyword">out</span>.println(<span class="string">"【再次添加定时任务】开始(每10秒输出一次)..."</span>);    
+            QuartzManager.addJob(job_name, MemberPrizeJob.class, <span class="string">"*/10 * * * * ?"</span>);    
+            Thread.sleep(<span class="number">60000</span>);    
+            System.<span class="keyword">out</span>.println(<span class="string">"【移除定时】开始..."</span>);    
+            QuartzManager.removeJob(job_name);    
+            System.<span class="keyword">out</span>.println(<span class="string">"【移除定时】成功"</span>);  
+        } <span class="keyword">catch</span> (Exception e) {  
+            e.printStackTrace();  
+        }  
+    }  
+} 
+</code></pre><p>调用  <strong>QuartzManager.addJob(job_name, MemberPrizeJob.class, “0/1 <em> </em> <em> </em> ?”);    </strong>，先往数据库插入记录然后定时调度扫描表发现有status为0的然后添加JOB。</p>
+<p>以上纯属虚构,如有雷同全属巧合。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>前面一节讲了用spring+quartz 定时调度，这个能满足大多数需求，但是有一些动态的JOB，该如何处理。我大概讲一下我的思路：</p>
+<p>首先创建JOB表，启动一个定时调度(上节写了)扫描这个表有没有新增的记录(status=0的记录),如果有就往quartz里面]]>
+    </summary>
+    
+      <category term="任务调度" scheme="http://blog.chen777.com/tags/%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[spring-quartz]]></title>
@@ -1688,89 +1986,6 @@ public void uploadImg(){
     </summary>
     
       <category term="hexo" scheme="http://blog.chen777.com/tags/hexo/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[fastJson]]></title>
-    <link href="http://blog.chen777.com/2015/09/21/fastJson/"/>
-    <id>http://blog.chen777.com/2015/09/21/fastJson/</id>
-    <published>2015-09-21T01:21:12.000Z</published>
-    <updated>2015-09-28T03:49:59.006Z</updated>
-    <content type="html"><![CDATA[<p>Fastjson是一个Java语言编写的JSON处理器。<br>1.遵循<a href="http://json.org标准，为其官方网站收录的参考实现之一。" target="_blank" rel="external">http://json.org标准，为其官方网站收录的参考实现之一。</a><br>2.功能强大，支持JDK的各种类型，包括基本的JavaBean、Collection、Map、Date、Enum、泛型。<br>3.无依赖，不需要例外额外的jar，能够直接跑在JDK上。<br>4开源,使用Apache License 2.0协议开源。<a href="http://code.alibabatech.com/wiki/display/FastJSON/Home" target="_blank" rel="external">http://code.alibabatech.com/wiki/display/FastJSON/Home</a></p>
-<p>下载地址：<br><a href="http://www.oschina.net/news/58783/fastjson-1-2-4" target="_blank" rel="external">http://www.oschina.net/news/58783/fastjson-1-2-4</a></p>
-<p>我的使用场景：<br>由于我是对象嵌套对象，然后在JS里面把json对象转换为json字符串，使用JSON.stringify()方法。然后后台使用JSON.parseObject(String text, Class clazz),把JSON文本parse为JavaBean。</p>
-<p>先看bean的结构:<br><strong>topicDTO:</strong></p>
-<pre><code><span class="keyword">private</span> <span class="built_in">int</span> id;
-
-<span class="keyword">private</span> <span class="keyword">String</span> topicTitle;        
-
-<span class="keyword">private</span> <span class="keyword">String</span> content;
-
-<span class="keyword">private</span> <span class="keyword">String</span> isBarrage;
-
-*<span class="keyword">private</span> VoteDTO voteDTO*;
-
-<span class="comment">/**
-  *getter,setter
-  *
-   */</span>
-</code></pre><p><strong>VoteDTO:</strong></p>
-<pre><code><span class="keyword">private</span> <span class="built_in">int</span> id;
-
-<span class="keyword">private</span> <span class="keyword">String</span> voteTitle;
-
-<span class="keyword">private</span> <span class="keyword">String</span> imgUrl;
-
-<span class="keyword">private</span> <span class="keyword">String</span> content;
-
-<span class="comment">/**
-  *getter,setter
-  *
-   */</span>
-</code></pre><p><strong>js处理：</strong></p>
-<pre><code><span class="keyword">var</span> topicDTO={};
-<span class="comment">//and so on</span>
-<span class="keyword">var</span> topicDTO.id=$(<span class="string">'#topicId'</span>).val();
-<span class="keyword">var</span> topicStr=<span class="built_in">JSON</span>.stringify(topicDTO);
-$.post(<span class="string">"admin/topic/saveTopic.action"</span>,
-        {topicStr:topicStr}
-    , <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>{
-        <span class="keyword">var</span> status = data.result;
-        <span class="keyword">if</span> (status == <span class="string">"success"</span>) {
-            $.messager.alert(<span class="string">'信息'</span>, <span class="string">'话题新增成功!'</span>, <span class="string">'info'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
-                close();
-            });
-        } <span class="keyword">else</span> {
-            $.messager.alert(<span class="string">'错误'</span>, <span class="string">'话题新增失败!'</span>, <span class="string">'error'</span>);
-        }
-    }, <span class="string">"json"</span>);
-</code></pre><p><strong>action处理:</strong></p>
-<pre><code><span class="built_in">String</span> topicStr=<span class="keyword">this</span>.getRequest().getParameter(<span class="string">"topicStr"</span>);
-TopicDTO dto=<span class="built_in">JSON</span>.parseObject(topicStr, topicDTO.getClass()); 
-</code></pre><p>此时前台传递的值都在dto对象中，简直是神器。</p>
-<p>说说fastJson的JSON.parseObject(String text, Class clazz);<br>前台通过JSON.stringify(rows)传JSON字符串到后台</p>
-<pre><code><span class="keyword">var</span> rows=$(<span class="string">'#dbgrid'</span>).datagrid(<span class="string">'getChecked'</span>);
-</code></pre><p><em>切记$.post传值千万不要这么写,{</em>rows*，} </p>
-<pre><code>$.post(<span class="string">"admin/hotWords/pushHotWordsTable.action"</span>,
-        {<span class="string">'rows'</span>,rows}
-    , <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>{
-    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; data.length; i++) {
-        str+=<span class="string">"&lt;tr&gt;&lt;td&gt;"</span>+data[i].hotWords+<span class="string">"&lt;/td&gt;&lt;td&gt;&lt;input type='text' value="</span>+data[i].order+<span class="string">" /&gt;&lt;/td&gt;&lt;/tr&gt;"</span>
-    }
-    $(<span class="string">'#hotWordsTable'</span>).append(str);
-    $(<span class="string">'#hotWordsTableData'</span>).val(data);
-    }, <span class="string">"json"</span>);    
-</code></pre><p>不然会报错请求不到后台*.<br>后台当然是简单粗暴的:</p>
-<pre><code><span class="built_in">String</span> rows= <span class="keyword">this</span>.getRequest().getParameter(<span class="string">"data"</span>);
-<span class="built_in">List</span>&lt;HotWordsDTO&gt; hotWordsList =JSON.parseArray(rows, HotWordsDTO.<span class="keyword">class</span>);
-</code></pre><p><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewb8jgrkvaj30bl07kgm1.jpg" alt=""></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>Fastjson是一个Java语言编写的JSON处理器。<br>1.遵循<a href="http://json.org标准，为其官方网站收录的参考实现之一。" target="_blank" rel="external">http://json.org标准，为其官方网站收]]>
-    </summary>
-    
-      <category term="json" scheme="http://blog.chen777.com/tags/json/"/>
     
   </entry>
   

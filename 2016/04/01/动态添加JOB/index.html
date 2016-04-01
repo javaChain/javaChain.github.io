@@ -1,0 +1,969 @@
+<!doctype html>
+<html class="theme-next  theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+    <meta name="description" content="学而不思则罔，思而不学则殆" />
+
+
+
+  <meta name="keywords" content="任务调度," />
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Coding Chain" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/myBlog.ico" />
+
+
+<meta name="description" content="前面一节讲了用spring+quartz 定时调度，这个能满足大多数需求，但是有一些动态的JOB，该如何处理。我大概讲一下我的思路：
+首先创建JOB表，启动一个定时调度(上节写了)扫描这个表有没有新增的记录(status=0的记录),如果有就往quartz里面添加job然后修改t_job的status
+CREATE TABLE `t_job` (
+  `id` bigint(20) NOT NUL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="动态添加JOB">
+<meta property="og:url" content="http://blog.chen777.com/2016/04/01/动态添加JOB/index.html">
+<meta property="og:site_name" content="Coding Chain">
+<meta property="og:description" content="前面一节讲了用spring+quartz 定时调度，这个能满足大多数需求，但是有一些动态的JOB，该如何处理。我大概讲一下我的思路：
+首先创建JOB表，启动一个定时调度(上节写了)扫描这个表有没有新增的记录(status=0的记录),如果有就往quartz里面添加job然后修改t_job的status
+CREATE TABLE `t_job` (
+  `id` bigint(20) NOT NUL">
+<meta property="og:updated_time" content="2016-04-01T01:25:51.967Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="动态添加JOB">
+<meta name="twitter:description" content="前面一节讲了用spring+quartz 定时调度，这个能满足大多数需求，但是有一些动态的JOB，该如何处理。我大概讲一下我的思路：
+首先创建JOB表，启动一个定时调度(上节写了)扫描这个表有没有新增的记录(status=0的记录),如果有就往quartz里面添加job然后修改t_job的status
+CREATE TABLE `t_job` (
+  `id` bigint(20) NOT NUL">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> 动态添加JOB | Coding Chain </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">Coding Chain</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <form class="site-search-form">
+    <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+  </form>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'oDjVXLFebsVH9TQC_FsZ','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              动态添加JOB
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2016-04-01T09:05:37+08:00" content="2016-04-01">
+            2016-04-01
+          </time>
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2016/04/01/动态添加JOB/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/01/动态添加JOB/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>前面一节讲了用spring+quartz 定时调度，这个能满足大多数需求，但是有一些动态的JOB，该如何处理。我大概讲一下我的思路：</p>
+<p>首先创建JOB表，启动一个定时调度(上节写了)扫描这个表有没有新增的记录(status=0的记录),如果有就往quartz里面添加job然后修改t_job的status</p>
+<pre><code><span class="operator"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`t_job`</span> (
+  <span class="string">`id`</span> <span class="built_in">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,
+  <span class="string">`create_date`</span> datetime <span class="keyword">NOT</span> <span class="literal">NULl</span> <span class="keyword">COMMENT</span> <span class="string">'创建时间'</span>,
+  <span class="string">`modify_date`</span> datetime <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'修改时间'</span>,
+  <span class="string">`job_name`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'job名称'</span>,
+  <span class="string">`class`</span> <span class="built_in">varchar</span>(<span class="number">255</span>)<span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'触发类'</span>,
+  <span class="string">`trigger_time`</span> datetime <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'触发时间'</span>,
+  <span class="string">`begin_date`</span> datetime <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'开始时间'</span>,
+  <span class="string">`end_date`</span> datetime <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="string">'结束时间'</span>,
+  <span class="string">`status`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="string">'状态：0未开启,1开启'</span>,
+  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>),
+) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">26</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</span>
+
+
+<span class="operator"><span class="keyword">select</span> * <span class="keyword">from</span> t_job <span class="keyword">where</span> <span class="keyword">status</span> =<span class="string">'0'</span>返回<span class="keyword">List</span>，然后添加JOB。</span>
+</code></pre><p>QuartzManage.java</p>
+<pre><code><span class="comment">/** 
+ * <span class="doctag">@Description</span>:  
+ * 
+ * <span class="doctag">@Title</span>: QuartzManager.java 
+ * <span class="doctag">@Package</span> com.joyce.quartz 
+ * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
+ */</span>  
+
+<span class="keyword">import</span> org.quartz.CronTrigger;  
+<span class="keyword">import</span> org.quartz.JobDetail;  
+<span class="keyword">import</span> org.quartz.Scheduler;  
+<span class="keyword">import</span> org.quartz.SchedulerFactory;  
+<span class="keyword">import</span> org.quartz.impl.StdSchedulerFactory;  
+
+<span class="comment">/** 
+ * <span class="doctag">@Description</span>: 定时任务管理类 
+ *  
+ * <span class="doctag">@ClassName</span>: QuartzManager 
+ * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
+ */</span>  
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">QuartzManager</span> </span>{  
+    <span class="keyword">private</span> <span class="keyword">static</span> SchedulerFactory gSchedulerFactory = <span class="keyword">new</span> StdSchedulerFactory();  
+    <span class="keyword">private</span> <span class="keyword">static</span> String JOB_GROUP_NAME = <span class="string">"EXTJWEB_JOBGROUP_NAME"</span>;  
+    <span class="keyword">private</span> <span class="keyword">static</span> String TRIGGER_GROUP_NAME = <span class="string">"EXTJWEB_TRIGGERGROUP_NAME"</span>;  
+
+    <span class="comment">/** 
+     * <span class="doctag">@Description</span>: 添加一个定时任务，使用默认的任务组名，触发器名，触发器组名 
+     *  
+     * <span class="doctag">@param</span> jobName 
+     *            任务名 
+     * <span class="doctag">@param</span> cls 
+     *            任务 
+     * <span class="doctag">@param</span> time 
+     *            时间设置，参考quartz说明文档 
+     *  
+     * <span class="doctag">@Title</span>: QuartzManager.java 
+     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
+     */</span>  
+    <span class="annotation">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)  
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">addJob</span><span class="params">(String jobName, Class cls, String time)</span> </span>{  
+        <span class="keyword">try</span> {  
+            Scheduler sched = gSchedulerFactory.getScheduler();  
+            JobDetail jobDetail = <span class="keyword">new</span> JobDetail(jobName, JOB_GROUP_NAME, cls);<span class="comment">// 任务名，任务组，任务执行类  </span>
+            <span class="comment">// 触发器  </span>
+            CronTrigger trigger = <span class="keyword">new</span> CronTrigger(jobName, TRIGGER_GROUP_NAME);<span class="comment">// 触发器名,触发器组  </span>
+            trigger.setCronExpression(time);<span class="comment">// 触发器时间设定  </span>
+            sched.scheduleJob(jobDetail, trigger);  
+            <span class="comment">// 启动  </span>
+            <span class="keyword">if</span> (!sched.isShutdown()) {  
+                sched.start();  
+            }  
+        } <span class="keyword">catch</span> (Exception e) {  
+            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);  
+        }  
+    }  
+
+    <span class="comment">/** 
+     * <span class="doctag">@Description</span>: 添加一个定时任务 
+     *  
+     * <span class="doctag">@param</span> jobName 
+     *            任务名 
+     * <span class="doctag">@param</span> jobGroupName 
+     *            任务组名 
+     * <span class="doctag">@param</span> triggerName 
+     *            触发器名 
+     * <span class="doctag">@param</span> triggerGroupName 
+     *            触发器组名 
+     * <span class="doctag">@param</span> jobClass 
+     *            任务 
+     * <span class="doctag">@param</span> time 
+     *            时间设置，参考quartz说明文档 
+     *  
+     * <span class="doctag">@Title</span>: QuartzManager.java 
+     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
+     */</span>  
+    <span class="annotation">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)  
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">addJob</span><span class="params">(String jobName, String jobGroupName,  
+            String triggerName, String triggerGroupName, Class jobClass,  
+            String time)</span> </span>{  
+        <span class="keyword">try</span> {  
+            Scheduler sched = gSchedulerFactory.getScheduler();  
+            JobDetail jobDetail = <span class="keyword">new</span> JobDetail(jobName, jobGroupName, jobClass);<span class="comment">// 任务名，任务组，任务执行类  </span>
+            <span class="comment">// 触发器  </span>
+            CronTrigger trigger = <span class="keyword">new</span> CronTrigger(triggerName, triggerGroupName);<span class="comment">// 触发器名,触发器组  </span>
+            trigger.setCronExpression(time);<span class="comment">// 触发器时间设定  </span>
+            sched.scheduleJob(jobDetail, trigger);  
+        } <span class="keyword">catch</span> (Exception e) {  
+            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);  
+        }  
+    }  
+
+    <span class="comment">/** 
+     * <span class="doctag">@Description</span>: 修改一个任务的触发时间(使用默认的任务组名，触发器名，触发器组名) 
+     *  
+     * <span class="doctag">@param</span> jobName 
+     * <span class="doctag">@param</span> time 
+     *  
+     * <span class="doctag">@Title</span>: QuartzManager.java 
+     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
+     */</span>  
+    <span class="annotation">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)  
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">modifyJobTime</span><span class="params">(String jobName, String time)</span> </span>{  
+        <span class="keyword">try</span> {  
+            Scheduler sched = gSchedulerFactory.getScheduler();  
+            CronTrigger trigger = (CronTrigger) sched.getTrigger(jobName,TRIGGER_GROUP_NAME);  
+            <span class="keyword">if</span> (trigger == <span class="keyword">null</span>) {  
+                <span class="keyword">return</span>;  
+            }  
+            String oldTime = trigger.getCronExpression();  
+            <span class="keyword">if</span> (!oldTime.equalsIgnoreCase(time)) {  
+                JobDetail jobDetail = sched.getJobDetail(jobName,JOB_GROUP_NAME);  
+                Class objJobClass = jobDetail.getJobClass();  
+                removeJob(jobName);  
+                addJob(jobName, objJobClass, time);  
+            }  
+        } <span class="keyword">catch</span> (Exception e) {  
+            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);  
+        }  
+    }  
+
+    <span class="comment">/** 
+     * <span class="doctag">@Description</span>: 修改一个任务的触发时间 
+     *  
+     * <span class="doctag">@param</span> triggerName 
+     * <span class="doctag">@param</span> triggerGroupName 
+     * <span class="doctag">@param</span> time 
+     *  
+     * <span class="doctag">@Title</span>: QuartzManager.java 
+     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
+     */</span>  
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">modifyJobTime</span><span class="params">(String triggerName,  
+            String triggerGroupName, String time)</span> </span>{  
+        <span class="keyword">try</span> {  
+            Scheduler sched = gSchedulerFactory.getScheduler();  
+            CronTrigger trigger = (CronTrigger) sched.getTrigger(triggerName,triggerGroupName);  
+            <span class="keyword">if</span> (trigger == <span class="keyword">null</span>) {  
+                <span class="keyword">return</span>;  
+            }  
+            String oldTime = trigger.getCronExpression();  
+            <span class="keyword">if</span> (!oldTime.equalsIgnoreCase(time)) {  
+                CronTrigger ct = (CronTrigger) trigger;  
+                <span class="comment">// 修改时间  </span>
+                ct.setCronExpression(time);  
+                <span class="comment">// 重启触发器  </span>
+                sched.resumeTrigger(triggerName, triggerGroupName);  
+            }  
+        } <span class="keyword">catch</span> (Exception e) {  
+            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);  
+        }  
+    }  
+
+    <span class="comment">/** 
+     * <span class="doctag">@Description</span>: 移除一个任务(使用默认的任务组名，触发器名，触发器组名) 
+     *  
+     * <span class="doctag">@param</span> jobName 
+     * <span class="doctag">@Title</span>: QuartzManager.java 
+     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
+     */</span>  
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">removeJob</span><span class="params">(String jobName)</span> </span>{  
+        <span class="keyword">try</span> {  
+            Scheduler sched = gSchedulerFactory.getScheduler();  
+            sched.pauseTrigger(jobName, TRIGGER_GROUP_NAME);<span class="comment">// 停止触发器  </span>
+            sched.unscheduleJob(jobName, TRIGGER_GROUP_NAME);<span class="comment">// 移除触发器  </span>
+            sched.deleteJob(jobName, JOB_GROUP_NAME);<span class="comment">// 删除任务  </span>
+        } <span class="keyword">catch</span> (Exception e) {  
+            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);  
+        }  
+    }  
+
+    <span class="comment">/** 
+     * <span class="doctag">@Description</span>: 移除一个任务 
+     *  
+     * <span class="doctag">@param</span> jobName 
+     * <span class="doctag">@param</span> jobGroupName 
+     * <span class="doctag">@param</span> triggerName 
+     * <span class="doctag">@param</span> triggerGroupName 
+     *  
+     * <span class="doctag">@Title</span>: QuartzManager.java 
+     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
+     *  
+     * <span class="doctag">@author</span> Comsys-LZP 
+     * <span class="doctag">@date</span> 2014-6-26 下午03:50:01 
+     * <span class="doctag">@version</span> V2.0 
+     */</span>  
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">removeJob</span><span class="params">(String jobName, String jobGroupName,  
+            String triggerName, String triggerGroupName)</span> </span>{  
+        <span class="keyword">try</span> {  
+            Scheduler sched = gSchedulerFactory.getScheduler();  
+            sched.pauseTrigger(triggerName, triggerGroupName);<span class="comment">// 停止触发器  </span>
+            sched.unscheduleJob(triggerName, triggerGroupName);<span class="comment">// 移除触发器  </span>
+            sched.deleteJob(jobName, jobGroupName);<span class="comment">// 删除任务  </span>
+        } <span class="keyword">catch</span> (Exception e) {  
+            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);  
+        }  
+    }  
+
+    <span class="comment">/** 
+     * <span class="doctag">@Description</span>:启动所有定时任务 
+     * <span class="doctag">@Title</span>: QuartzManager.java 
+     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
+     */</span>  
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">startJobs</span><span class="params">()</span> </span>{  
+        <span class="keyword">try</span> {  
+            Scheduler sched = gSchedulerFactory.getScheduler();  
+            sched.start();  
+        } <span class="keyword">catch</span> (Exception e) {  
+            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);  
+        }  
+    }  
+
+    <span class="comment">/** 
+     * <span class="doctag">@Description</span>:关闭所有定时任务 
+     * <span class="doctag">@Title</span>: QuartzManager.java 
+     * <span class="doctag">@Copyright</span>: Copyright (c) 2014 
+     *  
+     * <span class="doctag">@version</span> V2.0 
+     */</span>  
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">shutdownJobs</span><span class="params">()</span> </span>{  
+        <span class="keyword">try</span> {  
+            Scheduler sched = gSchedulerFactory.getScheduler();  
+            <span class="keyword">if</span> (!sched.isShutdown()) {  
+                sched.shutdown();  
+            }  
+        } <span class="keyword">catch</span> (Exception e) {  
+            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);  
+        }  
+    }  
+}  
+</code></pre><p>MemberPrizeJob.java</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MemberPrizeJob</span> <span class="keyword">implements</span> <span class="title">Job</span></span>{
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(JobExecutionContext arg0)</span> <span class="keyword">throws</span> JobExecutionException </span>{
+         <span class="comment">//do something for your service</span>
+    } 
+}
+</code></pre><p>QuartzTest.java</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">QuartzTest</span> {  
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>) </span>{  
+        <span class="keyword">try</span> {  
+            String job_name = <span class="string">"动态任务调度"</span>;  
+            System.<span class="keyword">out</span>.println(<span class="string">"【系统启动】开始(每1秒输出一次)..."</span>);    
+            QuartzManager.addJob(job_name, MemberPrizeJob.class, <span class="string">"0/1 * * * * ?"</span>);    
+
+            Thread.sleep(<span class="number">5000</span>);    
+            System.<span class="keyword">out</span>.println(<span class="string">"【修改时间】开始(每2秒输出一次)..."</span>);    
+            QuartzManager.modifyJobTime(job_name, <span class="string">"10/2 * * * * ?"</span>);    
+            Thread.sleep(<span class="number">6000</span>);    
+            System.<span class="keyword">out</span>.println(<span class="string">"【移除定时】开始..."</span>);    
+            QuartzManager.removeJob(job_name);    
+            System.<span class="keyword">out</span>.println(<span class="string">"【移除定时】成功"</span>);    
+
+            System.<span class="keyword">out</span>.println(<span class="string">"【再次添加定时任务】开始(每10秒输出一次)..."</span>);    
+            QuartzManager.addJob(job_name, MemberPrizeJob.class, <span class="string">"*/10 * * * * ?"</span>);    
+            Thread.sleep(<span class="number">60000</span>);    
+            System.<span class="keyword">out</span>.println(<span class="string">"【移除定时】开始..."</span>);    
+            QuartzManager.removeJob(job_name);    
+            System.<span class="keyword">out</span>.println(<span class="string">"【移除定时】成功"</span>);  
+        } <span class="keyword">catch</span> (Exception e) {  
+            e.printStackTrace();  
+        }  
+    }  
+} 
+</code></pre><p>调用  <strong>QuartzManager.addJob(job_name, MemberPrizeJob.class, “0/1 <em> </em> <em> </em> ?”);    </strong>，先往数据库插入记录然后定时调度扫描表发现有status为0的然后添加JOB。</p>
+<p>以上纯属虚构,如有雷同全属巧合。</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/任务调度/" rel="tag">#任务调度</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/28/spring-quartz/" rel="next">spring-quartz</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/04/01/动态添加JOB/"
+     data-title="动态添加JOB"
+     data-content=""
+     data-url="http://blog.chen777.com/2016/04/01/动态添加JOB/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+            <!-- 多说热评文章-->
+            <p>热评文章</p>
+            <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+        
+
+        
+          <div class="comments" id="comments">
+            
+              <div class="ds-thread" data-thread-key="2016/04/01/动态添加JOB/"
+                   data-title="动态添加JOB" data-url="http://blog.chen777.com/2016/04/01/动态添加JOB/">
+              </div>
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Xixi Chain" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Xixi Chain</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">学而不思则罔，思而不学则殆</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/javaChain/javaChain.github.io" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5546313096/profile?topnav=1&wvr=6" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/u/1242040" target="_blank">OsChina</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; &nbsp;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xixi Chain</span>
+	 <span id="busuanzi_container_site_pv" style='display:none'>
+		本站总访问量<span id="busuanzi_value_site_pv"></span>次
+	</span>
+	<span id="busuanzi_container_site_uv">
+	  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+	</span>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"chainxixi"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+     
+  	<script src="/js/ua-parser.min.js"></script>
+  	<script src="/js/hook-duoshuo.js"></script>
+  
+
+    
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/js/motion_fallback.js?v=0.4.5.1" id="motion.fallback"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>
