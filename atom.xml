@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2016-04-01T01:32:59.408Z</updated>
+  <updated>2016-04-21T06:36:48.615Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -13,6 +13,284 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[ArrayList底层学习]]></title>
+    <link href="http://blog.chen777.com/2016/04/21/ArrayList%E5%BA%95%E5%B1%82%E5%AD%A6%E4%B9%A0/"/>
+    <id>http://blog.chen777.com/2016/04/21/ArrayList底层学习/</id>
+    <published>2016-04-21T03:38:21.000Z</published>
+    <updated>2016-04-21T06:36:48.615Z</updated>
+    <content type="html"><![CDATA[<h1 id="ArrayList概述：">ArrayList概述：</h1><ul>
+<li><p>ArrayList是基于数组实现的，是一个动态数组，其容量能自动增长，类似于C语言中的动态申请内存，动态增长内存。</p>
+</li>
+<li><p>ArrayList不是线程安全的，只能用在单线程环境下，多线程环境下可以考虑用Collections.synchronizedList(List l)函数返回一个线程安全的ArrayList类，也可以使用concurrent并发包下的CopyOnWriteArrayList类。</p>
+</li>
+<li><p>ArrayList实现了Serializable接口，因此它支持序列化，能够通过序列化传输，实现了RandomAccess接口，支持快速随机访问，实际上就是通过下标序号进行快速访问，实现了Cloneable接口，能被克隆。</p>
+</li>
+<li><p>每个ArrayList实例都有一个容量，该容量是指用来存储列表元素的数组的大小。它总是至少等于列表的大小。随着向ArrayList中不断添加元素，其容量也自动增长。自动增长会带来数据向新数组的重新拷贝，因此，如果可预知数据量的多少，可在构造ArrayList时指定其容量。在添加大量元素前，应用程序也可以使用ensureCapacity操作来增加ArrayList实例的容量，这可以减少递增式再分配的数量。 注意，此实现不是同步的。如果多个线程同时访问一个ArrayList实例，而其中至少一个线程从结构上修改了列表，那么它必须保持外部同步。</p>
+</li>
+</ul>
+<h2 id="ArrayList的实现：">ArrayList的实现：</h2><p>对于ArrayList而言，它实现List接口、底层使用数组保存所有元素。其操作基本上是对数组的操作。下面我们来分析ArrayList的源代码：</p>
+<h3 id="私有属性：">私有属性：</h3><pre><code>ArrayList定义只定义类两个私有属性：
+
+    /** 
+       * The<span class="instruction"> array </span>buffer into which the elements of the ArrayList are stored. 
+       * The capacity of the ArrayList is the length of this<span class="instruction"> array </span>buffer. 
+      */  
+    <span class="keyword"> private</span><span class="keyword"> transient</span> Object<span class="keyword">[</span>] elementData;  
+
+     /** 
+      * The size of the ArrayList<span class="function"> (</span>the number of elements it contains<span class="function">)</span>. 
+      * 
+      * @serial 
+      */  
+    <span class="keyword"> private</span><span class="instruction"> int </span>size;
+</code></pre><p>很容易理解，elementData存储ArrayList内的元素，size表示它包含的元素的数量。</p>
+<p>有个关键字需要解释：transient。  </p>
+<p>Java的serialization提供了一种持久化对象实例的机制。当持久化对象时，可能有一个特殊的对象数据成员，我们不想用serialization机制来保存它。为了在一个特定对象的一个域上关闭serialization，可以在这个域前加上关键字transient。<br>被标记为transient的属性在对象被序列化的时候不会被保存。<br>*</p>
+<h3 id="构造方法：">构造方法：</h3><p>   ArrayList提供了三种方式的构造器，可以构造一个默认初始容量为10的空列表、构造一个指定初始容量的空列表以及构造一个包含指定collection的元素的列表，这些元素按照该collection的迭代器返回它们的顺序排列的。</p>
+<pre><code><span class="comment">// ArrayList带容量大小的构造函数。    </span>
+<span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>{    
+    super();    
+    <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)    
+        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal Capacity: "</span>+    
+                                           initialCapacity);    
+    <span class="comment">// 新建一个数组    </span>
+    <span class="keyword">this</span>.elementData = <span class="keyword">new</span> Object[initialCapacity];    
+}    
+
+<span class="comment">// ArrayList无参构造函数。默认容量是10。    </span>
+<span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">()</span> </span>{    
+    <span class="keyword">this</span>(<span class="number">10</span>);    
+}    
+
+<span class="comment">// 创建一个包含collection的ArrayList    </span>
+<span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">(Collection&lt;? extends E&gt; c)</span> </span>{    
+    elementData = c.toArray();    
+    size = elementData.length;    
+    <span class="keyword">if</span> (elementData.getClass() != Object[].<span class="keyword">class</span>)    
+        elementData = Arrays.copyOf(elementData, size, Object[].<span class="keyword">class</span>);    
+}
+</code></pre><h3 id="元素存储：">元素存储：</h3><p>   ArrayList提供了set(int index, E element)、add(E e)、add(int index, E element)、addAll(Collection&lt;? extends E&gt; c)、addAll(int index, Collection&lt;? extends E&gt; c)这些添加元素的方法。</p>
+<pre><code><span class="comment">// 用指定的元素替代此列表中指定位置上的元素，并返回以前位于该位置上的元素。  </span>
+<span class="keyword">public</span> E set(<span class="keyword">int</span> <span class="keyword">index</span>, E element) {  
+   RangeCheck(<span class="keyword">index</span>);  
+
+   E oldValue = (E) elementData[<span class="keyword">index</span>];  
+   elementData[<span class="keyword">index</span>] = element;  
+   <span class="keyword">return</span> oldValue;  
+}    
+<span class="comment">// 将指定的元素添加到此列表的尾部。  </span>
+<span class="keyword">public</span> <span class="keyword">boolean</span> add(E e) {  
+   ensureCapacity(size + <span class="number">1</span>);   
+   elementData[size++] = e;  
+   <span class="keyword">return</span> <span class="keyword">true</span>;  
+}    
+<span class="comment">// 将指定的元素插入此列表中的指定位置。  </span>
+<span class="comment">// 如果当前位置有元素，则向右移动当前位于该位置的元素以及所有后续元素（将其索引加1）。  </span>
+<span class="keyword">public</span> <span class="keyword">void</span> add(<span class="keyword">int</span> <span class="keyword">index</span>, E element) {  
+   <span class="keyword">if</span> (<span class="keyword">index</span> &gt; size || <span class="keyword">index</span> &lt; <span class="number">0</span>)  
+       <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(<span class="string">"Index: "</span>+<span class="keyword">index</span>+<span class="string">", Size: "</span>+size);  
+   <span class="comment">// 如果数组长度不足，将进行扩容。  </span>
+   ensureCapacity(size+<span class="number">1</span>);  <span class="comment">// Increments modCount!!  </span>
+   <span class="comment">// 将 elementData中从Index位置开始、长度为size-index的元素，  </span>
+   <span class="comment">// 拷贝到从下标为index+1位置开始的新的elementData数组中。  </span>
+   <span class="comment">// 即将当前位于该位置的元素以及所有后续元素右移一个位置。  </span>
+   System.arraycopy(elementData, <span class="keyword">index</span>, elementData, <span class="keyword">index</span> + <span class="number">1</span>, size - <span class="keyword">index</span>);  
+   elementData[<span class="keyword">index</span>] = element;  
+   size++;  
+}    
+<span class="comment">// 按照指定collection的迭代器所返回的元素顺序，将该collection中的所有元素添加到此列表的尾部。  </span>
+<span class="keyword">public</span> <span class="keyword">boolean</span> addAll(Collection&lt;? extends E&gt; c) {  
+   Object[] a = c.toArray();  
+   <span class="keyword">int</span> numNew = a.length;  
+   ensureCapacity(size + numNew);  <span class="comment">// Increments modCount  </span>
+   System.arraycopy(a, <span class="number">0</span>, elementData, size, numNew);  
+   size += numNew;  
+   <span class="keyword">return</span> numNew != <span class="number">0</span>;  
+}    
+<span class="comment">// 从指定的位置开始，将指定collection中的所有元素插入到此列表中。  </span>
+<span class="keyword">public</span> <span class="keyword">boolean</span> addAll(<span class="keyword">int</span> <span class="keyword">index</span>, Collection&lt;? extends E&gt; c) {  
+   <span class="keyword">if</span> (<span class="keyword">index</span> &gt; size || <span class="keyword">index</span> &lt; <span class="number">0</span>)  
+       <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(  
+           <span class="string">"Index: "</span> + <span class="keyword">index</span> + <span class="string">", Size: "</span> + size);  
+
+   Object[] a = c.toArray();  
+   <span class="keyword">int</span> numNew = a.length;  
+   ensureCapacity(size + numNew);  <span class="comment">// Increments modCount  </span>
+
+   <span class="keyword">int</span> numMoved = size - <span class="keyword">index</span>;  
+   <span class="keyword">if</span> (numMoved &gt; <span class="number">0</span>)  
+       System.arraycopy(elementData, <span class="keyword">index</span>, elementData, <span class="keyword">index</span> + numNew, numMoved);  
+
+   System.arraycopy(a, <span class="number">0</span>, elementData, <span class="keyword">index</span>, numNew);  
+   size += numNew;  
+   <span class="keyword">return</span> numNew != <span class="number">0</span>;  
+   }
+</code></pre><p>书上都说ArrayList是基于数组实现的，属性中也看到了数组，具体是怎么实现的呢？比如就这个添加元素的方法，如果数组大，则在将某个位置的值设置为指定元素即可，如果数组容量不够了呢？<br>看到add(E e)中先调用了ensureCapacity(size+1)方法，之后将元素的索引赋给elementData[size]，而后size自增。例如初次添加时，size为0，add将elementData[0]赋值为e，然后size设置为1（类似执行以下两条语句elementData[0]=e;size=1）。将元素的索引赋给elementData[size]不是会出现数组越界的情况吗？这里关键就在ensureCapacity(size+1)中了。</p>
+<h3 id="元素读取：">元素读取：</h3><pre><code><span class="comment">// 返回此列表中指定位置上的元素。  </span>
+ <span class="keyword">public</span> E get(<span class="keyword">int</span> <span class="keyword">index</span>) {  
+    RangeCheck(<span class="keyword">index</span>);  
+
+    <span class="keyword">return</span> (E) elementData[<span class="keyword">index</span>];  
+  }
+</code></pre><h3 id="元素删除：">元素删除：</h3><p>ArrayList提供了根据下标或者指定对象两种方式的删除功能。如下：<br>romove(int index):</p>
+<pre><code><span class="comment">// 移除此列表中指定位置上的元素。  </span>
+ <span class="keyword">public</span> E remove(<span class="keyword">int</span> <span class="keyword">index</span>) {  
+    RangeCheck(<span class="keyword">index</span>);  
+
+    modCount++;  
+    E oldValue = (E) elementData[<span class="keyword">index</span>];  
+
+    <span class="keyword">int</span> numMoved = size - <span class="keyword">index</span> - <span class="number">1</span>;  
+    <span class="keyword">if</span> (numMoved &gt; <span class="number">0</span>)  
+        System.arraycopy(elementData, <span class="keyword">index</span>+<span class="number">1</span>, elementData, <span class="keyword">index</span>, numMoved);  
+    elementData[--size] = <span class="keyword">null</span>; <span class="comment">// Let gc do its work  </span>
+
+    <span class="keyword">return</span> oldValue;  
+ }
+</code></pre><p> 首先是检查范围，修改modCount，保留将要被移除的元素，将移除位置之后的元素向前挪动一个位置，将list末尾元素置空（null），返回被移除的元素。</p>
+<p>remove(Object o)</p>
+<pre><code><span class="comment">// 移除此列表中首次出现的指定元素（如果存在）。这是应为ArrayList中允许存放重复的元素。  </span>
+ <span class="keyword">public</span> <span class="keyword">boolean</span> remove(Object o) {  
+    <span class="comment">// 由于ArrayList中允许存放null，因此下面通过两种情况来分别处理。  </span>
+    <span class="keyword">if</span> (o == <span class="keyword">null</span>) {  
+        <span class="keyword">for</span> (<span class="keyword">int</span> <span class="keyword">index</span> = <span class="number">0</span>; <span class="keyword">index</span> &lt; size; <span class="keyword">index</span>++)  
+            <span class="keyword">if</span> (elementData[<span class="keyword">index</span>] == <span class="keyword">null</span>) {  
+                <span class="comment">// 类似remove(int index)，移除列表中指定位置上的元素。  </span>
+                fastRemove(<span class="keyword">index</span>);  
+                <span class="keyword">return</span> <span class="keyword">true</span>;  
+            }  
+    } <span class="keyword">else</span> {  
+        <span class="keyword">for</span> (<span class="keyword">int</span> <span class="keyword">index</span> = <span class="number">0</span>; <span class="keyword">index</span> &lt; size; <span class="keyword">index</span>++)  
+            <span class="keyword">if</span> (o.equals(elementData[<span class="keyword">index</span>])) {  
+                fastRemove(<span class="keyword">index</span>);  
+                <span class="keyword">return</span> <span class="keyword">true</span>;  
+            }  
+        }  
+        <span class="keyword">return</span> <span class="keyword">false</span>;  
+    } 
+}
+</code></pre><p>首先通过代码可以看到，当移除成功后返回true，否则返回false。remove(Object o)中通过遍历element寻找是否存在传入对象，一旦找到就调用fastRemove移除对象。为什么找到了元素就知道了index，不通过remove(index)来移除元素呢？因为fastRemove跳过了判断边界的处理，因为找到元素就相当于确定了index不会超过边界，而且fastRemove并不返回被移除的元素。下面是fastRemove的代码，基本和remove(index)一致。</p>
+<pre><code><span class="keyword">private</span> void fastRemove(<span class="built_in">int</span> <span class="built_in">index</span>) {  
+         modCount++;  
+         <span class="built_in">int</span> numMoved = <span class="built_in">size</span> - <span class="built_in">index</span> - <span class="number">1</span>;  
+         <span class="keyword">if</span> (numMoved &gt; <span class="number">0</span>)  
+             System.arraycopy(elementData, <span class="built_in">index</span>+<span class="number">1</span>, elementData, <span class="built_in">index</span>,  
+                              numMoved);  
+         elementData[--<span class="built_in">size</span>] = null; // Let gc <span class="keyword">do</span> its work  
+ }
+
+
+<span class="keyword">protected</span> void removeRange(<span class="built_in">int</span> fromIndex, <span class="built_in">int</span> toIndex) {  
+     modCount++;  
+     <span class="built_in">int</span> numMoved = <span class="built_in">size</span> - toIndex;  
+         System.arraycopy(elementData, toIndex, elementData, fromIndex,  
+                          numMoved);  
+
+     // Let gc <span class="keyword">do</span> its work  
+     <span class="built_in">int</span> newSize = <span class="built_in">size</span> - (toIndex-fromIndex);  
+     <span class="keyword">while</span> (<span class="built_in">size</span> <span class="comment">!= newSize)  </span>
+         elementData[--<span class="built_in">size</span>] = null;  
+}
+</code></pre><p>执行过程是将elementData从toIndex位置开始的元素向前移动到fromIndex，然后将toIndex位置之后的元素全部置空顺便修改size。</p>
+<p>这个方法是protected，及受保护的方法，为什么这个方法被定义为protected呢？</p>
+<p>这是一个解释，但是可能不容易看明白。<a href="http://stackoverflow.com/questions/2289183/why-is-javas-abstractlists-removerange-method-protected" target="_blank" rel="external">http://stackoverflow.com/questions/2289183/why-is-javas-abstractlists-removerange-method-protected</a></p>
+<h3 id="调整数组容量ensureCapacity：">调整数组容量ensureCapacity：</h3><p> 从上面介绍的向ArrayList中存储元素的代码中，我们看到，每当向数组中添加元素时，都要去检查添加后元素的个数是否会超出当前数组的长度，如果超出，数组将会进行扩容，以满足添加数据的需求。数组扩容通过一个公开的方法ensureCapacity(int minCapacity)来实现。在实际添加大量元素前，我也可以使用ensureCapacity来手动增加ArrayList实例的容量，以减少递增式再分配的数量。</p>
+<pre><code><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ensureCapacity</span><span class="params">(<span class="keyword">int</span> minCapacity)</span> </span>{  
+    modCount++;  
+    <span class="keyword">int</span> oldCapacity = elementData.length;  
+    <span class="keyword">if</span> (minCapacity &gt; oldCapacity) {  
+        Object oldData[] = elementData;  
+        <span class="keyword">int</span> newCapacity = (oldCapacity * <span class="number">3</span>)/<span class="number">2</span> + <span class="number">1</span>;  <span class="comment">//增加50%+1</span>
+            <span class="keyword">if</span> (newCapacity &lt; minCapacity)  
+                newCapacity = minCapacity;  
+      <span class="comment">// minCapacity is usually close to size, so this is a win:  </span>
+      elementData = Arrays.copyOf(elementData, newCapacity);  
+    }  
+ }
+</code></pre><p>从上述代码中可以看出，数组进行扩容时，会将老数组中的元素重新拷贝一份到新的数组中，每次数组容量的增长大约是其原容量的1.5倍。这种操作的代价是很高的，因此在实际使用时，我们应该尽量避免数组容量的扩张。当我们可预知要保存的元素的多少时，要在构造ArrayList实例时，就指定其容量，以避免数组扩容的发生。或者根据实际需求，通过调用ensureCapacity方法来手动增加ArrayList实例的容量。</p>
+<p>Object oldData[] = elementData;//为什么要用到oldData[]<br>乍一看来后面并没有用到关于oldData， 这句话显得多此一举！但是这是一个牵涉到内存管理的类， 所以要了解内部的问题。 而且为什么这一句还在if的内部，这跟elementData = Arrays.copyOf(elementData, newCapacity); 这句是有关系的，下面这句Arrays.copyOf的实现时新创建了newCapacity大小的内存，然后把老的elementData放入。好像也没有用到oldData，有什么问题呢。问题就在于旧的内存的引用是elementData， elementData指向了新的内存块，如果有一个局部变量oldData变量引用旧的内存块的话，在copy的过程中就会比较安全，因为这样证明这块老的内存依然有引用，分配内存的时候就不会被侵占掉，然后copy完成后这个局部变量的生命期也过去了，然后释放才是安全的。不然在copy的的时候万一新的内存或其他线程的分配内存侵占了这块老的内存，而copy还没有结束，这将是个严重的事情。</p>
+<h1 id="关于ArrayList和Vector区别如下：">关于ArrayList和Vector区别如下：</h1><ul>
+<li>ArrayList在内存不够时默认是扩展50% + 1个，Vector是默认扩展1倍。 </li>
+<li>Vector提供indexOf(obj, start)接口，ArrayList没有。 </li>
+<li>Vector属于线程安全级别的，但是大多数情况下不使用Vector，因为线程安全需要更大的系统开销。 </li>
+</ul>
+<p>ArrayList还给我们提供了将底层数组的容量调整为当前列表保存的实际元素的大小的功能。它可以通过trimToSize方法来实现。代码如下：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">void</span> trimToSize() {  
+       modCount++;  
+       <span class="keyword">int</span> oldCapacity = elementData.length;  
+       <span class="keyword">if</span> (<span class="keyword">size</span> &lt; oldCapacity) {  
+           elementData = Arrays.copyOf(elementData, <span class="keyword">size</span>);  
+       }  
+  }
+</code></pre><p>由于elementData的长度会被拓展，size标记的是其中包含的元素的个数。所以会出现size很小但elementData.length很大的情况，将出现空间的浪费。trimToSize将返回一个新的数组给elementData，元素内容保持不变，length和size相同，节省空间。</p>
+<h3 id="转为静态数组toArray">转为静态数组toArray</h3><p>注意ArrayList的两个转化为静态数组的toArray方法。</p>
+<p>第一个， 调用Arrays.copyOf将返回一个数组，数组内容是size个elementData的元素，即拷贝elementData从0至size-1位置的元素到新数组并返回。</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">Object</span>[] toArray() {  
+         <span class="keyword">return</span> Arrays.copyOf(elementData, <span class="built_in">size</span>);  
+ } 
+</code></pre><p> 第二个，如果传入数组的长度小于size，返回一个新的数组，大小为size，类型与传入数组相同。所传入数组长度与size相等，则将elementData复制到传入数组中并返回传入的数组。若传入数组长度大于size，除了复制elementData外，还将把返回数组的第size个元素置为空。</p>
+<pre><code><span class="keyword">public</span> &lt;T&gt; T[] toArray(T[] a) {
+    <span class="keyword">if</span> (a.length &lt; <span class="keyword">size</span>)
+        <span class="comment">// Make a new array of a's runtime type, but my contents:</span>
+        <span class="keyword">return</span> (T[]) Arrays.copyOf(elementData, <span class="keyword">size</span>, a.getClass());
+System.arraycopy(elementData, <span class="number">0</span>, a, <span class="number">0</span>, <span class="keyword">size</span>);
+    <span class="keyword">if</span> (a.length &gt; <span class="keyword">size</span>)
+        a[<span class="keyword">size</span>] = <span class="keyword">null</span>;
+    <span class="keyword">return</span> a;
+}
+</code></pre><p>Fail-Fast机制：<br>ArrayList也采用了快速失败的机制，通过记录modCount参数来实现。在面对并发的修改时，迭代器很快就会完全失败，而不是冒着在将来某个不确定时间发生任意不确定行为的风险。具体介绍请参考这篇文章深入Java集合学习系列：<a href="http://zhangshixi.iteye.com/blog/672697" target="_blank" rel="external">HashMap的实现原理 中的Fail-Fast机制。    </a></p>
+<p>总结:</p>
+<p>关于ArrayList的源码，给出几点比较重要的总结：</p>
+<p>   1、注意其三个不同的构造方法。无参构造方法构造的ArrayList的容量默认为10，带有Collection参数的构造方法，将Collection转化为数组赋给ArrayList的实现数组elementData。</p>
+<p>   2、注意扩充容量的方法ensureCapacity。ArrayList在每次增加元素（可能是1个，也可能是一组）时，都要调用该方法来确保足够的容量。当容量不足以容纳当前的元素个数时，就设置新的容量为旧的容量的1.5倍加1，如果设置后的新容量还不够，则直接新容量设置为传入的参数（也就是所需的容量），而后用Arrays.copyof()方法将元素拷贝到新的数组（详见下面的第3点）。从中可以看出，当容量不够时，每次增加元素，都要将原来的元素拷贝到一个新的数组中，非常之耗时，也因此建议在事先能确定元素数量的情况下，才使用ArrayList，否则建议使用LinkedList。</p>
+<p>   3、ArrayList的实现中大量地调用了Arrays.copyof()和System.arraycopy()方法。我们有必要对这两个方法的实现做下深入的了解。</p>
+<p>   首先来看Arrays.copyof()方法。它有很多个重载的方法，但实现思路都是一样的，我们来看泛型版本的源码：</p>
+<pre><code>public <span class="value">static</span> &lt;T&gt; T<span class="attr_selector">[]</span> <span class="function">copyOf</span>(T<span class="attr_selector">[]</span> original, int newLength) {  
+        return (T<span class="attr_selector">[]</span>) <span class="function">copyOf</span>(original, newLength, original<span class="class">.getClass</span>());  
+}
+</code></pre><p>  很明显调用了另一个copyof方法，该方法有三个参数，最后一个参数指明要转换的数据的类型，其源码如下：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">static</span> &lt;T,U&gt; T[] copyOf(U[] original, <span class="built_in">int</span> newLength, Class&lt;? extends T[]&gt; newType) {  
+    T[] <span class="built_in">copy</span> = ((<span class="keyword">Object</span>)newType == (<span class="keyword">Object</span>)<span class="keyword">Object</span>[].class)  
+        ? (T[]) <span class="keyword">new</span> <span class="keyword">Object</span>[newLength]  
+        : (T[]) <span class="keyword">Array</span>.newInstance(newType.getComponentType(), newLength);  
+    System.arraycopy(original, <span class="number">0</span>, <span class="built_in">copy</span>, <span class="number">0</span>,  
+                     Math.<span class="built_in">min</span>(original.length, newLength));  
+    <span class="keyword">return</span> <span class="built_in">copy</span>;  
+}
+</code></pre><p>这里可以很明显地看出，该方法实际上是在其内部又创建了一个长度为newlength的数组，调用System.arraycopy()方法，将原来数组中的元素复制到了新的数组中。</p>
+<p>下面来看System.arraycopy()方法。该方法被标记了native，调用了系统的C/C++代码，在JDK中是看不到的，但在openJDK中可以看到其源码。该函数实际上最终调用了C语言的memmove()函数，因此它可以保证同一个数组内元素的正确复制和移动，比一般的复制方法的实现效率要高很多，很适合用来批量处理数组。Java强烈推荐在复制大量数组元素时用该方法，以取得更高的效率。</p>
+<p>4、ArrayList基于数组实现，可以通过下标索引直接查找到指定位置的元素，因此查找效率高，但每次插入或删除元素，就要大量地移动元素，插入删除元素的效率低。</p>
+<p>5、在查找给定元素索引值等的方法中，源码都将该元素的值分为null和不为null两种情况处理，ArrayList中允许元素为null。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="ArrayList概述：">ArrayList概述：</h1><ul>
+<li><p>ArrayList是基于数组实现的，是一个动态数组，其容量能自动增长，类似于C语言中的动态申请内存，动态增长内存。</p>
+</li>
+<li><p>ArrayList不是线程安]]>
+    </summary>
+    
+      <category term="源码学习" scheme="http://blog.chen777.com/tags/%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[让青春继续]]></title>
+    <link href="http://blog.chen777.com/2016/04/19/%E8%AE%A9%E9%9D%92%E6%98%A5%E7%BB%A7%E7%BB%AD/"/>
+    <id>http://blog.chen777.com/2016/04/19/让青春继续/</id>
+    <published>2016-04-19T02:08:58.000Z</published>
+    <updated>2016-04-20T02:02:39.927Z</updated>
+    <content type="html"><![CDATA[<p><a href="http://www.ourcampus.cn/newshasha/" target="_blank" rel="external">让青春继续</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><a href="http://www.ourcampus.cn/newshasha/" target="_blank" rel="external">让青春继续</a></p>
+]]>
+    </summary>
+    
+      <category term="杂记" scheme="http://blog.chen777.com/tags/%E6%9D%82%E8%AE%B0/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[动态添加JOB]]></title>
@@ -1898,83 +2176,6 @@ public void uploadImg(){
       <category term="List" scheme="http://blog.chen777.com/tags/List/"/>
     
       <category term="java" scheme="http://blog.chen777.com/tags/java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[java-sort排序问题]]></title>
-    <link href="http://blog.chen777.com/2015/09/23/java-sort/"/>
-    <id>http://blog.chen777.com/2015/09/23/java-sort/</id>
-    <published>2015-09-23T03:54:20.000Z</published>
-    <updated>2015-09-23T07:49:26.743Z</updated>
-    <content type="html"><![CDATA[<p>前言：前一阵子接到这样的一个需求修改排序的时候，如果修改其中一个排序，其他的都顺序排列。<br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1ewce9w7oyvj30fz099771.jpg" alt=""></p>
-<p>例如，修改id=328排序为3的改为排序1，则变成如图：<img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewcecgsd9aj30g1096770.jpg" alt=""></p>
-<p>思路：首先把需要修改的id=328的数据从list中remove,然后<em>Collections.sort(list);</em>重新排序，再把拿出来的id=328的数据插入相应的位置。然后for循环设置顺序</p>
-<p>先说sort方法：</p>
-<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SubscribeDTO</span> <span class="keyword">implements</span> <span class="title">Serializable</span>,<span class="title">Comparable</span>&lt;<span class="title">SubscribeDTO</span>&gt;</span>{
-    @Override
-    <span class="keyword">public</span> <span class="keyword">int</span> compareTo(SubscribeDTO o) {
-        <span class="keyword">if</span>(<span class="keyword">this</span>.<span class="keyword">order</span> == o.getOrder()){
-            <span class="keyword">if</span>(o.getUpdateDate()!=<span class="keyword">null</span>){
-                <span class="keyword">return</span> (<span class="keyword">int</span>) (o.getUpdateDate().getTime() - <span class="keyword">this</span>.updateDate.getTime());
-            }<span class="keyword">else</span>{
-                <span class="keyword">return</span> -<span class="number">1</span>;
-            }
-        }<span class="keyword">else</span>{
-            <span class="keyword">return</span> <span class="keyword">this</span>.<span class="keyword">order</span> - o.getOrder();
-        }
-    }
-}
-</code></pre><p>在看action代码：</p>
-<pre><code><span class="label">for</span> (<span class="keyword">SubscribeDTO </span><span class="keyword">subscribeDTO </span>: <span class="keyword">subList) </span>{
-        <span class="preprocessor">if</span>(<span class="keyword">subscribeDTO.getId().equals(id)){
-</span>            <span class="keyword">subscribeDTO.setOrder(order);
-</span>            <span class="keyword">subscribDTO1=subscribeDTO;
-</span>            <span class="keyword">subList.remove(subscribeDTO);
-</span>            <span class="keyword">break;
-</span>        }
-    }
-
-    Collections.sort(<span class="keyword">subList);
-</span>    <span class="preprocessor">if</span>(order&lt;<span class="number">=0</span>){
-        <span class="keyword">subList.add(0, </span><span class="keyword">subscribDTO1);
-</span>    }<span class="preprocessor">else</span> <span class="preprocessor">if</span>(order&gt;<span class="label">=subList</span>.size()+<span class="number">1</span>){
-        <span class="keyword">subList.add(subList.size(), </span><span class="keyword">subscribDTO1);
-</span>    }<span class="preprocessor">else</span>{
-        <span class="keyword">subList.add(order-1, </span><span class="keyword">subscribDTO1);
-</span>    }
-
-    for(int i = <span class="number">0</span><span class="comment">; i &lt; subList.size();i++)</span>
-    {
-        <span class="keyword">subList.get(i).setOrder(i+1);
-</span>    }
-</code></pre><p>这样就实现了图2所示的例子;</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>前言：前一阵子接到这样的一个需求修改排序的时候，如果修改其中一个排序，其他的都顺序排列。<br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1ewce9w7oyvj30fz099771.jpg" alt=""></p>
-<]]>
-    </summary>
-    
-      <category term="sort" scheme="http://blog.chen777.com/tags/sort/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[hexo遇到的问题]]></title>
-    <link href="http://blog.chen777.com/2015/09/22/hexo-question/"/>
-    <id>http://blog.chen777.com/2015/09/22/hexo-question/</id>
-    <published>2015-09-22T07:05:50.000Z</published>
-    <updated>2015-09-23T03:53:25.328Z</updated>
-    <content type="html"><![CDATA[<p>搭建hexo走了许多弯路，弯路走了很多，人也变弯了<br><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewb8vpqwuhj301s01sweb.jpg" alt=""><br>今天归纳一下，借鉴：<a href="http://blog.csdn.net/wx_962464/article/details/44786929" target="_blank" rel="external">http://blog.csdn.net/wx_962464/article/details/44786929</a><br>next主题的设定：<a href="http://theme-next.iissnan.com/theme-settings.html" target="_blank" rel="external">http://theme-next.iissnan.com/theme-settings.html</a><br>说说我蠢哭的事情，让各位客官高兴高兴吧。</p>
-<p>搭建的时候大家都说站点配置文件加入xxxx，我一直不知道是那个配置文件，后来墨迹了十几分钟在另外的博客截图才看到是此_config.yml,然后终于找到的配置文件心里十万匹草利马奔腾，劳资终于找到了，哈哈哈，然后next主题我刚进来的时候是繁体的，这让强迫症的我要死，然后去next主题看，照着弄，就是不对。后来百度错误，原来是没在冒号后面加空格，擦。</p>
-<p>然后最近在研究怎么备份，因为hexo始终在本地，如果我换了地方 我改如何继续使用，诶，可怜的我到现在也没有研究出个123，好希望人来支持我(原谅我对git的不理解，搞了很久还是有问题).if you want to help me,you can call QQ 280385556! 3ks</p>
-<p>总结一下：照着文档弄博客的时候，好着急，想一口吃一个大胖子，然后着急弄，很多其实博主提到了，我错了无数遍终于看到了这句话。诶。欲速则不达啊。 </p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>搭建hexo走了许多弯路，弯路走了很多，人也变弯了<br><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewb8vpqwuhj301s01sweb.jpg" alt=""><br>今天归纳一下，借鉴：<a href="ht]]>
-    </summary>
-    
-      <category term="hexo" scheme="http://blog.chen777.com/tags/hexo/"/>
     
   </entry>
   
