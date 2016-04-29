@@ -1,0 +1,800 @@
+<!doctype html>
+<html class="theme-next  theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+    <meta name="description" content="学而不思则罔，思而不学则殆" />
+
+
+
+  <meta name="keywords" content="java," />
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Coding Chain" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/myBlog.ico" />
+
+
+<meta name="description" content="悲观锁和乐观锁使用场景乐观锁是在应用层加锁，而悲观锁是在数据库层加锁(for update)
+乐观锁顾名思义就是在操作时很乐观，这数据只有我在用，我先尽管用，最后发现不行时就回滚。
+悲观锁在操作时很悲观，生怕数据被其他人更新掉，我就先将其先锁住，让别人用不了，我操作完成后再释放掉。
+悲观锁需要数据库级别上的的实现，程序中是做不到的，如果在长事务环境中，数据会一直被锁住，导致并发性能大大地降低。
+一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="问题汇总">
+<meta property="og:url" content="http://blog.chen777.com/2016/04/28/问题汇总/index.html">
+<meta property="og:site_name" content="Coding Chain">
+<meta property="og:description" content="悲观锁和乐观锁使用场景乐观锁是在应用层加锁，而悲观锁是在数据库层加锁(for update)
+乐观锁顾名思义就是在操作时很乐观，这数据只有我在用，我先尽管用，最后发现不行时就回滚。
+悲观锁在操作时很悲观，生怕数据被其他人更新掉，我就先将其先锁住，让别人用不了，我操作完成后再释放掉。
+悲观锁需要数据库级别上的的实现，程序中是做不到的，如果在长事务环境中，数据会一直被锁住，导致并发性能大大地降低。
+一">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/0063lLoQgw1f3c7o4u0bij30na07f75o.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/0063lLoQgw1f3db2gvn0ej30hs07pdg1.jpg">
+<meta property="og:updated_time" content="2016-04-29T01:41:57.165Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="问题汇总">
+<meta name="twitter:description" content="悲观锁和乐观锁使用场景乐观锁是在应用层加锁，而悲观锁是在数据库层加锁(for update)
+乐观锁顾名思义就是在操作时很乐观，这数据只有我在用，我先尽管用，最后发现不行时就回滚。
+悲观锁在操作时很悲观，生怕数据被其他人更新掉，我就先将其先锁住，让别人用不了，我操作完成后再释放掉。
+悲观锁需要数据库级别上的的实现，程序中是做不到的，如果在长事务环境中，数据会一直被锁住，导致并发性能大大地降低。
+一">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> 问题汇总 | Coding Chain </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">Coding Chain</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <form class="site-search-form">
+    <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+  </form>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'oDjVXLFebsVH9TQC_FsZ','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              问题汇总
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2016-04-28T09:48:15+08:00" content="2016-04-28">
+            2016-04-28
+          </time>
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2016/04/28/问题汇总/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/28/问题汇总/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h1 id="悲观锁和乐观锁使用场景">悲观锁和乐观锁使用场景</h1><p>乐观锁是在应用层加锁，而悲观锁是在数据库层加锁(for update)</p>
+<p>乐观锁顾名思义就是在操作时很乐观，这数据只有我在用，我先尽管用，最后发现不行时就回滚。</p>
+<p>悲观锁在操作时很悲观，生怕数据被其他人更新掉，我就先将其先锁住，让别人用不了，我操作完成后再释放掉。</p>
+<p>悲观锁需要数据库级别上的的实现，程序中是做不到的，如果在长事务环境中，数据会一直被锁住，导致并发性能大大地降低。</p>
+<p>一般来说如果并发量很高的话，建议使用悲观锁，否则的话就使用乐观锁。</p>
+<p>如果并发量很高时使用乐观锁的话，会导致很多的并发事务回滚、操作失败。</p>
+<p>总之，冲突几率大用悲观，小就用乐观。</p>
+<h2 id="mybatis乐观锁实现，解决并发问题">mybatis乐观锁实现，解决并发问题</h2><p>银行两操作员同时操作同一账户就是典型的例子。<br>比如A、B操作员同时读取一余额为1000元的账户，A操作员为该账户增加100元，B操作员同时为该账户扣除50元，A先提交，B后提交。最后实际账户余额为1000-50=950元，但本该为1000+100-50=1050。这就是典型的并发问题。</p>
+<p>乐观锁机制在一定程度上解决了这个问题。乐观锁，大多是基于数据版本(Version)记录机制实现。何谓数据版本？即为数据增加一个版本标识，在基于数据库表的版本解决方案中，一般是通过为数据库表增加一个 “version” 字段来实现。</p>
+<p>读取出数据时，将此版本号一同读出，之后更新时，对此版本号加一。此时，将提交数据的版本数据与数据库表对应记录的当前版本信息进行比对，如果提交的数据版本号大于数据库表当前版本号，则予以更新，否则认为是过期数据。</p>
+<p>对于上面修改用户帐户信息的例子而言，假设数据库中帐户信息表中有一个version字段，当前值为1；而当前帐户余额字段(balance)为1000元。假设操作员A先更新完，操作员B后更新。</p>
+<ol>
+<li>操作员A此时将其读出(version=1)，并从其帐户余额中增加100(1000+100=1100)。</li>
+<li>在操作员A操作的过程中，操作员B也读入此用户信息(version=1)，并从其帐户余额中扣除50(1000-50=950)。</li>
+<li>操作员A完成了修改工作，将数据版本号加一(version=2)，连同帐户增加后余额(balance=1100)，提交至数据库更新，此时由于提交数据版本大于数据库记录当前版本，数据被更新，数据库记录version更新为2。</li>
+<li>操作员B完成了操作，也将版本号加一(version=2)试图向数据库提交数据(balance=950)，但此时比对数据库记录版本时发现，操作员B提交的数据版本号为2，数据库记录当前版本也为2，不满足 “提交版本必须大于记录当前版本才能执行更新 “的乐观锁策略，因此，操作员B的提交被驳回。<br>这样，就避免了操作员B用基于version=1的旧数据修改的结果覆盖操作员A的操作结果的可能。</li>
+</ol>
+<p>操作员A操作如下：</p>
+<pre><code><span class="operator"><span class="keyword">select</span> <span class="keyword">id</span>, balance, <span class="keyword">version</span> <span class="keyword">from</span> <span class="keyword">account</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="string">"1"</span>;</span> 
+查询结果：id=1, balance=1000, version=1
+
+<span class="operator"><span class="keyword">update</span> <span class="keyword">account</span> 
+<span class="keyword">set</span> balance=balance+<span class="number">100</span>, <span class="keyword">version</span>=<span class="keyword">version</span>+<span class="number">1</span> 
+<span class="keyword">where</span> <span class="keyword">id</span>=<span class="string">"1"</span> <span class="keyword">and</span> <span class="keyword">version</span>=<span class="number">1</span>
+
+<span class="keyword">select</span> <span class="keyword">id</span>, balance, <span class="keyword">version</span> <span class="keyword">from</span> <span class="keyword">account</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="string">"1"</span>;</span> 
+查询结果：id=1, balance=1100, version=2
+复制代码
+
+操作员B操作如下：
+
+复制代码
+<span class="operator"><span class="keyword">select</span> <span class="keyword">id</span>, balance, <span class="keyword">version</span> <span class="keyword">from</span> <span class="keyword">account</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="string">"1"</span>;</span> 
+查询结果：id=1, balance=1000, version=1
+</code></pre><p>操作员A已修改成功，实际account.balance=1100、account.version=2，操作员B也将版本号加一(version=2)试图向数据库提交数据(balance=950)，但此时比对数据库记录版本时发现，操作员B提交的数据版本号为2，数据库记录当前版本也为2，不满足 “提交版本必须大于记录当前版本才能执行更新 “的乐观锁策略，因此，操作员B的提交被驳回。</p>
+<pre><code><span class="operator"><span class="keyword">update</span> <span class="keyword">account</span> 
+<span class="keyword">set</span> balance=balance-<span class="number">50</span>, <span class="keyword">version</span>=<span class="keyword">version</span>+<span class="number">1</span> 
+<span class="keyword">where</span> <span class="keyword">id</span>=<span class="string">"1"</span> <span class="keyword">and</span> <span class="keyword">version</span>=<span class="number">1</span> 
+
+<span class="keyword">select</span> <span class="keyword">id</span>, balance, <span class="keyword">version</span> <span class="keyword">from</span> <span class="keyword">account</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="string">"1"</span>;</span> 
+查询结果：id=1, balance=1100, version=2
+复制代码
+
+Hibernate、JPA等ORM框架或者实现，是使用版本号，再判断<span class="operator"><span class="keyword">UPDATE</span>后返回的数值</span>
+</code></pre><h1 id="事务传播机制以及隔离级别">事务传播机制以及隔离级别</h1><p>你可以指定传播、隔离级别、超时以及允许和不允许的异常。<br>@Transactional注解的属性:<br>propagation：指定事务定义中使用的传播<br>isolation：设定事务的隔离级别<br>timeout：指定事务的超市（秒）<br>readOnly：指定事务的超时<br>noRollbackFor：目标方法可抛出的异常所构成的数组，但通知仍会提交事务<br>rollbackFor：异常所构成的数组，如果目标方法抛出了这些异常，通知就会回滚事务 </p>
+<pre><code>&lt;tx:advice id=<span class="string">"txAdvice"</span> transaction-manager=<span class="string">"transactionManager"</span>&gt;  
+    &lt;tx:attributes&gt;  
+        &lt;tx:<span class="keyword">method</span> name=<span class="string">"bulk*"</span> propagation=<span class="string">"REQUIRED"</span> isolation=<span class="string">"DEFAULT"</span> /&gt;  
+        &lt;tx:<span class="keyword">method</span> name=<span class="string">"load*"</span> propagation=<span class="string">"REQUIRED"</span> isolation=<span class="string">"DEFAULT"</span> read-only=<span class="string">"true"</span>/&gt;  
+    &lt;/tx:attributes&gt;  
+&lt;/tx:advice&gt;  
+&lt;aop:config&gt;  
+        &lt;aop:advisor pointcut=<span class="string">"execution(* *..*Service*.*(..))"</span> advice-<span class="keyword">ref</span>=<span class="string">"txAdvice"</span> /&gt;  
+&lt;/aop:config&gt;  
+
+或  
+
+&lt;aop:config&gt;  
+    &lt;aop:pointcut id=<span class="string">"allServiceMethods"</span>  
+                  expression=<span class="string">"execution(* com.apress.prospring2.ch16.services.*.*(..))"</span>/&gt;  
+    &lt;aop:advisor advice-<span class="keyword">ref</span>=<span class="string">"defaultTransactionAdvice"</span>  
+                 pointcut-<span class="keyword">ref</span>=<span class="string">"allServiceMethods"</span>/&gt;  
+&lt;/aop:config&gt;  
+
+&lt;tx:advice id=<span class="string">"defaultTransactionAdvice"</span> transaction-manager=<span class="string">"transactionManager"</span>&gt;  
+    &lt;tx:attributes&gt;  
+        &lt;tx:<span class="keyword">method</span>  
+                name=<span class="string">"*"</span>  
+                isolation=<span class="string">"DEFAULT"</span>  
+                propagation=<span class="string">"REQUIRED"</span>  
+                no-rollback-<span class="keyword">for</span>=<span class="string">"java.lang.RuntimeException"</span>  
+                timeout=<span class="string">"100"</span>/&gt;  
+        &lt;tx:<span class="keyword">method</span>  
+                name=<span class="string">"get*"</span>  
+                read-only=<span class="string">"true"</span>/&gt;  
+    &lt;/tx:attributes&gt;  
+&lt;/tx:advice&gt;      
+</code></pre><p>隔离级别（Isolation Level）</p>
+<p> SQL标准定义了4类隔离级别，包括了一些具体规则，用来限定事务内外的哪些改变是可见的，哪些是不可见的。低级别的隔离级一般支持更高的并发处理，并拥有更低的系统开销。<br>Read Uncommitted（读取未提交内容）</p>
+<p> 在该隔离级别，所有事务都可以看到其他未提交事务的执行结果。本隔离级别很少用于实际应用，因为它的性能也不比其他级别好多少。读取未提交的数据，也被称之为脏读（Dirty Read）。</p>
+<p>Read Committed（读取提交内容）</p>
+<pre><code>这是大多数数据库系统的默认隔离级别（但不是MySQL默认的）。它满足了隔离的简单定义：一个事务只能看见已经提交事务所做的改变。这种隔离级别 也支持所谓的不可重复读（Nonrepeatable <span class="keyword">Read</span>），因为同一事务的其他实例在该实例处理其间可能会有新的commit，所以同一<span class="keyword">select</span>可能返回不同结果。
+</code></pre><p>Repeatable Read（可重读）</p>
+<pre><code>这是MySQL的默认事务隔离级别，它确保同一事务的多个实例在并发读取数据时，会看到同样的数据行。不过理论上，这会导致另一个棘手的问题：幻读 （Phantom <span class="keyword">Read</span>）。简单的说，幻读指当用户读取某一范围的数据行时，另一个事务又在该范围内插入了新行，当用户再读取该范围的数据行时，会发现有新的“幻影” 行。InnoDB和Falcon存储引擎通过多版本并发控制（MVCC，Multiversion Concurrency <span class="keyword">Control</span>）机制解决了该问题。
+</code></pre><p>Serializable（可串行化）<br>这是最高的隔离级别，它通过强制事务排序，使之不可能相互冲突，从而解决幻读问题。简言之，它是在每个读的数据行上加上共享锁。在这个级别，可能导致大量的超时现象和锁竞争。</p>
+<p> 这四种隔离级别采取不同的锁类型来实现，若读取的是同一个数据的话，就容易发生问题。例如：</p>
+<p> 脏读(Drity Read)：某个事务已更新一份数据，另一个事务在此时读取了同一份数据，由于某些原因，前一个RollBack了操作，则后一个事务所读取的数据就会是不正确的。</p>
+<p> 不可重复读(Non-repeatable read):在一个事务的两次查询之中数据不一致，这可能是两次查询过程中间插入了一个事务更新的原有的数据。</p>
+<p> 幻读(Phantom Read):在一个事务的两次查询中数据笔数不一致，例如有一个事务查询了几列(Row)数据，而另一个事务却在此时插入了新的几列数据，先前的事务在接下来的查询中，就会发现有几列数据是它先前所没有的。</p>
+<p><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1f3c7o4u0bij30na07f75o.jpg" alt="http://ww2.sinaimg.cn/large/0063lLoQgw1f3c7o4u0bij30na07f75o.jpg"></p>
+<h1 id="java多线程">java多线程</h1><p>线程有2中实现方式：1.集成Thread类 2.实现runnable接口<br>一. 线程状态类型</p>
+<ol>
+<li>新建状态（New）：新创建了一个线程对象。</li>
+<li>就绪状态（Runnable）：线程对象创建后，其他线程调用了该对象的start()方法。该状态的线程位于可运行线程池中，变得可运行，等待获取CPU的使用权。</li>
+<li>运行状态（Running）：就绪状态的线程获取了CPU，执行程序代码。</li>
+<li>阻塞状态（Blocked）：阻塞状态是线程因为某种原因放弃CPU使用权，暂时停止运行。直到线程进入就绪状态，才有机会转到运行状态。阻塞的情况分三种：<br>（一）、等待阻塞：运行的线程执行wait()方法，JVM会把该线程放入等待池中。<br>（二）、同步阻塞：运行的线程在获取对象的同步锁时，若该同步锁被别的线程占用，则JVM会把该线程放入锁池中。<br>（三）、其他阻塞：运行的线程执行sleep()或join()方法，或者发出了I/O请求时，JVM会把该线程置为阻塞状态。当sleep()状态超时、join()等待线程终止或者超时、或者I/O处理完毕时，线程重新转入就绪状态。</li>
+<li>死亡状态（Dead）：线程执行完了或者因异常退出了run()方法，该线程结束生命周期。</li>
+</ol>
+<h1 id="Spring_MVC_流程图">Spring MVC 流程图</h1><h1 id="java线程池">java线程池</h1><h1 id="内存模型">内存模型</h1><p>一、Java线程与内存的交互关系<br><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1f3db2gvn0ej30hs07pdg1.jpg" alt="http://ww1.sinaimg.cn/large/0063lLoQgw1f3db2gvn0ej30hs07pdg1.jpg"></p>
+<p>二、Java线程与内存交互过程说明</p>
+<blockquote>
+<p> Java内存模型的主要目的是定义程序运行中各个变量的访问规则，也即JVM虚拟机将变量存储到内存和从内存读取到变量的底层细节。<br>这里所说的变量不包括局部变量和传递参数，因为它们均为线程私有变量，不会在线程间共享。<br>这里所说的变量包括实例变量、类变量等线程共享的变量。</p>
+</blockquote>
+<p>1.Java内存模型规定所有的变量都存储在主内存中，此处的主内存仅指虚拟机内存的一部分，主要对应java堆中的对象实例数据部分。<br>2.线程都有自己的工作内存，线程的工作内存保存了被该线程使用到的变量的主内存副本，线程对变量的所有操作（读取，修改等）都必须在自己的工作内存中进行，不能直接操作主内存中的变量。<br>3.线程无法读取其它线程的工作内存，不同线程之间的变量传递必须通过主内存。<br>三、主内存和工作内存间的交互操作</p>
+<blockquote>
+<p> 主内存和工作内存之间的交互协议（变量如何从主内存拷贝到工作内存、如何从工作内存同步回主内存之类的操作），Java内存模型定义了8种操作来完成，这些操作的实现在虚拟机中都是原子的，不可再分的（当然也有例外）。</p>
+</blockquote>
+<p>1.lock：锁定，作用于主内存变量，把变量标示为线程独占。<br>2.unlock：解锁，作用于主内存变量，把处于锁定状态的变量释放出来，释放后变量才能被其它线程锁定。<br>3.read：读取，作用于主内存变量，把变量从主内存传输到工作内存中，以便随后的load动作使用。<br>4.load：载入，作用工作内存的变量，把read操作从主内存得到的变量值放入工作内存的变量副本中。<br>5.use：使用，作用工作内存的变量，把工作内存中的变量传递给执行引擎，每当虚拟机遇到一个需要使用变量的值的字节码指令时将会执行这个操作。<br>6.assign：赋值，作用于工作内存的变量，把一个从执行引擎接收到值赋给工作内存中的变量，每当虚拟机遇到一个给变量赋值的字节码指令时执行这个操作。<br>7.store：存储，作用于工作内存变量，把工作内存中的变量传送到主内存中，以便随后的write操作使用。<br>8.write：写入，作用于主内存变量，它把store操作从工作内存中得到的变量值放入主内存变量中。</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag">#java</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/25/微信刷卡支付以及扫码支付/" rel="next">微信刷卡支付以及扫码支付</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/04/28/问题汇总/"
+     data-title="问题汇总"
+     data-content=""
+     data-url="http://blog.chen777.com/2016/04/28/问题汇总/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+            <!-- 多说热评文章-->
+            <p>热评文章</p>
+            <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+        
+
+        
+          <div class="comments" id="comments">
+            
+              <div class="ds-thread" data-thread-key="2016/04/28/问题汇总/"
+                   data-title="问题汇总" data-url="http://blog.chen777.com/2016/04/28/问题汇总/">
+              </div>
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Xixi Chain" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Xixi Chain</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">学而不思则罔，思而不学则殆</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">25</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/javaChain/javaChain.github.io" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5546313096/profile?topnav=1&wvr=6" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/u/1242040" target="_blank">OsChina</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#悲观锁和乐观锁使用场景"><span class="nav-number">1.</span> <span class="nav-text">悲观锁和乐观锁使用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mybatis乐观锁实现，解决并发问题"><span class="nav-number">1.1.</span> <span class="nav-text">mybatis乐观锁实现，解决并发问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务传播机制以及隔离级别"><span class="nav-number">2.</span> <span class="nav-text">事务传播机制以及隔离级别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#java多线程"><span class="nav-number">3.</span> <span class="nav-text">java多线程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring_MVC_流程图"><span class="nav-number">4.</span> <span class="nav-text">Spring MVC 流程图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#java线程池"><span class="nav-number">5.</span> <span class="nav-text">java线程池</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存模型"><span class="nav-number">6.</span> <span class="nav-text">内存模型</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; &nbsp;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xixi Chain</span>
+	 <span id="busuanzi_container_site_pv" style='display:none'>
+		本站总访问量<span id="busuanzi_value_site_pv"></span>次
+	</span>
+	<span id="busuanzi_container_site_uv">
+	  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+	</span>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"chainxixi"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+     
+  	<script src="/js/ua-parser.min.js"></script>
+  	<script src="/js/hook-duoshuo.js"></script>
+  
+
+    
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/js/motion_fallback.js?v=0.4.5.1" id="motion.fallback"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

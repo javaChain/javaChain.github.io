@@ -189,6 +189,94 @@
           
           
             
+              <a class="post-title-link" href="/2016/03/16/java堆栈了解/" itemprop="url">
+                java堆栈了解
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2016-03-16T16:52:53+08:00" content="2016-03-16">
+            2016-03-16
+          </time>
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2016/03/16/java堆栈了解/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/16/java堆栈了解/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+            　　JAVA的JVM的内存可分为3个区：堆(heap)、栈(stack)和方法区(method)
+堆区:
+1.存储的全部是对象，每个对象都包含一个与之对应的class的信息。(class的目的是得到操作指令)
+2.jvm只有一个堆区(heap)被所有线程共享，堆中不存放基本类型和对象引用，只存放对象本身
+
+栈区:
+1.每个线程包含一个栈区，栈中只保存基础数据类型的对象和自定义对象的引用(不是对象)，对象都存放在堆区中
+2.每个栈中的数据(原始类型和对象引用)都是私有的，其他栈不能访问。
+3.栈分为3个部分：基本类型变量区、执行环境上下文、操作指令区(存放操作指令)。
+
+方法区:
+1.又叫静态区
+            ...
+          </span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/16/java堆栈了解/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
               <a class="post-title-link" href="/2016/03/02/2015年终总结/" itemprop="url">
                 2015年终总结
               </a>
@@ -490,79 +578,6 @@ Web前端系统为了达到不同应用的服务器共享、
 
 
     
-      
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      
-      
-        <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-              <a class="post-title-link" href="/2015/12/02/easyui作后台-二/" itemprop="url">
-                easyui作后台(二)
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于
-          <time itemprop="dateCreated" datetime="2015-12-02T17:17:39+08:00" content="2015-12-02">
-            2015-12-02
-          </time>
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-              &nbsp; | &nbsp;
-              <a href="/2015/12/02/easyui作后台-二/#comments" itemprop="discussionUrl">
-                <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/02/easyui作后台-二/" itemprop="commentsCount"></span>
-              </a>
-            </span>
-          
-        
-      </div>
-    </header>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h1 id="介绍">介绍</h1><p>easyui作为后台，第一节讲了构造整个系统，然后为了支持欧美等国家，所以我们要国际化。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/12/02/easyui作后台-二/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -601,7 +616,7 @@ Web前端系统为了达到不同应用的服务器共享、
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">24</span>
+              <span class="site-state-item-count">25</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
