@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2016-05-03T04:11:58.554Z</updated>
+  <updated>2016-05-03T04:12:59.761Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://blog.chen777.com/2016/04/28/%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/"/>
     <id>http://blog.chen777.com/2016/04/28/问题汇总/</id>
     <published>2016-04-28T01:48:15.000Z</published>
-    <updated>2016-05-03T04:11:58.554Z</updated>
+    <updated>2016-05-03T04:12:59.761Z</updated>
     <content type="html"><![CDATA[<h1 id="悲观锁和乐观锁使用场景">悲观锁和乐观锁使用场景</h1><p>乐观锁是在应用层加锁，而悲观锁是在数据库层加锁(for update)</p>
 <p>乐观锁顾名思义就是在操作时很乐观，这数据只有我在用，我先尽管用，最后发现不行时就回滚。</p>
 <p>悲观锁在操作时很悲观，生怕数据被其他人更新掉，我就先将其先锁住，让别人用不了，我操作完成后再释放掉。</p>
@@ -124,10 +124,8 @@ Hibernate、JPA等ORM框架或者实现，是使用版本号，再判断<span cl
 <ol>
 <li>用户向服务器发送请求，请求被Spring 前端控制Servelt DispatcherServlet捕获；</li>
 <li>DispatcherServlet对请求URL进行解析，得到请求资源标识符（URI）。然后根据该URI，调用HandlerMapping获得该Handler配置的所有相关的对象（包括Handler对象以及Handler对象对应的拦截器），最后以HandlerExecutionChain对象的形式返回；</li>
-<li>DispatcherServlet 根据获得的Handler，选择一个合适的HandlerAdapter。（附注：如果成功获得HandlerAdapter后，此时将开始执行拦截器的preHandler(…)方法）<ol>
+<li>DispatcherServlet 根据获得的Handler，选择一个合适的HandlerAdapter。（附注：如果成功获得HandlerAdapter后，此时将开始执行拦截器的preHandler(…)方法）</li>
 <li>提取Request中的模型数据，填充Handler入参，开始执行Handler（Controller)。 在填充Handler的入参过程中，根据你的配置，Spring将帮你做一些额外的工作：<br>HttpMessageConveter： 将请求消息（如Json、xml等数据）转换成一个对象，将对象转换为指定的响应信息<br>数据转换：对请求消息进行数据转换。如String转换成Integer、Double等<br>数据根式化：对请求消息进行数据格式化。 如将字符串转换成格式化数字或格式化日期等<br>数据验证： 验证数据的有效性（长度、格式等），验证结果存储到BindingResult或Error中</li>
-</ol>
-</li>
 <li>Handler执行完成后，向DispatcherServlet 返回一个ModelAndView对象；</li>
 <li>根据返回的ModelAndView，选择一个适合的ViewResolver（必须是已经注册到Spring容器中的ViewResolver)返回给DispatcherServlet ；</li>
 <li>ViewResolver 结合Model和View，来渲染视图</li>
