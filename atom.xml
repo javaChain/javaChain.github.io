@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2016-04-29T01:41:57.165Z</updated>
+  <updated>2016-05-03T04:10:23.071Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://blog.chen777.com/2016/04/28/%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/"/>
     <id>http://blog.chen777.com/2016/04/28/问题汇总/</id>
     <published>2016-04-28T01:48:15.000Z</published>
-    <updated>2016-04-29T01:41:57.165Z</updated>
+    <updated>2016-05-03T04:10:23.071Z</updated>
     <content type="html"><![CDATA[<h1 id="悲观锁和乐观锁使用场景">悲观锁和乐观锁使用场景</h1><p>乐观锁是在应用层加锁，而悲观锁是在数据库层加锁(for update)</p>
 <p>乐观锁顾名思义就是在操作时很乐观，这数据只有我在用，我先尽管用，最后发现不行时就回滚。</p>
 <p>悲观锁在操作时很悲观，生怕数据被其他人更新掉，我就先将其先锁住，让别人用不了，我操作完成后再释放掉。</p>
@@ -118,7 +118,23 @@ Hibernate、JPA等ORM框架或者实现，是使用版本号，再判断<span cl
 <li>阻塞状态（Blocked）：阻塞状态是线程因为某种原因放弃CPU使用权，暂时停止运行。直到线程进入就绪状态，才有机会转到运行状态。阻塞的情况分三种：<br>（一）、等待阻塞：运行的线程执行wait()方法，JVM会把该线程放入等待池中。<br>（二）、同步阻塞：运行的线程在获取对象的同步锁时，若该同步锁被别的线程占用，则JVM会把该线程放入锁池中。<br>（三）、其他阻塞：运行的线程执行sleep()或join()方法，或者发出了I/O请求时，JVM会把该线程置为阻塞状态。当sleep()状态超时、join()等待线程终止或者超时、或者I/O处理完毕时，线程重新转入就绪状态。</li>
 <li>死亡状态（Dead）：线程执行完了或者因异常退出了run()方法，该线程结束生命周期。</li>
 </ol>
-<h1 id="Spring_MVC_流程图">Spring MVC 流程图</h1><h1 id="java线程池">java线程池</h1><h1 id="内存模型">内存模型</h1><p>一、Java线程与内存的交互关系<br><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1f3db2gvn0ej30hs07pdg1.jpg" alt="http://ww1.sinaimg.cn/large/0063lLoQgw1f3db2gvn0ej30hs07pdg1.jpg"></p>
+<h1 id="Spring_MVC_流程图">Spring MVC 流程图</h1><p><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1f3i2jgbr3aj30oe0ek0w6.jpg" alt="http://ww3.sinaimg.cn/large/0063lLoQgw1f3i2jgbr3aj30oe0ek0w6.jpg"></p>
+<p><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1f3i2jsbbsmj30ij0d9abh.jpg" alt="http://ww3.sinaimg.cn/large/0063lLoQgw1f3i2jsbbsmj30ij0d9abh.jpg"></p>
+<p>Spring工作流程描述</p>
+<pre><code>1. 用户向服务器发送请求，请求被Spring 前端控制Servelt DispatcherServlet捕获；
+2. DispatcherServlet对请求URL进行解析，得到请求资源标识符（URI）。然后根据该URI，调用HandlerMapping获得该<span class="operator"><span class="keyword">Handler</span>配置的所有相关的对象（包括<span class="keyword">Handler</span>对象以及<span class="keyword">Handler</span>对象对应的拦截器），最后以HandlerExecutionChain对象的形式返回；
+<span class="number">3.</span> DispatcherServlet 根据获得的<span class="keyword">Handler</span>，选择一个合适的HandlerAdapter。（附注：如果成功获得HandlerAdapter后，此时将开始执行拦截器的preHandler(...)方法）
+ <span class="number">4.</span>  提取Request中的模型数据，填充<span class="keyword">Handler</span>入参，开始执行<span class="keyword">Handler</span>（Controller)。 在填充<span class="keyword">Handler</span>的入参过程中，根据你的配置，Spring将帮你做一些额外的工作：
+HttpMessageConveter： 将请求消息（如<span class="keyword">Json</span>、<span class="keyword">xml</span>等数据）转换成一个对象，将对象转换为指定的响应信息
+数据转换：对请求消息进行数据转换。如<span class="keyword">String</span>转换成<span class="built_in">Integer</span>、<span class="keyword">Double</span>等
+数据根式化：对请求消息进行数据格式化。 如将字符串转换成格式化数字或格式化日期等
+数据验证： 验证数据的有效性（长度、格式等），验证结果存储到BindingResult或<span class="keyword">Error</span>中
+<span class="number">5.</span>  <span class="keyword">Handler</span>执行完成后，向DispatcherServlet 返回一个ModelAndView对象；
+<span class="number">6.</span>  根据返回的ModelAndView，选择一个适合的ViewResolver（必须是已经注册到Spring容器中的ViewResolver)返回给DispatcherServlet ；
+<span class="number">7.</span> ViewResolver 结合<span class="keyword">Model</span>和<span class="keyword">View</span>，来渲染视图
+<span class="number">8.</span> 将渲染结果返回给客户端。</span>
+</code></pre><p>Spring工作流程描述<br>    为什么Spring只使用一个Servlet(DispatcherServlet)来处理所有请求？<br>     详细见J2EE设计模式-前端控制模式<br>    Spring为什么要结合使用HandlerMapping以及HandlerAdapter来处理Handler?<br>    符合面向对象中的单一职责原则，代码架构清晰，便于维护，最重要的是代码可复用性高。如HandlerAdapter可能会被用于处理多种Handler。</p>
+<h1 id="java线程池">java线程池</h1><h1 id="内存模型">内存模型</h1><p>一、Java线程与内存的交互关系<br><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1f3db2gvn0ej30hs07pdg1.jpg" alt="http://ww1.sinaimg.cn/large/0063lLoQgw1f3db2gvn0ej30hs07pdg1.jpg"></p>
 <p>二、Java线程与内存交互过程说明</p>
 <blockquote>
 <p> Java内存模型的主要目的是定义程序运行中各个变量的访问规则，也即JVM虚拟机将变量存储到内存和从内存读取到变量的底层细节。<br>这里所说的变量不包括局部变量和传递参数，因为它们均为线程私有变量，不会在线程间共享。<br>这里所说的变量包括实例变量、类变量等线程共享的变量。</p>
