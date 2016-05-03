@@ -59,7 +59,7 @@
 <meta property="og:image" content="http://ww3.sinaimg.cn/large/0063lLoQgw1f3i2jgbr3aj30oe0ek0w6.jpg">
 <meta property="og:image" content="http://ww3.sinaimg.cn/large/0063lLoQgw1f3i2jsbbsmj30ij0d9abh.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/0063lLoQgw1f3db2gvn0ej30hs07pdg1.jpg">
-<meta property="og:updated_time" content="2016-05-03T04:10:23.071Z">
+<meta property="og:updated_time" content="2016-05-03T04:11:58.554Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="问题汇总">
 <meta name="twitter:description" content="悲观锁和乐观锁使用场景乐观锁是在应用层加锁，而悲观锁是在数据库层加锁(for update)
@@ -340,19 +340,19 @@ Hibernate、JPA等ORM框架或者实现，是使用版本号，再判断<span cl
 <h1 id="Spring_MVC_流程图">Spring MVC 流程图</h1><p><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1f3i2jgbr3aj30oe0ek0w6.jpg" alt="http://ww3.sinaimg.cn/large/0063lLoQgw1f3i2jgbr3aj30oe0ek0w6.jpg"></p>
 <p><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1f3i2jsbbsmj30ij0d9abh.jpg" alt="http://ww3.sinaimg.cn/large/0063lLoQgw1f3i2jsbbsmj30ij0d9abh.jpg"></p>
 <p>Spring工作流程描述</p>
-<pre><code>1. 用户向服务器发送请求，请求被Spring 前端控制Servelt DispatcherServlet捕获；
-2. DispatcherServlet对请求URL进行解析，得到请求资源标识符（URI）。然后根据该URI，调用HandlerMapping获得该<span class="operator"><span class="keyword">Handler</span>配置的所有相关的对象（包括<span class="keyword">Handler</span>对象以及<span class="keyword">Handler</span>对象对应的拦截器），最后以HandlerExecutionChain对象的形式返回；
-<span class="number">3.</span> DispatcherServlet 根据获得的<span class="keyword">Handler</span>，选择一个合适的HandlerAdapter。（附注：如果成功获得HandlerAdapter后，此时将开始执行拦截器的preHandler(...)方法）
- <span class="number">4.</span>  提取Request中的模型数据，填充<span class="keyword">Handler</span>入参，开始执行<span class="keyword">Handler</span>（Controller)。 在填充<span class="keyword">Handler</span>的入参过程中，根据你的配置，Spring将帮你做一些额外的工作：
-HttpMessageConveter： 将请求消息（如<span class="keyword">Json</span>、<span class="keyword">xml</span>等数据）转换成一个对象，将对象转换为指定的响应信息
-数据转换：对请求消息进行数据转换。如<span class="keyword">String</span>转换成<span class="built_in">Integer</span>、<span class="keyword">Double</span>等
-数据根式化：对请求消息进行数据格式化。 如将字符串转换成格式化数字或格式化日期等
-数据验证： 验证数据的有效性（长度、格式等），验证结果存储到BindingResult或<span class="keyword">Error</span>中
-<span class="number">5.</span>  <span class="keyword">Handler</span>执行完成后，向DispatcherServlet 返回一个ModelAndView对象；
-<span class="number">6.</span>  根据返回的ModelAndView，选择一个适合的ViewResolver（必须是已经注册到Spring容器中的ViewResolver)返回给DispatcherServlet ；
-<span class="number">7.</span> ViewResolver 结合<span class="keyword">Model</span>和<span class="keyword">View</span>，来渲染视图
-<span class="number">8.</span> 将渲染结果返回给客户端。</span>
-</code></pre><p>Spring工作流程描述<br>    为什么Spring只使用一个Servlet(DispatcherServlet)来处理所有请求？<br>     详细见J2EE设计模式-前端控制模式<br>    Spring为什么要结合使用HandlerMapping以及HandlerAdapter来处理Handler?<br>    符合面向对象中的单一职责原则，代码架构清晰，便于维护，最重要的是代码可复用性高。如HandlerAdapter可能会被用于处理多种Handler。</p>
+<ol>
+<li>用户向服务器发送请求，请求被Spring 前端控制Servelt DispatcherServlet捕获；</li>
+<li>DispatcherServlet对请求URL进行解析，得到请求资源标识符（URI）。然后根据该URI，调用HandlerMapping获得该Handler配置的所有相关的对象（包括Handler对象以及Handler对象对应的拦截器），最后以HandlerExecutionChain对象的形式返回；</li>
+<li>DispatcherServlet 根据获得的Handler，选择一个合适的HandlerAdapter。（附注：如果成功获得HandlerAdapter后，此时将开始执行拦截器的preHandler(…)方法）<ol>
+<li>提取Request中的模型数据，填充Handler入参，开始执行Handler（Controller)。 在填充Handler的入参过程中，根据你的配置，Spring将帮你做一些额外的工作：<br>HttpMessageConveter： 将请求消息（如Json、xml等数据）转换成一个对象，将对象转换为指定的响应信息<br>数据转换：对请求消息进行数据转换。如String转换成Integer、Double等<br>数据根式化：对请求消息进行数据格式化。 如将字符串转换成格式化数字或格式化日期等<br>数据验证： 验证数据的有效性（长度、格式等），验证结果存储到BindingResult或Error中</li>
+</ol>
+</li>
+<li>Handler执行完成后，向DispatcherServlet 返回一个ModelAndView对象；</li>
+<li>根据返回的ModelAndView，选择一个适合的ViewResolver（必须是已经注册到Spring容器中的ViewResolver)返回给DispatcherServlet ；</li>
+<li>ViewResolver 结合Model和View，来渲染视图</li>
+<li>将渲染结果返回给客户端。</li>
+</ol>
+<p>Spring工作流程描述<br>    为什么Spring只使用一个Servlet(DispatcherServlet)来处理所有请求？<br>     详细见J2EE设计模式-前端控制模式<br>    Spring为什么要结合使用HandlerMapping以及HandlerAdapter来处理Handler?<br>    符合面向对象中的单一职责原则，代码架构清晰，便于维护，最重要的是代码可复用性高。如HandlerAdapter可能会被用于处理多种Handler。</p>
 <h1 id="java线程池">java线程池</h1><h1 id="内存模型">内存模型</h1><p>一、Java线程与内存的交互关系<br><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1f3db2gvn0ej30hs07pdg1.jpg" alt="http://ww1.sinaimg.cn/large/0063lLoQgw1f3db2gvn0ej30hs07pdg1.jpg"></p>
 <p>二、Java线程与内存交互过程说明</p>
 <blockquote>
