@@ -189,6 +189,89 @@
           
           
             
+              <a class="post-title-link" href="/2016/06/15/jenkins-ant-svn持续集成一/" itemprop="url">
+                jenkins-ant-svn持续集成一
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2016-06-15T16:24:51+08:00" content="2016-06-15">
+            2016-06-15
+          </time>
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2016/06/15/jenkins-ant-svn持续集成一/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/15/jenkins-ant-svn持续集成一/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+            1.部署jenkins，在linux上部署tomcat下载jenkins的war包放在tomcat的webapp下启动，然后通过ip:端口/jenkins访问jenkinsjenkins war下载
+2.系统管理—》系统设置—设置ant和jdk的环境变量（linux里面ant和jdk的环境变量）
+3.邮件通知参考文档：邮箱配置参考文档
+主要是密码，这个密码不是邮箱密码而是授权码。
+
+4.安装ssh插件，因为jenkins打了war包之后要上传到服务器，通过ssh上传war包简单方便。插件url下载地址如下：戳我,用力
+附件是ssh插件包。系统管理—》管理插件—》高级，上传插件。 publish
+            ...
+          </span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/06/15/jenkins-ant-svn持续集成一/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
               <a class="post-title-link" href="/2016/04/28/问题汇总/" itemprop="url">
                 问题汇总
               </a>
@@ -507,91 +590,11 @@ CREATE TABLE `t_job` (
 
 
     
-      
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      
-      
-        <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-              <a class="post-title-link" href="/2016/03/28/spring-quartz/" itemprop="url">
-                spring-quartz
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于
-          <time itemprop="dateCreated" datetime="2016-03-28T10:40:09+08:00" content="2016-03-28">
-            2016-03-28
-          </time>
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-              &nbsp; | &nbsp;
-              <a href="/2016/03/28/spring-quartz/#comments" itemprop="discussionUrl">
-                <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/28/spring-quartz/" itemprop="commentsCount"></span>
-              </a>
-            </span>
-          
-        
-      </div>
-    </header>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-            CronTrigger
-CronTriggers往往比SimpleTrigger更有用，如果您需要基于日历的概念，而非SimpleTrigger完全指定的时间间隔，复发的发射工作的时间表。CronTrigger，你可以指定触发的时间表如“每星期五中午”，或“每个工作日9:30时”，甚至“每5分钟一班9:00和10:00逢星期一上午，星期三星期五“。即便如此，SimpleTrigger一样，CronTrigger拥有的startTime指定的时间表时生效，指定的时间表时，应停止（可选）结束时间。
-Cron Expressions
-cron的表达式被用来配置CronTrigger实例。 cron的
-            ...
-          </span>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/03/28/spring-quartz/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">&raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/">&raquo;</a>
   </nav>
 
  </div>
@@ -625,7 +628,7 @@ cron的表达式被用来配置CronTrigger实例。 cron的
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">25</span>
+              <span class="site-state-item-count">26</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -639,7 +642,7 @@ cron的表达式被用来配置CronTrigger实例。 cron的
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-count">22</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

@@ -59,7 +59,8 @@
 <meta property="og:image" content="http://ww3.sinaimg.cn/large/0063lLoQgw1f3i2jgbr3aj30oe0ek0w6.jpg">
 <meta property="og:image" content="http://ww3.sinaimg.cn/large/0063lLoQgw1f3i2jsbbsmj30ij0d9abh.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/0063lLoQgw1f3db2gvn0ej30hs07pdg1.jpg">
-<meta property="og:updated_time" content="2016-05-03T04:12:59.761Z">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/0063lLoQgw1f3k9od65xwj30b40850tn.jpg">
+<meta property="og:updated_time" content="2016-05-05T02:27:19.266Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="问题汇总">
 <meta name="twitter:description" content="悲观锁和乐观锁使用场景乐观锁是在应用层加锁，而悲观锁是在数据库层加锁(for update)
@@ -361,6 +362,87 @@ Hibernate、JPA等ORM框架或者实现，是使用版本号，再判断<span cl
 <p> 主内存和工作内存之间的交互协议（变量如何从主内存拷贝到工作内存、如何从工作内存同步回主内存之类的操作），Java内存模型定义了8种操作来完成，这些操作的实现在虚拟机中都是原子的，不可再分的（当然也有例外）。</p>
 </blockquote>
 <p>1.lock：锁定，作用于主内存变量，把变量标示为线程独占。<br>2.unlock：解锁，作用于主内存变量，把处于锁定状态的变量释放出来，释放后变量才能被其它线程锁定。<br>3.read：读取，作用于主内存变量，把变量从主内存传输到工作内存中，以便随后的load动作使用。<br>4.load：载入，作用工作内存的变量，把read操作从主内存得到的变量值放入工作内存的变量副本中。<br>5.use：使用，作用工作内存的变量，把工作内存中的变量传递给执行引擎，每当虚拟机遇到一个需要使用变量的值的字节码指令时将会执行这个操作。<br>6.assign：赋值，作用于工作内存的变量，把一个从执行引擎接收到值赋给工作内存中的变量，每当虚拟机遇到一个给变量赋值的字节码指令时执行这个操作。<br>7.store：存储，作用于工作内存变量，把工作内存中的变量传送到主内存中，以便随后的write操作使用。<br>8.write：写入，作用于主内存变量，它把store操作从工作内存中得到的变量值放入主内存变量中。</p>
+<h1 id="JVM内存分配">JVM内存分配</h1><h2 id="1-_JVM运行时数据区结构图">1. JVM运行时数据区结构图</h2><p><img src="http://ww4.sinaimg.cn/large/0063lLoQgw1f3k9od65xwj30b40850tn.jpg" alt="http://ww4.sinaimg.cn/large/0063lLoQgw1f3k9od65xwj30b40850tn.jpg"></p>
+<h2 id="2-_各个区的作用">2. 各个区的作用</h2><ol>
+<li>程序计数器(Program Counter Register)程序计数器是线程私有的,生命周期和线程一致.<br>程序在执行的时候,可能会中断(cpu切换到别的任务去了),当再恢复的时候,需要知道从哪开始继续执行.需要做个标记, 程序计数器,就是用来保存这个标记的.<br>因为程序会有多个线程同时运行,所以计数器肯定是要线程隔离,才能保证不会乱套.另外如果正在执行本地方法的话,这里面就是空的.</li>
+<li>虚拟机栈(VM Stack)虚拟机栈是线程私有的,生命周期和线程一致.<br>平时很多人说的引用存栈上,对象存堆上. 其中的栈,就是这里说的虚拟机栈.<br>虚拟机栈描述的是java方法执行的内存模型,即每个方法执行的时候,都会同时创建一个栈帧(Stack Frame,一种数据结构),用于存放局部变量表,操作数栈,方法出口等信息.<br>一个方法被调用到执行完成,其实就是在 虚拟机栈中 入栈到出栈的一个过程.<br>局部变量表里面存的类型只能是基本类型和引用类型,</li>
+<li>本地方法栈(Native Method Stack)本地方法栈是线程私有的,生命周期和线程一致.<br>本地方法栈和虚拟机栈作用类似,只不过这里存的是native的信息.因为有些jvm直接就把 本地方法栈和虚拟机栈合二为一,所以有些书都没有讲这些.</li>
+<li>堆(Heap)堆是线程共享的,生命周期和Jvm一致.(随jvm启动而创建,一个jvm实例只有一个堆)<br>我们平常说的堆,就是这个堆了.(图上看堆的圆圈很小,其实它是占用内存最大的…嘿嘿)<br>堆就是用来存放对象实例的.Java虚拟机规范中描述到:所有的对象实例以及数组都要在堆上分配.(《深入理解Java虚拟机》一书提到,随着JIT的发展和逃逸分析技术的城市,栈上分配,标量替换等优化技术会导致一些微妙的变化发生,所有的对象都分配在堆上渐渐变得不是那么绝对了.. 这玩意太高深了.我就当没有这回事算了).<br>堆是垃圾回收器管理的主要区域,所以这里面又会因为垃圾回收器的算法原因而细分为一些小分区. 例如老年代,新生代等等.这个以后再讨论.</li>
+<li>方法区(Method Area) 方法区是线程共享的,生命周期和jvm一致.<br>方法区是用来存放被虚拟机加载的类信息,常量,静态变量,即时编译器编译后的代码等数据.<br>java虚拟机规范中,把方法区描述为堆的一个逻辑部分,但是它却有一个别名叫做Non-Heap,目的应该是与堆 区分开来.<br>有些人习惯把方法区称为永久代(Permanent Generation),但是本质上两者并不等价.因为只是HotSpot虚拟机是用永久代来实现方法区的,别的虚拟机就不是.而且HotSpot也有放弃永久代的规划.</li>
+</ol>
+<h2 id="3-_这些区会内存溢出吗,什么情况下会出现?报错信息是什么?怎么设置每个区的大小?">3. 这些区会内存溢出吗,什么情况下会出现?报错信息是什么?怎么设置每个区的大小?</h2><ol>
+<li>程序计数器<br>程序计数器占用内存很小,而且是唯一一个在java虚拟机规范中没有规定任何OutOfMemoryError情况的区域.所以不存在内存溢出情况.</li>
+<li>虚拟机栈 通过-Xss 设置每个线程的栈大小<br>虚拟机栈会内存溢出,且分为两种情况:<br>如果线程请求的栈深度大于虚拟机所允许的最大深度,抛出 StackOverflowError 异常.(java.langStackOverflowError)<br>如果虚拟机在扩展栈时无法申请到足够的内存空间,则抛出 OutOfMemoryError 异常.(java.lang.OutOfMemoryError: unable to create new native thread)<br>这两种情况,貌似有重叠的地方,好理解,但是不太容易区分.书中对这2种情况分别进行了测试. 第一种直接无线递归就会出现. 第二种则必须在多线程下不断启用新线程调用方法才会出现.</li>
+<li>本地方法栈 通过-Xoss设置本地方法栈大小(HotSpot没用,因为不区分虚拟机栈和本地方法栈)<br>和虚拟机栈一样.</li>
+<li>堆 通过-Xms和-Xmx 限制大小<br>堆里面存放的是对象实例,当对象实例过多,装不下时,自然就溢出了.这个报错,应该很常见. (java.lang.OutOfMemoryError: Java heap space)</li>
+<li>方法区 通过-XX:PermSize和-XX:MaxPermSize 限制大小<br>方法区用来存放类信息,当类信息过多过大,装不下时,自然也会溢出.这个报错,也很常见. (java.lang.OutOfMemoryError:  PermGen space)</li>
+<li>运行时常量池 只能通过方法区大小设置<br>常量池是方法区的一部分,当存放常量多多时,也就溢出了. 报错和方法区是一样的. (java.lang.OutOfMemoryError:  PermGen space)</li>
+<li>直接内存 通过-XX:MaxDirectMemorySize 限制大小,默认和Java堆的最大值一样<br>报错信息为 (java.lang.OutOfMemoryError)</li>
+</ol>
+<h2 id="4-_这些区跟多线程有没有什么关系?">4.   这些区跟多线程有没有什么关系?</h2><pre><code>import java.util.ArrayList;
+import java.util.List;
+
+<span class="keyword">class</span> <span class="title">TestA</span>{
+    <span class="keyword">public</span> TestB b;
+}
+<span class="keyword">class</span> <span class="title">TestB</span>{
+    <span class="keyword">public</span> <span class="keyword">int</span> age;
+}
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Test</span> {
+    <span class="keyword">private</span> List&lt;TestA&gt; list = <span class="keyword">new</span> ArrayList&lt;TestA&gt;();
+
+    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">addA</span>(<span class="params">TestA a</span>)</span>{
+        list.add(a);
+    }
+
+    <span class="function"><span class="keyword">private</span> List&lt;TestA&gt; <span class="title">getListA</span>(<span class="params"></span>)</span>{
+        <span class="keyword">return</span> list;
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">run</span>(<span class="params"></span>)</span>{
+        TestA a1 = <span class="keyword">new</span> TestA();
+        TestA a2 = <span class="keyword">new</span> TestA();
+        Test t1 = <span class="keyword">new</span> Test();
+        t1.addA(a1);
+        System.<span class="keyword">out</span>.println(t1.getListA().<span class="keyword">get</span>(<span class="number">0</span>).age);
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>) </span>{
+        run();
+    }
+}
+</code></pre><p>在这段代码中,定义了三个类, Test,TestA,TestB. 运行时,他们的类信息都会放在方法区中.然后我们从run方法看起.(main方法是个入口,比较特殊)<br>run方法第一行,TestA a1 = new TestA(); 会牵扯到三个区.<br>1). a1 会作为引用类型,存在栈上.<br>2). new TestA() 会作为实例数据存在堆上<br>3).TestA的对象类型数据(如父类,实现的接口,方法等) 都会存在方法区中.<br>OK.现在我们知道了他们存储的地方, 然后结合最上面的图, 我们能得到, a1 是线程安全的, new TestA()以及TestA的对象类型数据,是线程共享的,也就是说可能是线程不安全的.<br>这里我们先不考虑方法区,因为这里面信息一般应该只是读. 我们来着重看下 a1 和 new TestA();<br>先看a1, a1是个局部变量,局部变量是线程安全的,这句话,大家应该听过.因为每次方法执行时,都是在栈上创建一个栈帧,自然每次的a1,都是新的,而且方法结束后,a1所在的栈帧就没了.a1自然也没了.<br>再来看 new TestA() .其实每次方法执行的时候,都会在堆中创建一个新的实例,就像a1一样.只是创建的地方不一样. 我们知道,方法调用结束后,a1就消失了,那么 new TestA() 是否会消失呢?<br>这里牵扯到java的垃圾回收机制.后面详细讨论. 简单讲, 还有没有地方用到这个new TestA()呢. 如果有,就不会消失. 如果没有,就处于等待消失的状态(即等待GC).<br>对于我们的例子来说, a1 对应的 new TestA(), 因为后面有 t1.addA(a1) 这句话,所以说,它还被引用,不会消失. 而 a2对应的 new TestA(). 因为后面没有操作,当方法执行完成,它就处于等待消失的状态.<br>2个new TestA()都在堆里面, 都是线程共享的. a1对应的 new TestA()被加入到t1.list里面去了. 我们可以想象一下.如果是多线程操作,别的线程,就可以拿到a1对应的 new TestA(),然后进行修改操作,<br>这样其他线程就会受到影响, 这就是线程不安全的. 回过头来看a2 对应的 new TestA(), 因为方法结束后,就没有引用了. 所以别的线程没办法得到 a2对应的 实例, 也就没办法修改.(也不能说绝对没办法,如果TestA重写finalize方法,并且在方法里又把自己挂上一个引用,那么也会有问题.) 总之, 堆里面的是线程不安全的.<br>这里还要说下我原来的一个疑问, 即引用存栈上,实例存堆上. 那么a1 中的 TestB b , 是怎么存? 也是存在栈上?  然后TestB的实例存在堆上? TestB里面属性age是int基本类型,然后再存在栈上? 这样交叉来交叉去吗?<br>答案是否定的.基本类型会存在栈上,但是不一定非得在栈上,主要看声明变量的位置.<br>关于变量存放位置的问题,在网上看了一个例子,很能说明问题.搬到这里看看.</p>
+<pre><code><span class="keyword">class</span> <span class="title">BirthDate</span> {  
+       <span class="keyword">private</span> <span class="keyword">int</span> day;  
+       <span class="keyword">private</span> <span class="keyword">int</span> month;  
+       <span class="keyword">private</span> <span class="keyword">int</span> year;      
+       <span class="function"><span class="keyword">public</span> <span class="title">BirthDate</span>(<span class="params"><span class="keyword">int</span> d, <span class="keyword">int</span> m, <span class="keyword">int</span> y</span>) </span>{  
+           day = d;   
+           month = m;   
+           year = y;  
+        }  
+    <span class="comment">//   省略get,set方法………  </span>
+    }  
+    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Test</span>{  
+       <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String args[]</span>)</span>{  
+        <span class="keyword">int</span> date = <span class="number">9</span>;  
+    &lt;span style=<span class="string">"white-space:pre"</span>&gt;    &lt;/span&gt;Test test = <span class="keyword">new</span> Test();        
+            test.change1(date);   
+            BirthDate d1= <span class="keyword">new</span> BirthDate(<span class="number">7</span>,<span class="number">7</span>,<span class="number">1970</span>);         
+        }    
+       <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">change1</span>(<span class="params"><span class="keyword">int</span> i</span>)</span>{  
+           i = <span class="number">1234</span>;  
+        }  
+    }
+</code></pre><p>下面是对上面代码的分析.</p>
+<ol>
+<li>main方法开始执行：int date = 9;<br>date局部变量，基础类型，引用和值都存在栈中。 </li>
+<li>Test test = new Test();<br>test为对象引用，存在栈中，对象(new Test())存在堆中。 </li>
+<li>test.change1(date);<br>i为局部变量，引用和值存在栈中。当方法change1执行完成后，i就会从栈中消失。 </li>
+<li>BirthDate d1= new BirthDate(7,7,1970);<br>d1 为对象引用，存在栈中，对象(new BirthDate())存在堆中，其中d，m，y为局部变量存储在栈中，且它们的类型为基础类型，因此它们的数据也存储在栈中。day,month,year为成员变量，它们存储在堆中(new BirthDate()里面)。当BirthDate构造方法执行完之后，d,m,y将从栈中消失。<br>5.main方法执行完之后，date变量，test，d1引用将从栈中消失，new Test(),new BirthDate()将等待垃圾回收。</li>
+</ol>
+<h2 id="5-_内存结构跟内存模型有没有什么关系?">5. 内存结构跟内存模型有没有什么关系?</h2><p>jvm内存结构:顾名思义,就是内存是以什么结构存的.<br>java内存模型(Java Memory Model,JMM):主要目标是用来定义程序中各个变量的访问规则,来屏蔽掉各种硬件和操作系统的内存访问差异,以实现让java程序在各种平台下都能达到一致的并发效果.<br>jvm内存分配策略:分配策略主要是跟回收策略对应的. GC的算法会影响分配策略.</p>
 </span>
       
     </div>
@@ -377,6 +459,8 @@ Hibernate、JPA等ORM框架或者实现，是使用版本号，再判断<span cl
       
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/15/jenkins-ant-svn持续集成一/" rel="prev">jenkins-ant-svn持续集成一</a>
             
           </div>
 
@@ -471,7 +555,7 @@ Hibernate、JPA等ORM框架或者实现，是使用版本号，再判断<span cl
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">25</span>
+              <span class="site-state-item-count">26</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -485,7 +569,7 @@ Hibernate、JPA等ORM框架或者实现，是使用版本号，再判断<span cl
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-count">22</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -540,7 +624,7 @@ Hibernate、JPA等ORM框架或者实现，是使用版本号，再判断<span cl
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#悲观锁和乐观锁使用场景"><span class="nav-number">1.</span> <span class="nav-text">悲观锁和乐观锁使用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mybatis乐观锁实现，解决并发问题"><span class="nav-number">1.1.</span> <span class="nav-text">mybatis乐观锁实现，解决并发问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务传播机制以及隔离级别"><span class="nav-number">2.</span> <span class="nav-text">事务传播机制以及隔离级别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#java多线程"><span class="nav-number">3.</span> <span class="nav-text">java多线程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring_MVC_流程图"><span class="nav-number">4.</span> <span class="nav-text">Spring MVC 流程图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#java线程池"><span class="nav-number">5.</span> <span class="nav-text">java线程池</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存模型"><span class="nav-number">6.</span> <span class="nav-text">内存模型</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#悲观锁和乐观锁使用场景"><span class="nav-number">1.</span> <span class="nav-text">悲观锁和乐观锁使用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mybatis乐观锁实现，解决并发问题"><span class="nav-number">1.1.</span> <span class="nav-text">mybatis乐观锁实现，解决并发问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务传播机制以及隔离级别"><span class="nav-number">2.</span> <span class="nav-text">事务传播机制以及隔离级别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#java多线程"><span class="nav-number">3.</span> <span class="nav-text">java多线程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring_MVC_流程图"><span class="nav-number">4.</span> <span class="nav-text">Spring MVC 流程图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#java线程池"><span class="nav-number">5.</span> <span class="nav-text">java线程池</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存模型"><span class="nav-number">6.</span> <span class="nav-text">内存模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JVM内存分配"><span class="nav-number">7.</span> <span class="nav-text">JVM内存分配</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-_JVM运行时数据区结构图"><span class="nav-number">7.1.</span> <span class="nav-text">1. JVM运行时数据区结构图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-_各个区的作用"><span class="nav-number">7.2.</span> <span class="nav-text">2. 各个区的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-_这些区会内存溢出吗,什么情况下会出现?报错信息是什么?怎么设置每个区的大小?"><span class="nav-number">7.3.</span> <span class="nav-text">3. 这些区会内存溢出吗,什么情况下会出现?报错信息是什么?怎么设置每个区的大小?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-_这些区跟多线程有没有什么关系?"><span class="nav-number">7.4.</span> <span class="nav-text">4.   这些区跟多线程有没有什么关系?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-_内存结构跟内存模型有没有什么关系?"><span class="nav-number">7.5.</span> <span class="nav-text">5. 内存结构跟内存模型有没有什么关系?</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
