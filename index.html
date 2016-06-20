@@ -189,6 +189,92 @@
           
           
             
+              <a class="post-title-link" href="/2016/06/20/jenkins-ant-svn持续集成二/" itemprop="url">
+                jenkins-ant-svn持续集成二
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2016-06-20T09:33:18+08:00" content="2016-06-20">
+            2016-06-20
+          </time>
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2016/06/20/jenkins-ant-svn持续集成二/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/20/jenkins-ant-svn持续集成二/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+            Jenkins email-ext替换的默认邮件通知
+安装
+首先安装    Email Extension Plugin,在系统管理–&gt;插件管理–&gt;可选插件找到Email Extension Plugin，进行安装.
+
+部署
+增加构建后操作 Editable Email Notification
+Project Recipient List: 输入邮件接收人，多人用空格隔开
+Project Reply-To List:回复列表
+Content Type:选HTML(text/html)
+Default Subject:构建通知:$PROJECT_NAME - Build # $BU
+            ...
+          </span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/06/20/jenkins-ant-svn持续集成二/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
               <a class="post-title-link" href="/2016/06/15/jenkins-ant-svn持续集成一/" itemprop="url">
                 jenkins-ant-svn持续集成一
               </a>
@@ -231,11 +317,11 @@
             
             1.部署jenkins，在linux上部署tomcat下载jenkins的war包放在tomcat的webapp下启动，然后通过ip:端口/jenkins访问jenkinsjenkins war下载
 2.系统管理—》系统设置—设置ant和jdk的环境变量（linux里面ant和jdk的环境变量）
-3.邮件通知参考文档：邮箱配置参考文档
+3.邮件通知参考文档：QQ企业邮箱QQ个人邮箱
 主要是密码，这个密码不是邮箱密码而是授权码。
 
 4.安装ssh插件，因为jenkins打了war包之后要上传到服务器，通过ssh上传war包简单方便。插件url下载地址如下：戳我,用力
-附件是ssh插件包。系统管理—》管理插件—》高级，上传插件。 publish
+附件是ssh插件包。系统管理—》管理插件—》高级，上传插件。 pub
             ...
           </span>
           <div class="post-more-link text-center">
@@ -508,88 +594,6 @@ ArrayList实现了Serializable接口，因此它支持序列化，能够通过�
 
 
     
-      
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      
-      
-        <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-              <a class="post-title-link" href="/2016/04/01/动态添加JOB/" itemprop="url">
-                动态添加JOB
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于
-          <time itemprop="dateCreated" datetime="2016-04-01T09:05:37+08:00" content="2016-04-01">
-            2016-04-01
-          </time>
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-              &nbsp; | &nbsp;
-              <a href="/2016/04/01/动态添加JOB/#comments" itemprop="discussionUrl">
-                <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/01/动态添加JOB/" itemprop="commentsCount"></span>
-              </a>
-            </span>
-          
-        
-      </div>
-    </header>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-            前面一节讲了用spring+quartz 定时调度，这个能满足大多数需求，但是有一些动态的JOB，该如何处理。我大概讲一下我的思路：
-首先创建JOB表，启动一个定时调度(上节写了)扫描这个表有没有新增的记录(status=0的记录),如果有就往quartz里面添加job然后修改t_job的status
-CREATE TABLE `t_job` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `create_date` datetime NOT NULl COMMENT '创建时间',
-  `modify_date` datetime NOT NUL
-            ...
-          </span>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/01/动态添加JOB/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -628,7 +632,7 @@ CREATE TABLE `t_job` (
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-count">27</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

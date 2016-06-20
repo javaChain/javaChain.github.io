@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2016-06-15T09:09:42.647Z</updated>
+  <updated>2016-06-20T02:10:39.477Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -15,14 +15,123 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[jenkins-ant-svn持续集成二]]></title>
+    <link href="http://blog.chen777.com/2016/06/20/jenkins-ant-svn%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E4%BA%8C/"/>
+    <id>http://blog.chen777.com/2016/06/20/jenkins-ant-svn持续集成二/</id>
+    <published>2016-06-20T01:33:18.000Z</published>
+    <updated>2016-06-20T02:10:39.477Z</updated>
+    <content type="html"><![CDATA[<p>Jenkins email-ext替换的默认邮件通知</p>
+<h1 id="安装">安装</h1><ol>
+<li>首先安装    Email Extension Plugin,在系统管理–&gt;插件管理–&gt;可选插件找到<span style="color:red">Email Extension Plugin</span>，进行安装.</li>
+</ol>
+<h1 id="部署">部署</h1><ol>
+<li>增加构建后操作 Editable Email Notification</li>
+<li>Project Recipient List: 输入邮件接收人，多人用空格隔开</li>
+<li>Project Reply-To List:回复列表</li>
+<li>Content Type:选HTML(text/html)</li>
+<li>Default Subject:构建通知:$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!</li>
+<li><p>Default Content</p>
+<pre><code><span class="doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;<span class="title">html</span>&gt;</span>
+<span class="tag">&lt;<span class="title">head</span>&gt;</span>
+<span class="tag">&lt;<span class="title">meta</span> <span class="attribute">charset</span>=<span class="value">"UTF-8"</span>&gt;</span>
+<span class="tag">&lt;<span class="title">title</span>&gt;</span>${ENV, var="JOB_NAME"}-第${BUILD_NUMBER}次构建日志<span class="tag">&lt;/<span class="title">title</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+
+<span class="tag">&lt;<span class="title">body</span> <span class="attribute">leftmargin</span>=<span class="value">"8"</span> <span class="attribute">marginwidth</span>=<span class="value">"0"</span> <span class="attribute">topmargin</span>=<span class="value">"8"</span> <span class="attribute">marginheight</span>=<span class="value">"4"</span>
+    <span class="attribute">offset</span>=<span class="value">"0"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">table</span> <span class="attribute">width</span>=<span class="value">"95%"</span> <span class="attribute">cellpadding</span>=<span class="value">"0"</span> <span class="attribute">cellspacing</span>=<span class="value">"0"</span>
+        <span class="attribute">style</span>=<span class="value">"font-size: 11pt; font-family: Tahoma, Arial, Helvetica, sans-serif"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span>(本邮件是程序自动下发的，请勿回复！)<span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span><span class="tag">&lt;<span class="title">h2</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">font</span> <span class="attribute">color</span>=<span class="value">"#0000FF"</span>&gt;</span>构建结果 - ${BUILD_STATUS}<span class="tag">&lt;/<span class="title">font</span>&gt;</span>
+                <span class="tag">&lt;/<span class="title">h2</span>&gt;</span><span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span><span class="tag">&lt;<span class="title">br</span> /&gt;</span>
+            <span class="tag">&lt;<span class="title">b</span>&gt;</span><span class="tag">&lt;<span class="title">font</span> <span class="attribute">color</span>=<span class="value">"#0B610B"</span>&gt;</span>构建信息<span class="tag">&lt;/<span class="title">font</span>&gt;</span><span class="tag">&lt;/<span class="title">b</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">hr</span> <span class="attribute">size</span>=<span class="value">"2"</span> <span class="attribute">width</span>=<span class="value">"100%"</span> <span class="attribute">align</span>=<span class="value">"center"</span> /&gt;</span><span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">ul</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">li</span>&gt;</span>项目名称&amp;nbsp;：&amp;nbsp;${PROJECT_NAME}<span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">li</span>&gt;</span>构建编号&amp;nbsp;：&amp;nbsp;第${BUILD_NUMBER}次构建<span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">li</span>&gt;</span>SVN&amp;nbsp;版本：&amp;nbsp;${SVN_REVISION}<span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">li</span>&gt;</span>触发原因：&amp;nbsp;${CAUSE}<span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">li</span>&gt;</span>构建日志：&amp;nbsp;<span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"${BUILD_URL}console"</span>&gt;</span>${BUILD_URL}console<span class="tag">&lt;/<span class="title">a</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">li</span>&gt;</span>构建&amp;nbsp;&amp;nbsp;Url&amp;nbsp;：&amp;nbsp;<span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"${BUILD_URL}"</span>&gt;</span>${BUILD_URL}<span class="tag">&lt;/<span class="title">a</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">li</span>&gt;</span>工作目录&amp;nbsp;：&amp;nbsp;<span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"${PROJECT_URL}ws"</span>&gt;</span>${PROJECT_URL}ws<span class="tag">&lt;/<span class="title">a</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">li</span>&gt;</span>项目&amp;nbsp;&amp;nbsp;Url&amp;nbsp;：&amp;nbsp;<span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"${PROJECT_URL}"</span>&gt;</span>${PROJECT_URL}<span class="tag">&lt;/<span class="title">a</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+                <span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span><span class="tag">&lt;<span class="title">b</span>&gt;</span><span class="tag">&lt;<span class="title">font</span> <span class="attribute">color</span>=<span class="value">"#0B610B"</span>&gt;</span>Changes Since Last
+                        Successful Build:<span class="tag">&lt;/<span class="title">font</span>&gt;</span><span class="tag">&lt;/<span class="title">b</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">hr</span> <span class="attribute">size</span>=<span class="value">"2"</span> <span class="attribute">width</span>=<span class="value">"100%"</span> <span class="attribute">align</span>=<span class="value">"center"</span> /&gt;</span><span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">ul</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">li</span>&gt;</span>历史变更记录 : <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"${PROJECT_URL}changes"</span>&gt;</span>${PROJECT_URL}changes<span class="tag">&lt;/<span class="title">a</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+                <span class="tag">&lt;/<span class="title">ul</span>&gt;</span> ${CHANGES_SINCE_LAST_SUCCESS,reverse=true, format="Changes for Build #%n:<span class="tag">&lt;<span class="title">br</span> /&gt;</span>%c<span class="tag">&lt;<span class="title">br</span> /&gt;</span>",showPaths=true,changesFormat="<span class="tag">&lt;<span class="title">pre</span>&gt;</span>[%a]<span class="tag">&lt;<span class="title">br</span> /&gt;</span>%m<span class="tag">&lt;/<span class="title">pre</span>&gt;</span>",pathFormat="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;%p"}
+            <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span><span class="tag">&lt;<span class="title">b</span>&gt;</span>Failed Test Results<span class="tag">&lt;/<span class="title">b</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">hr</span> <span class="attribute">size</span>=<span class="value">"2"</span> <span class="attribute">width</span>=<span class="value">"100%"</span> <span class="attribute">align</span>=<span class="value">"center"</span> /&gt;</span><span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span><span class="tag">&lt;<span class="title">pre</span>
+                    <span class="attribute">style</span>=<span class="value">"font-size: 11pt; font-family: Tahoma, Arial, Helvetica, sans-serif"</span>&gt;</span>$FAILED_TESTS<span class="tag">&lt;/<span class="title">pre</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">br</span> /&gt;</span><span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span><span class="tag">&lt;<span class="title">b</span>&gt;</span><span class="tag">&lt;<span class="title">font</span> <span class="attribute">color</span>=<span class="value">"#0B610B"</span>&gt;</span>构建日志 (最后 100行):<span class="tag">&lt;/<span class="title">font</span>&gt;</span><span class="tag">&lt;/<span class="title">b</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">hr</span> <span class="attribute">size</span>=<span class="value">"2"</span> <span class="attribute">width</span>=<span class="value">"100%"</span> <span class="attribute">align</span>=<span class="value">"center"</span> /&gt;</span><span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+        <span class="comment">&lt;!-- &lt;tr&gt;
+            &lt;td&gt;Test Logs (if test has ran): &lt;a
+                href="${PROJECT_URL}ws/TestResult/archive_logs/Log-Build-${BUILD_NUMBER}.zip"&gt;${PROJECT_URL}/ws/TestResult/archive_logs/Log-Build-${BUILD_NUMBER}.zip&lt;/a&gt;
+                &lt;br /&gt;
+            &lt;br /&gt;
+            &lt;/td&gt;
+        &lt;/tr&gt; --&gt;</span>
+        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span><span class="tag">&lt;<span class="title">textarea</span> <span class="attribute">cols</span>=<span class="value">"80"</span> <span class="attribute">rows</span>=<span class="value">"30"</span> <span class="attribute">readonly</span>=<span class="value">"readonly"</span>
+                    <span class="attribute">style</span>=<span class="value">"font-family: Courier New"</span>&gt;</span>${BUILD_LOG, maxLines=100}<span class="tag">&lt;/<span class="title">textarea</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">table</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+</code></pre></li>
+</ol>
+<p>剩下的一些自己的实际需求选择。图片仅供参考。<br><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1f51gt8h4dnj316b0cfacv.jpg" alt="http://ww1.sinaimg.cn/large/0063lLoQgw1f51gt8h4dnj316b0cfacv.jpg"><br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1f51gtzpnjpj315v0g7who.jpg" alt="http://ww2.sinaimg.cn/large/0063lLoQgw1f51gtzpnjpj315v0g7who.jpg"><br><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1f51gualeyoj316l0i6q4b.jpg" alt="http://ww1.sinaimg.cn/large/0063lLoQgw1f51gualeyoj316l0i6q4b.jpg"></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>Jenkins email-ext替换的默认邮件通知</p>
+<h1 id="安装">安装</h1><ol>
+<li>首先安装    Email Extension Plugin,在系统管理–&gt;插件管理–&gt;可选插件找到<span style="color:red]]>
+    </summary>
+    
+      <category term="jenkins" scheme="http://blog.chen777.com/tags/jenkins/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[jenkins-ant-svn持续集成一]]></title>
     <link href="http://blog.chen777.com/2016/06/15/jenkins-ant-svn%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E4%B8%80/"/>
     <id>http://blog.chen777.com/2016/06/15/jenkins-ant-svn持续集成一/</id>
     <published>2016-06-15T08:24:51.000Z</published>
-    <updated>2016-06-15T09:09:42.647Z</updated>
+    <updated>2016-06-15T09:27:42.703Z</updated>
     <content type="html"><![CDATA[<p>1.部署jenkins，在linux上部署tomcat下载jenkins的war包放在tomcat的webapp下启动，然后通过ip:端口/jenkins访问jenkins<br><a href="http://pan.baidu.com/s/1qY8E5iO" target="_blank" rel="external">jenkins war下载</a></p>
 <p>2.系统管理—》系统设置—设置ant和jdk的环境变量（linux里面ant和jdk的环境变量）<br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1f4vztr0rl7j31960hnmz9.jpg" alt="ant、jdk环境变量设置"></p>
-<p>3.邮件通知<br><img src="http://ww4.sinaimg.cn/large/0063lLoQgw1f4vzuh3uvuj317k0dlq53.jpg" alt="邮件通知"><br>参考文档：<br><a href="http://pan.baidu.com/s/1dFfUHot" target="_blank" rel="external">邮箱配置参考文档</a></p>
+<p>3.邮件通知<br><img src="http://ww4.sinaimg.cn/large/0063lLoQgw1f4vzuh3uvuj317k0dlq53.jpg" alt="邮件通知"><br>参考文档：<br><a href="http://pan.baidu.com/s/1dFfUHot" target="_blank" rel="external">QQ企业邮箱</a><br><a href="http://pan.baidu.com/s/1mi2bdKO" target="_blank" rel="external">QQ个人邮箱</a></p>
 <p style="color:red;">主要是密码，这个密码不是邮箱密码而是授权码。</p>
 
 <p>4.安装ssh插件，因为jenkins打了war包之后要上传到服务器，通过ssh上传war包简单方便。插件url下载地址如下：<br><a href="https://wiki.jenkins-ci.org/display/JENKINS/Plugins#Plugins-Deploymentplugins" target="_blank" rel="external">戳我,用力</a></p>
@@ -2269,24 +2378,6 @@ $(<span class="string">'#submitForm'</span>).click(<span class="function"><span 
     </summary>
     
       <category term="工具" scheme="http://blog.chen777.com/tags/%E5%B7%A5%E5%85%B7/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[程序员必备之机械键盘]]></title>
-    <link href="http://blog.chen777.com/2015/10/10/jianpan/"/>
-    <id>http://blog.chen777.com/2015/10/10/jianpan/</id>
-    <published>2015-10-10T03:13:31.000Z</published>
-    <updated>2015-10-10T03:24:12.224Z</updated>
-    <content type="html"><![CDATA[<p>最近入手了一款青轴机械键盘，虽然价格有点贵（相比于普通的键盘），但是还是很爽的哈。噼里啪啦的手感以及好看的外观，干活都持久了。<br>我买的是达尔优的青轴，有人说青轴吵，买茶轴或红轴，我个人推荐青轴。<br>我是手残档，图片拍的不好 凑合看。<br><a id="more"></a><br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1ewvvh38ayjj31kw16ok8b.jpg" alt=""><br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1ewvvhsubjnj31kw16o18n.jpg" alt=""><br><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewvvi0ixetj31kw16oh4t.jpg" alt=""></p>
-<p>链接：<a href="http://item.jd.com/1365181.html" target="_blank" rel="external">http://item.jd.com/1365181.html</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>最近入手了一款青轴机械键盘，虽然价格有点贵（相比于普通的键盘），但是还是很爽的哈。噼里啪啦的手感以及好看的外观，干活都持久了。<br>我买的是达尔优的青轴，有人说青轴吵，买茶轴或红轴，我个人推荐青轴。<br>我是手残档，图片拍的不好 凑合看。<br>]]>
-    
-    </summary>
-    
-      <category term="机械键盘" scheme="http://blog.chen777.com/tags/%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98/"/>
     
   </entry>
   
