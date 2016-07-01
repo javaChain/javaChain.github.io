@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2016-06-20T02:10:39.477Z</updated>
+  <updated>2016-07-01T02:10:45.335Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -15,11 +15,102 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[jenkins-ant-build.xml]]></title>
+    <link href="http://blog.chen777.com/2016/07/01/jenkins-ant-builder-xml/"/>
+    <id>http://blog.chen777.com/2016/07/01/jenkins-ant-builder-xml/</id>
+    <published>2016-07-01T02:01:28.000Z</published>
+    <updated>2016-07-01T02:10:45.335Z</updated>
+    <content type="html"><![CDATA[<p>使用ant打包，我当初也是研究很久才弄出来。我的使用情况：<br>测试环境和生产环境的配置文件不一样，正式环境就是SVN提交的记录，所以不需要改变，测试环境需要把Test文件夹覆盖resource文件夹<br><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1f5e6iobq1lj30br0fl78b.jpg" alt="http://ww1.sinaimg.cn/large/0063lLoQgw1f5e6iobq1lj30br0fl78b.jpg"></p>
+<p>而且ant也需要指定使用buildTest.xml<br><img src="http://ww4.sinaimg.cn/large/0063lLoQgw1f5e6lj39ekj318f09375b.jpg" alt="http://ww4.sinaimg.cn/large/0063lLoQgw1f5e6lj39ekj318f09375b.jpg">.<br>然后我把我的buildTest.xml发出来，仅供参考</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">project</span> <span class="attribute">name</span>=<span class="value">"lepa-b2c"</span> <span class="attribute">default</span>=<span class="value">"warTest"</span> <span class="attribute">basedir</span>=<span class="value">"."</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">environment</span>=<span class="value">"env"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"src"</span> <span class="attribute">value</span>=<span class="value">"${basedir}/src"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"resource"</span> <span class="attribute">value</span>=<span class="value">"${basedir}/resource"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"test"</span> <span class="attribute">value</span>=<span class="value">"${basedir}/Test"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"bin"</span> <span class="attribute">value</span>=<span class="value">"${basedir}/WebContent/WEB-INF/classes"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"build"</span> <span class="attribute">value</span>=<span class="value">"${basedir}/build"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"war"</span> <span class="attribute">value</span>=<span class="value">"${build}/war"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"lib"</span> <span class="attribute">value</span>=<span class="value">"${basedir}/WebContent/WEB-INF/lib"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"captcha"</span> <span class="attribute">value</span>=<span class="value">"${basedir}/src/net/wit/captcha"</span> /&gt;</span>
+
+    <span class="tag">&lt;<span class="title">path</span> <span class="attribute">id</span>=<span class="value">"javaclass.path"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">pathelement</span> <span class="attribute">path</span>=<span class="value">"${env.JAVA_HOME}"</span> /&gt;</span>
+        <span class="tag">&lt;<span class="title">fileset</span> <span class="attribute">dir</span>=<span class="value">"${lib}"</span> <span class="attribute">includes</span>=<span class="value">"*.jar"</span> /&gt;</span>
+    <span class="tag">&lt;/<span class="title">path</span>&gt;</span>
+
+    <span class="tag">&lt;<span class="title">target</span> <span class="attribute">name</span>=<span class="value">"clean"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">echo</span>&gt;</span>clean...<span class="tag">&lt;/<span class="title">echo</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">delete</span> <span class="attribute">dir</span>=<span class="value">"${build}"</span> /&gt;</span>
+    <span class="tag">&lt;/<span class="title">target</span>&gt;</span>
+
+    <span class="tag">&lt;<span class="title">target</span> <span class="attribute">name</span>=<span class="value">"init"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">echo</span>&gt;</span>init...<span class="tag">&lt;/<span class="title">echo</span>&gt;</span>
+
+        <span class="tag">&lt;<span class="title">mkdir</span> <span class="attribute">dir</span>=<span class="value">"${war}"</span> /&gt;</span>
+        <span class="tag">&lt;<span class="title">mkdir</span> <span class="attribute">dir</span>=<span class="value">"${bin}"</span> /&gt;</span>
+    <span class="tag">&lt;/<span class="title">target</span>&gt;</span>
+
+    <span class="comment">&lt;!-- 测试环境编译 --&gt;</span>
+    <span class="tag">&lt;<span class="title">target</span> <span class="attribute">name</span>=<span class="value">"compileTest"</span> <span class="attribute">description</span>=<span class="value">"Compile Test..."</span> <span class="attribute">depends</span>=<span class="value">"init"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">javac</span> <span class="attribute">srcdir</span>=<span class="value">"${resource}"</span> <span class="attribute">destdir</span>=<span class="value">"${bin}"</span>  <span class="attribute">includeantruntime</span>=<span class="value">"on"</span>  <span class="attribute">source</span>=<span class="value">"1.7"</span> <span class="attribute">debug</span>=<span class="value">"true"</span> <span class="attribute">encoding</span>=<span class="value">"UTF-8"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">compilerarg</span> <span class="attribute">line</span>=<span class="value">"-XDignore.symbol.file"</span>/&gt;</span>
+            <span class="tag">&lt;<span class="title">classpath</span> <span class="attribute">refid</span>=<span class="value">"javaclass.path"</span>&gt;</span><span class="tag">&lt;/<span class="title">classpath</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">javac</span>&gt;</span>
+
+        <span class="tag">&lt;<span class="title">javac</span> <span class="attribute">srcdir</span>=<span class="value">"${src}"</span> <span class="attribute">destdir</span>=<span class="value">"${bin}"</span>  <span class="attribute">includeantruntime</span>=<span class="value">"on"</span>  <span class="attribute">source</span>=<span class="value">"1.7"</span> <span class="attribute">debug</span>=<span class="value">"true"</span> <span class="attribute">encoding</span>=<span class="value">"UTF-8"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">compilerarg</span> <span class="attribute">line</span>=<span class="value">"-XDignore.symbol.file"</span>/&gt;</span>
+            <span class="tag">&lt;<span class="title">classpath</span> <span class="attribute">refid</span>=<span class="value">"javaclass.path"</span>&gt;</span><span class="tag">&lt;/<span class="title">classpath</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">javac</span>&gt;</span>
+
+         <span class="tag">&lt;<span class="title">copy</span> <span class="attribute">todir</span>=<span class="value">"${bin}"</span> <span class="attribute">includeemptydirs</span>=<span class="value">"false"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">fileset</span> <span class="attribute">dir</span>=<span class="value">"${resource}"</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">exclude</span> <span class="attribute">name</span>=<span class="value">"**/.svn"</span>/&gt;</span>
+            <span class="tag">&lt;/<span class="title">fileset</span>&gt;</span>
+         <span class="tag">&lt;/<span class="title">copy</span>&gt;</span>
+
+        <span class="tag">&lt;<span class="title">copy</span> <span class="attribute">todir</span>=<span class="value">"${bin}"</span> <span class="attribute">includeemptydirs</span>=<span class="value">"false"</span> <span class="attribute">overwrite</span>=<span class="value">"true"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">fileset</span> <span class="attribute">dir</span>=<span class="value">"${test}"</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">exclude</span> <span class="attribute">name</span>=<span class="value">"**/.svn"</span>/&gt;</span>
+            <span class="tag">&lt;/<span class="title">fileset</span>&gt;</span>
+         <span class="tag">&lt;/<span class="title">copy</span>&gt;</span>
+
+        <span class="tag">&lt;<span class="title">copy</span> <span class="attribute">todir</span>=<span class="value">"${bin}/net/wit/captcha"</span> <span class="attribute">includeemptydirs</span>=<span class="value">"false"</span> <span class="attribute">overwrite</span>=<span class="value">"true"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">fileset</span> <span class="attribute">dir</span>=<span class="value">"${captcha}"</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">exclude</span> <span class="attribute">name</span>=<span class="value">"**/.svn"</span>/&gt;</span>
+            <span class="tag">&lt;/<span class="title">fileset</span>&gt;</span>
+         <span class="tag">&lt;/<span class="title">copy</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">target</span>&gt;</span>
+
+    <span class="comment">&lt;!-- 测试环境打war包 --&gt;</span>
+    <span class="tag">&lt;<span class="title">target</span> <span class="attribute">name</span>=<span class="value">"warTest"</span> <span class="attribute">depends</span>=<span class="value">"clean,init,compileTest"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">copy</span> <span class="attribute">todir</span>=<span class="value">"build/war"</span> <span class="attribute">includeemptydirs</span>=<span class="value">"no"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">fileset</span> <span class="attribute">dir</span>=<span class="value">"WebContent"</span> <span class="attribute">includes</span>=<span class="value">"**/*"</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">fileset</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">copy</span>&gt;</span>
+
+        <span class="tag">&lt;<span class="title">jar</span> <span class="attribute">destfile</span>=<span class="value">"build/ROOT.war"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">fileset</span> <span class="attribute">dir</span>=<span class="value">"build/war"</span> <span class="attribute">includes</span>=<span class="value">"**/*"</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">fileset</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">jar</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">target</span>&gt;</span>
+
+<span class="tag">&lt;/<span class="title">project</span>&gt;</span>
+</code></pre>]]></content>
+    <summary type="html">
+    <![CDATA[<p>使用ant打包，我当初也是研究很久才弄出来。我的使用情况：<br>测试环境和生产环境的配置文件不一样，正式环境就是SVN提交的记录，所以不需要改变，测试环境需要把Test文件夹覆盖resource文件夹<br><img src="http://ww1.sinaimg.cn/]]>
+    </summary>
+    
+      <category term="jenkins" scheme="http://blog.chen777.com/tags/jenkins/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[jenkins-ant-svn持续集成二]]></title>
     <link href="http://blog.chen777.com/2016/06/20/jenkins-ant-svn%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E4%BA%8C/"/>
     <id>http://blog.chen777.com/2016/06/20/jenkins-ant-svn持续集成二/</id>
     <published>2016-06-20T01:33:18.000Z</published>
-    <updated>2016-06-20T02:10:39.477Z</updated>
+    <updated>2016-07-01T02:00:11.339Z</updated>
     <content type="html"><![CDATA[<p>Jenkins email-ext替换的默认邮件通知</p>
 <h1 id="安装">安装</h1><ol>
 <li>首先安装    Email Extension Plugin,在系统管理–&gt;插件管理–&gt;可选插件找到<span style="color:red">Email Extension Plugin</span>，进行安装.</li>
@@ -112,6 +203,7 @@
 </code></pre></li>
 </ol>
 <p>剩下的一些自己的实际需求选择。图片仅供参考。<br><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1f51gt8h4dnj316b0cfacv.jpg" alt="http://ww1.sinaimg.cn/large/0063lLoQgw1f51gt8h4dnj316b0cfacv.jpg"><br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1f51gtzpnjpj315v0g7who.jpg" alt="http://ww2.sinaimg.cn/large/0063lLoQgw1f51gtzpnjpj315v0g7who.jpg"><br><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1f51gualeyoj316l0i6q4b.jpg" alt="http://ww1.sinaimg.cn/large/0063lLoQgw1f51gualeyoj316l0i6q4b.jpg"></p>
+<p>如果出现<span style="color:red">连接失败,重新连接</span>这个错误,我是设置了<img src="http://ww1.sinaimg.cn/large/0063lLoQgw1f5e6c6or6zj31830pvdkx.jpg" alt="http://ww1.sinaimg.cn/large/0063lLoQgw1f5e6c6or6zj31830pvdkx.jpg"><br>SMTP Server 然后就好了。 具体原因不明。</p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>Jenkins email-ext替换的默认邮件通知</p>
@@ -2348,36 +2440,6 @@ $(<span class="string">'#submitForm'</span>).click(<span class="function"><span 
     </summary>
     
       <category term="AES" scheme="http://blog.chen777.com/tags/AES/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[开发工具]]></title>
-    <link href="http://blog.chen777.com/2015/10/12/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/"/>
-    <id>http://blog.chen777.com/2015/10/12/开发工具/</id>
-    <published>2015-10-12T06:57:43.000Z</published>
-    <updated>2015-10-15T07:18:44.966Z</updated>
-    <content type="html"><![CDATA[<p>工欲善其事必先利其器，每个coder的都有自己偏执的工具， 我介绍一下我使用的工具(eclipse,notepad++,secureCRT,navicat,HBuild),一般都是解压即可用，压缩包里面会有使用介绍。</p>
-<a id="more"></a>
-<p>eclipse：<a href="http://www.eclipse.org/downloads/" target="_blank" rel="external">http://www.eclipse.org/downloads/</a></p>
-<p>我使用的eclipse：<a href="http://pan.baidu.com/s/1C1yKA" target="_blank" rel="external">http://pan.baidu.com/s/1C1yKA</a>  /nsvj</p>
-<p>chrome:<a href="http://chromecj.com/chrome/2014-09/177/download.html" target="_blank" rel="external">http://chromecj.com/chrome/2014-09/177/download.html</a></p>
-<p>文本编辑器用的notepad++，世面上有很多文本编辑器editplus，uedit等。<br>notepad++:<a href="http://pan.baidu.com/s/1dDhTgwp" target="_blank" rel="external">http://pan.baidu.com/s/1dDhTgwp</a>  /d350</p>
-<p>反编译工具：<a href="http://pan.baidu.com/s/1pJH09gZ" target="_blank" rel="external">http://pan.baidu.com/s/1pJH09gZ</a>  /640h</p>
-<p>SecureCRT:<a href="http://pan.baidu.com/s/1kTJAAxh" target="_blank" rel="external">http://pan.baidu.com/s/1kTJAAxh</a>  /ddog</p>
-<p>navicat for mysql:<a href="http://pan.baidu.com/s/15FO8Q" target="_blank" rel="external">http://pan.baidu.com/s/15FO8Q</a>   /fpw2</p>
-<p>偶尔兼职做一下页面的开发或者调试一下JS，网页工具有runjs，我下了一个HBuilder，支持原创.<br>HBuilder:<a href="http://www.dcloud.io/" target="_blank" rel="external">http://www.dcloud.io/</a></p>
-<p>听歌以前用的酷狗，用久了感觉没新意了(其实就是听到了好歌没有地方抒发情感)，换了一个网易云音乐.</p>
-<p>文本比较工具：Beyond Compare11，解压即可。<a href="http://pan.baidu.com/s/1eQ4RCrg" target="_blank" rel="external">http://pan.baidu.com/s/1eQ4RCrg</a>  /es9x</p>
-<p>基本开发工具就是这些了。</p>
-<p>so 附上我喜欢的music:<a href="http://music.163.com/#/m/playlist?id=111665824" target="_blank" rel="external">http://music.163.com/#/m/playlist?id=111665824</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>工欲善其事必先利其器，每个coder的都有自己偏执的工具， 我介绍一下我使用的工具(eclipse,notepad++,secureCRT,navicat,HBuild),一般都是解压即可用，压缩包里面会有使用介绍。</p>]]>
-    
-    </summary>
-    
-      <category term="工具" scheme="http://blog.chen777.com/tags/%E5%B7%A5%E5%85%B7/"/>
     
   </entry>
   

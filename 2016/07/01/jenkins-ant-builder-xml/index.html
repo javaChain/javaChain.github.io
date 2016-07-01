@@ -30,7 +30,7 @@
 
 
 
-  <meta name="keywords" content="机械键盘," />
+  <meta name="keywords" content="jenkins," />
 
 
 
@@ -41,19 +41,27 @@
   <link rel="shorticon icon" type="image/x-icon" href="/myBlog.ico" />
 
 
-<meta name="description" content="最近入手了一款青轴机械键盘，虽然价格有点贵（相比于普通的键盘），但是还是很爽的哈。噼里啪啦的手感以及好看的外观，干活都持久了。我买的是达尔优的青轴，有人说青轴吵，买茶轴或红轴，我个人推荐青轴。我是手残档，图片拍的不好 凑合看。">
+<meta name="description" content="使用ant打包，我当初也是研究很久才弄出来。我的使用情况：测试环境和生产环境的配置文件不一样，正式环境就是SVN提交的记录，所以不需要改变，测试环境需要把Test文件夹覆盖resource文件夹
+而且ant也需要指定使用buildTest.xml.然后我把我的buildTest.xml发出来，仅供参考
+&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;
+&amp;lt">
 <meta property="og:type" content="article">
-<meta property="og:title" content="程序员必备之机械键盘">
-<meta property="og:url" content="http://blog.chen777.com/2015/10/10/jianpan/index.html">
+<meta property="og:title" content="jenkins-ant-build.xml">
+<meta property="og:url" content="http://blog.chen777.com/2016/07/01/jenkins-ant-builder-xml/index.html">
 <meta property="og:site_name" content="Coding Chain">
-<meta property="og:description" content="最近入手了一款青轴机械键盘，虽然价格有点贵（相比于普通的键盘），但是还是很爽的哈。噼里啪啦的手感以及好看的外观，干活都持久了。我买的是达尔优的青轴，有人说青轴吵，买茶轴或红轴，我个人推荐青轴。我是手残档，图片拍的不好 凑合看。">
-<meta property="og:image" content="http://ww2.sinaimg.cn/large/0063lLoQgw1ewvvh38ayjj31kw16ok8b.jpg">
-<meta property="og:image" content="http://ww2.sinaimg.cn/large/0063lLoQgw1ewvvhsubjnj31kw16o18n.jpg">
-<meta property="og:image" content="http://ww3.sinaimg.cn/large/0063lLoQgw1ewvvi0ixetj31kw16oh4t.jpg">
-<meta property="og:updated_time" content="2015-10-10T03:24:12.224Z">
+<meta property="og:description" content="使用ant打包，我当初也是研究很久才弄出来。我的使用情况：测试环境和生产环境的配置文件不一样，正式环境就是SVN提交的记录，所以不需要改变，测试环境需要把Test文件夹覆盖resource文件夹
+而且ant也需要指定使用buildTest.xml.然后我把我的buildTest.xml发出来，仅供参考
+&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;
+&amp;lt">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/0063lLoQgw1f5e6iobq1lj30br0fl78b.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/0063lLoQgw1f5e6lj39ekj318f09375b.jpg">
+<meta property="og:updated_time" content="2016-07-01T02:10:45.335Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="程序员必备之机械键盘">
-<meta name="twitter:description" content="最近入手了一款青轴机械键盘，虽然价格有点贵（相比于普通的键盘），但是还是很爽的哈。噼里啪啦的手感以及好看的外观，干活都持久了。我买的是达尔优的青轴，有人说青轴吵，买茶轴或红轴，我个人推荐青轴。我是手残档，图片拍的不好 凑合看。">
+<meta name="twitter:title" content="jenkins-ant-build.xml">
+<meta name="twitter:description" content="使用ant打包，我当初也是研究很久才弄出来。我的使用情况：测试环境和生产环境的配置文件不一样，正式环境就是SVN提交的记录，所以不需要改变，测试环境需要把Test文件夹覆盖resource文件夹
+而且ant也需要指定使用buildTest.xml.然后我把我的buildTest.xml发出来，仅供参考
+&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;
+&amp;lt">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -63,7 +71,7 @@
   };
 </script>
 
-  <title> 程序员必备之机械键盘 | Coding Chain </title>
+  <title> jenkins-ant-build.xml | Coding Chain </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -191,7 +199,7 @@
           
           
             
-              程序员必备之机械键盘
+              jenkins-ant-build.xml
             
           
         </h1>
@@ -200,8 +208,8 @@
       <div class="post-meta">
         <span class="post-time">
           发表于
-          <time itemprop="dateCreated" datetime="2015-10-10T11:13:31+08:00" content="2015-10-10">
-            2015-10-10
+          <time itemprop="dateCreated" datetime="2016-07-01T10:01:28+08:00" content="2016-07-01">
+            2016-07-01
           </time>
         </span>
 
@@ -211,8 +219,8 @@
           
             <span class="post-comments-count">
               &nbsp; | &nbsp;
-              <a href="/2015/10/10/jianpan/#comments" itemprop="discussionUrl">
-                <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/10/jianpan/" itemprop="commentsCount"></span>
+              <a href="/2016/07/01/jenkins-ant-builder-xml/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/01/jenkins-ant-builder-xml/" itemprop="commentsCount"></span>
               </a>
             </span>
           
@@ -226,9 +234,83 @@
       
 
       
-        <span itemprop="articleBody"><p>最近入手了一款青轴机械键盘，虽然价格有点贵（相比于普通的键盘），但是还是很爽的哈。噼里啪啦的手感以及好看的外观，干活都持久了。<br>我买的是达尔优的青轴，有人说青轴吵，买茶轴或红轴，我个人推荐青轴。<br>我是手残档，图片拍的不好 凑合看。<br><a id="more"></a><br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1ewvvh38ayjj31kw16ok8b.jpg" alt=""><br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1ewvvhsubjnj31kw16o18n.jpg" alt=""><br><img src="http://ww3.sinaimg.cn/large/0063lLoQgw1ewvvi0ixetj31kw16oh4t.jpg" alt=""></p>
-<p>链接：<a href="http://item.jd.com/1365181.html" target="_blank" rel="external">http://item.jd.com/1365181.html</a></p>
-</span>
+        <span itemprop="articleBody"><p>使用ant打包，我当初也是研究很久才弄出来。我的使用情况：<br>测试环境和生产环境的配置文件不一样，正式环境就是SVN提交的记录，所以不需要改变，测试环境需要把Test文件夹覆盖resource文件夹<br><img src="http://ww1.sinaimg.cn/large/0063lLoQgw1f5e6iobq1lj30br0fl78b.jpg" alt="http://ww1.sinaimg.cn/large/0063lLoQgw1f5e6iobq1lj30br0fl78b.jpg"></p>
+<p>而且ant也需要指定使用buildTest.xml<br><img src="http://ww4.sinaimg.cn/large/0063lLoQgw1f5e6lj39ekj318f09375b.jpg" alt="http://ww4.sinaimg.cn/large/0063lLoQgw1f5e6lj39ekj318f09375b.jpg">.<br>然后我把我的buildTest.xml发出来，仅供参考</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">project</span> <span class="attribute">name</span>=<span class="value">"lepa-b2c"</span> <span class="attribute">default</span>=<span class="value">"warTest"</span> <span class="attribute">basedir</span>=<span class="value">"."</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">environment</span>=<span class="value">"env"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"src"</span> <span class="attribute">value</span>=<span class="value">"${basedir}/src"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"resource"</span> <span class="attribute">value</span>=<span class="value">"${basedir}/resource"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"test"</span> <span class="attribute">value</span>=<span class="value">"${basedir}/Test"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"bin"</span> <span class="attribute">value</span>=<span class="value">"${basedir}/WebContent/WEB-INF/classes"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"build"</span> <span class="attribute">value</span>=<span class="value">"${basedir}/build"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"war"</span> <span class="attribute">value</span>=<span class="value">"${build}/war"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"lib"</span> <span class="attribute">value</span>=<span class="value">"${basedir}/WebContent/WEB-INF/lib"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"captcha"</span> <span class="attribute">value</span>=<span class="value">"${basedir}/src/net/wit/captcha"</span> /&gt;</span>
+
+    <span class="tag">&lt;<span class="title">path</span> <span class="attribute">id</span>=<span class="value">"javaclass.path"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">pathelement</span> <span class="attribute">path</span>=<span class="value">"${env.JAVA_HOME}"</span> /&gt;</span>
+        <span class="tag">&lt;<span class="title">fileset</span> <span class="attribute">dir</span>=<span class="value">"${lib}"</span> <span class="attribute">includes</span>=<span class="value">"*.jar"</span> /&gt;</span>
+    <span class="tag">&lt;/<span class="title">path</span>&gt;</span>
+
+    <span class="tag">&lt;<span class="title">target</span> <span class="attribute">name</span>=<span class="value">"clean"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">echo</span>&gt;</span>clean...<span class="tag">&lt;/<span class="title">echo</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">delete</span> <span class="attribute">dir</span>=<span class="value">"${build}"</span> /&gt;</span>
+    <span class="tag">&lt;/<span class="title">target</span>&gt;</span>
+
+    <span class="tag">&lt;<span class="title">target</span> <span class="attribute">name</span>=<span class="value">"init"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">echo</span>&gt;</span>init...<span class="tag">&lt;/<span class="title">echo</span>&gt;</span>
+
+        <span class="tag">&lt;<span class="title">mkdir</span> <span class="attribute">dir</span>=<span class="value">"${war}"</span> /&gt;</span>
+        <span class="tag">&lt;<span class="title">mkdir</span> <span class="attribute">dir</span>=<span class="value">"${bin}"</span> /&gt;</span>
+    <span class="tag">&lt;/<span class="title">target</span>&gt;</span>
+
+    <span class="comment">&lt;!-- 测试环境编译 --&gt;</span>
+    <span class="tag">&lt;<span class="title">target</span> <span class="attribute">name</span>=<span class="value">"compileTest"</span> <span class="attribute">description</span>=<span class="value">"Compile Test..."</span> <span class="attribute">depends</span>=<span class="value">"init"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">javac</span> <span class="attribute">srcdir</span>=<span class="value">"${resource}"</span> <span class="attribute">destdir</span>=<span class="value">"${bin}"</span>  <span class="attribute">includeantruntime</span>=<span class="value">"on"</span>  <span class="attribute">source</span>=<span class="value">"1.7"</span> <span class="attribute">debug</span>=<span class="value">"true"</span> <span class="attribute">encoding</span>=<span class="value">"UTF-8"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">compilerarg</span> <span class="attribute">line</span>=<span class="value">"-XDignore.symbol.file"</span>/&gt;</span>
+            <span class="tag">&lt;<span class="title">classpath</span> <span class="attribute">refid</span>=<span class="value">"javaclass.path"</span>&gt;</span><span class="tag">&lt;/<span class="title">classpath</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">javac</span>&gt;</span>
+
+        <span class="tag">&lt;<span class="title">javac</span> <span class="attribute">srcdir</span>=<span class="value">"${src}"</span> <span class="attribute">destdir</span>=<span class="value">"${bin}"</span>  <span class="attribute">includeantruntime</span>=<span class="value">"on"</span>  <span class="attribute">source</span>=<span class="value">"1.7"</span> <span class="attribute">debug</span>=<span class="value">"true"</span> <span class="attribute">encoding</span>=<span class="value">"UTF-8"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">compilerarg</span> <span class="attribute">line</span>=<span class="value">"-XDignore.symbol.file"</span>/&gt;</span>
+            <span class="tag">&lt;<span class="title">classpath</span> <span class="attribute">refid</span>=<span class="value">"javaclass.path"</span>&gt;</span><span class="tag">&lt;/<span class="title">classpath</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">javac</span>&gt;</span>
+
+         <span class="tag">&lt;<span class="title">copy</span> <span class="attribute">todir</span>=<span class="value">"${bin}"</span> <span class="attribute">includeemptydirs</span>=<span class="value">"false"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">fileset</span> <span class="attribute">dir</span>=<span class="value">"${resource}"</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">exclude</span> <span class="attribute">name</span>=<span class="value">"**/.svn"</span>/&gt;</span>
+            <span class="tag">&lt;/<span class="title">fileset</span>&gt;</span>
+         <span class="tag">&lt;/<span class="title">copy</span>&gt;</span>
+
+        <span class="tag">&lt;<span class="title">copy</span> <span class="attribute">todir</span>=<span class="value">"${bin}"</span> <span class="attribute">includeemptydirs</span>=<span class="value">"false"</span> <span class="attribute">overwrite</span>=<span class="value">"true"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">fileset</span> <span class="attribute">dir</span>=<span class="value">"${test}"</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">exclude</span> <span class="attribute">name</span>=<span class="value">"**/.svn"</span>/&gt;</span>
+            <span class="tag">&lt;/<span class="title">fileset</span>&gt;</span>
+         <span class="tag">&lt;/<span class="title">copy</span>&gt;</span>
+
+        <span class="tag">&lt;<span class="title">copy</span> <span class="attribute">todir</span>=<span class="value">"${bin}/net/wit/captcha"</span> <span class="attribute">includeemptydirs</span>=<span class="value">"false"</span> <span class="attribute">overwrite</span>=<span class="value">"true"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">fileset</span> <span class="attribute">dir</span>=<span class="value">"${captcha}"</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">exclude</span> <span class="attribute">name</span>=<span class="value">"**/.svn"</span>/&gt;</span>
+            <span class="tag">&lt;/<span class="title">fileset</span>&gt;</span>
+         <span class="tag">&lt;/<span class="title">copy</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">target</span>&gt;</span>
+
+    <span class="comment">&lt;!-- 测试环境打war包 --&gt;</span>
+    <span class="tag">&lt;<span class="title">target</span> <span class="attribute">name</span>=<span class="value">"warTest"</span> <span class="attribute">depends</span>=<span class="value">"clean,init,compileTest"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">copy</span> <span class="attribute">todir</span>=<span class="value">"build/war"</span> <span class="attribute">includeemptydirs</span>=<span class="value">"no"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">fileset</span> <span class="attribute">dir</span>=<span class="value">"WebContent"</span> <span class="attribute">includes</span>=<span class="value">"**/*"</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">fileset</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">copy</span>&gt;</span>
+
+        <span class="tag">&lt;<span class="title">jar</span> <span class="attribute">destfile</span>=<span class="value">"build/ROOT.war"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">fileset</span> <span class="attribute">dir</span>=<span class="value">"build/war"</span> <span class="attribute">includes</span>=<span class="value">"**/*"</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">fileset</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">jar</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">target</span>&gt;</span>
+
+<span class="tag">&lt;/<span class="title">project</span>&gt;</span>
+</code></pre></span>
       
     </div>
 
@@ -236,7 +318,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/机械键盘/" rel="tag">#机械键盘</a>
+            <a href="/tags/jenkins/" rel="tag">#jenkins</a>
           
         </div>
       
@@ -245,13 +327,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/10/12/开发工具/" rel="prev">开发工具</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/09/28/ajaxfileupload图片上传/" rel="next">ajaxfileupload图片上传</a>
+              <a href="/2016/06/20/jenkins-ant-svn持续集成二/" rel="next">jenkins-ant-svn持续集成二</a>
             
           </div>
         </div>
@@ -266,10 +346,10 @@
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2015/10/10/jianpan/"
-     data-title="程序员必备之机械键盘"
+        <div class="ds-share flat" data-thread-key="2016/07/01/jenkins-ant-builder-xml/"
+     data-title="jenkins-ant-build.xml"
      data-content=""
-     data-url="http://blog.chen777.com/2015/10/10/jianpan/">
+     data-url="http://blog.chen777.com/2016/07/01/jenkins-ant-builder-xml/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -299,8 +379,8 @@
         
           <div class="comments" id="comments">
             
-              <div class="ds-thread" data-thread-key="2015/10/10/jianpan/"
-                   data-title="程序员必备之机械键盘" data-url="http://blog.chen777.com/2015/10/10/jianpan/">
+              <div class="ds-thread" data-thread-key="2016/07/01/jenkins-ant-builder-xml/"
+                   data-title="jenkins-ant-build.xml" data-url="http://blog.chen777.com/2016/07/01/jenkins-ant-builder-xml/">
               </div>
             
           </div>
