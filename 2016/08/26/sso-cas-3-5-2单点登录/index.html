@@ -1,0 +1,845 @@
+<!doctype html>
+<html class="theme-next  theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+    <meta name="description" content="学而不思则罔，思而不学则殆" />
+
+
+
+  <meta name="keywords" content="sso," />
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Coding Chain" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/myBlog.ico" />
+
+
+<meta name="description" content="jasig CAS实现单点登录(数据库认证)
+环境要求1. jdk7
+2. tomcat7
+流程图
+官网地址： http://www.jasig.org/cas
+我下载的cas server版本是cas-server-webapp-3.5.3.warclient:cas-client-core-3.2.1
+开始搭建准备2个tomcat7，分别命名为tomcat1,tomcat2，tomcat1放置">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sso-cas-3.5.2单点登录">
+<meta property="og:url" content="http://blog.chen777.com/2016/08/26/sso-cas-3-5-2单点登录/index.html">
+<meta property="og:site_name" content="Coding Chain">
+<meta property="og:description" content="jasig CAS实现单点登录(数据库认证)
+环境要求1. jdk7
+2. tomcat7
+流程图
+官网地址： http://www.jasig.org/cas
+我下载的cas server版本是cas-server-webapp-3.5.3.warclient:cas-client-core-3.2.1
+开始搭建准备2个tomcat7，分别命名为tomcat1,tomcat2，tomcat1放置">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/0063lLoQgw1f776cptn6zg30e708b74b.gif">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/0063lLoQgw1f776y5d6n4g30t60e5wf2.gif">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/0063lLoQgw1f7776nxf1ij30au08emy3.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/0063lLoQgw1f777afejupj30ck0egdhj.jpg">
+<meta property="og:updated_time" content="2016-08-26T08:12:19.870Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="sso-cas-3.5.2单点登录">
+<meta name="twitter:description" content="jasig CAS实现单点登录(数据库认证)
+环境要求1. jdk7
+2. tomcat7
+流程图
+官网地址： http://www.jasig.org/cas
+我下载的cas server版本是cas-server-webapp-3.5.3.warclient:cas-client-core-3.2.1
+开始搭建准备2个tomcat7，分别命名为tomcat1,tomcat2，tomcat1放置">
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'post'
+  };
+</script>
+
+  <title> sso-cas-3.5.2单点登录 | Coding Chain </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand" rel="start">
+      <span class="logo">
+        <i class="icon-next-logo"></i>
+      </span>
+      <span class="site-title">Coding Chain</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <form class="site-search-form">
+    <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+  </form>
+
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'oDjVXLFebsVH9TQC_FsZ','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content"> 
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              sso-cas-3.5.2单点登录
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2016-08-26T15:16:07+08:00" content="2016-08-26">
+            2016-08-26
+          </time>
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2016/08/26/sso-cas-3-5-2单点登录/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/26/sso-cas-3-5-2单点登录/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>jasig CAS实现单点登录(数据库认证)</p>
+<h2 id="环境要求">环境要求</h2><pre><code><span class="number">1.</span> jdk7
+<span class="number">2.</span> tomcat7
+</code></pre><h2 id="流程图">流程图</h2><p><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1f776cptn6zg30e708b74b.gif" alt="http://ww2.sinaimg.cn/large/0063lLoQgw1f776cptn6zg30e708b74b.gif"></p>
+<p>官网地址： <a href="http://www.jasig.org/cas" target="_blank" rel="external">http://www.jasig.org/cas</a></p>
+<p>我下载的cas server版本是<a href="http://pan.baidu.com/s/1hs8sTs4" target="_blank" rel="external">cas-server-webapp-3.5.3.war</a><br>client:<a href="http://pan.baidu.com/s/1skPvpyl" target="_blank" rel="external">cas-client-core-3.2.1</a></p>
+<h2 id="开始搭建">开始搭建</h2><p>准备2个tomcat7，分别命名为tomcat1,tomcat2，tomcat1放置server.</p>
+<ol>
+<li><p>首先在C:\Windows\System32\drivers\etc\hosts 文件中添加<br>127.0.0.1    www.tomcat1.com<br>127.0.0.1    www.tomcat2.com</p>
+</li>
+<li><p>把下载下来的cas-server-webapp-3.5.3.war 部署在tomcat1下面的webapps下，修改war包名称为cas.war</p>
+</li>
+<li>创建证书<br><code>keytool -genkey -alias ssotest -keyalg RSA -keysize 2048 -keystore C:/cas/keys/ssotest.keystore</code><br>导出证书<br><code>keytool -export -file c:/cas/keys/ssotest.crt -alias ssotest -keystore  C:/cas/keys/ssotest.keystore</code><br>客户端JVM导入证书<br><code>keytool -import -keystore &quot;E:\Program Files\Java\jdk1.7.0_17\jre\lib\security\cacerts&quot; -file c:/cas/keys/ssotest.crt -alias ssotest</code><br> 如果提示：<br>keytool error: java.io.IOException: Keystore was tampered with, or password was incorrect<br>那么输入密码：changeit<br>这是因为JDK安装后会默认创建一个密钥库，密码为：changeit<br>也可以删除E:\Program Files\Java\jdk1.7.0_17\jre\lib\security\cacerts 在输入上述命令</li>
+<li>让tomcat使用证书<br>打开tomcat目录的conf/server.xml文件，8443端处，并设置keystoreFile、keystorePass修改结果如下：</li>
+</ol>
+<p><code>&lt;Connector port=&quot;8443&quot; protocol=&quot;org.apache.coyote.http11.Http11Protocol&quot;  
+               maxThreads=&quot;150&quot; SSLEnabled=&quot;true&quot; scheme=&quot;https&quot; secure=&quot;true&quot;  
+               clientAuth=&quot;false&quot; sslProtocol=&quot;TLS&quot;   
+        keystoreFile=&quot;c:/cas/keys/ssotest.keystore&quot;    
+            keystorePass=&quot;123456&quot; /&gt;</code></p>
+<p>启动tomcat，这时进入<a href="https://www.tomcat1.com:8443/cas/" target="_blank" rel="external">https://www.tomcat1.com:8443/cas/</a>, 见下图，则服务端已经配置ok：<br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1f776y5d6n4g30t60e5wf2.gif" alt="http://ww2.sinaimg.cn/large/0063lLoQgw1f776y5d6n4g30t60e5wf2.gif">  </p>
+<p>这时输入用户名及密码(保持一样就可以，默认CAS验证方式只要用户名密码一样就行), 可见其默认验证实现类SimpleTestUsernamePasswordAuthenticationHandler：</p>
+<pre><code>    public <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleTestUsernamePasswordAuthenticationHandler</span> <span class="keyword"><span class="keyword">extends</span></span>
+</span>    <span class="type">AbstractUsernamePasswordAuthenticationHandler</span> {
+
+    public boolean authenticateUsernamePasswordInternal(<span class="keyword">final</span> <span class="type">UsernamePasswordCredentials</span> credentials) {
+        <span class="keyword">final</span> <span class="type">String</span> username = credentials.getUsername();
+        <span class="keyword">final</span> <span class="type">String</span> password = credentials.getPassword();
+
+        <span class="keyword">if</span> (<span class="type">StringUtils</span>.hasText(username) &amp;&amp; <span class="type">StringUtils</span>.hasText(password)
+            &amp;&amp; username.equals(getPasswordEncoder().encode(password))) {<span class="comment">//用户名及密码相同就成功</span>
+            <span class="keyword">return</span> <span class="literal">true</span>;
+        }
+        <span class="keyword">return</span> <span class="literal">false</span>;
+    }
+}
+</code></pre><p>这样CAS服务端就默认配置完毕了，待会儿我们还要配置数据库验证。</p><p style="color:red;">*cas4.0后默认的密码验证不是简单的相同了。在配置文件里， 默认是 casuser：Mellon</p><p></p>
+<h2 id="cas客户端">cas客户端</h2><ol>
+<li>新建WEB项目cas-web-client, 并加入依赖包：cas-client-core-3.2.1.jar，commons-logging-1.1.jar</li>
+<li><p>配置web.xml(一台电脑启动2个tomcat肯定会端口冲突，这个自行修改端口就好):</p>
+<p>   &lt;?xml version=”1.0” encoding=”UTF-8”?&gt;</p>
+<pre><code><span class="tag">&lt;<span class="title">web-app</span> <span class="attribute">xmlns:xsi</span>=<span class="value">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="attribute">xmlns</span>=<span class="value">"http://java.sun.com/xml/ns/javaee"</span> <span class="attribute">xsi:schemaLocation</span>=<span class="value">"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span> <span class="attribute">id</span>=<span class="value">"WebApp_ID"</span> <span class="attribute">version</span>=<span class="value">"2.5"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">display-name</span>&gt;</span>cas-web-client<span class="tag">&lt;/<span class="title">display-name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">listener</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">listener-class</span>&gt;</span>
+            org.jasig.cas.client.session.SingleSignOutHttpSessionListener
+        <span class="tag">&lt;/<span class="title">listener-class</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">listener</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>CasSingleSignOutFilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-class</span>&gt;</span>org.jasig.cas.client.session.SingleSignOutFilter<span class="tag">&lt;/<span class="title">filter-class</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">filter</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter-mapping</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>CasSingleSignOutFilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">filter-mapping</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter</span>&gt;</span>
+       <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>CASFilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+       <span class="tag">&lt;<span class="title">filter-class</span>&gt;</span>org.jasig.cas.client.authentication.AuthenticationFilter<span class="tag">&lt;/<span class="title">filter-class</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">init-param</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">param-name</span>&gt;</span>casServerLoginUrl<span class="tag">&lt;/<span class="title">param-name</span>&gt;</span><span class="comment">&lt;!-- Cas Server登录url--&gt;</span>
+            <span class="tag">&lt;<span class="title">param-value</span>&gt;</span>https://www.tomcat1.com:8443/cas/login<span class="tag">&lt;/<span class="title">param-value</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">init-param</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">init-param</span>&gt;</span><span class="comment">&lt;!-- 配置当前web应用所在的web服务器域名url --&gt;</span>
+            <span class="tag">&lt;<span class="title">param-name</span>&gt;</span>serverName<span class="tag">&lt;/<span class="title">param-name</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">param-value</span>&gt;</span>http://www.tomcat2.com:8081<span class="tag">&lt;/<span class="title">param-value</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">init-param</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">filter</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter-mapping</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>CASFilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">filter-mapping</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>CasTicketFilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-class</span>&gt;</span>
+            org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter<span class="tag">&lt;/<span class="title">filter-class</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">init-param</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">param-name</span>&gt;</span>casServerUrlPrefix<span class="tag">&lt;/<span class="title">param-name</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">param-value</span>&gt;</span>https://www.tomcat1.com:8443/cas<span class="tag">&lt;/<span class="title">param-value</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">init-param</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">init-param</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">param-name</span>&gt;</span>serverName<span class="tag">&lt;/<span class="title">param-name</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">param-value</span>&gt;</span>http://www.tomcat2.com:8081<span class="tag">&lt;/<span class="title">param-value</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">init-param</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">filter</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter-mapping</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>CasTicketFilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">filter-mapping</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>CasRequestWrapFilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-class</span>&gt;</span>
+            org.jasig.cas.client.util.HttpServletRequestWrapperFilter<span class="tag">&lt;/<span class="title">filter-class</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">filter</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter-mapping</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>CasRequestWrapFilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">filter-mapping</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>AssertionThreadLocalFilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-class</span>&gt;</span>org.jasig.cas.client.util.AssertionThreadLocalFilter<span class="tag">&lt;/<span class="title">filter-class</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">filter</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter-mapping</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>AssertionThreadLocalFilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">filter-mapping</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">welcome-file-list</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">welcome-file</span>&gt;</span>index.jsp<span class="tag">&lt;/<span class="title">welcome-file</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">welcome-file-list</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">web-app</span>&gt;</span>
+</code></pre></li>
+</ol>
+<p>这样cas-web-client就完成了，拷贝一份为另一个web客户端cas-web-client2：<br><img src="http://ww4.sinaimg.cn/large/0063lLoQgw1f7776nxf1ij30au08emy3.jpg" alt="http://ww4.sinaimg.cn/large/0063lLoQgw1f7776nxf1ij30au08emy3.jpg"><br>启动Cas Server所在tomcat(Tomcat1)，再启动web客户端所在tomcat(Tomcat2)，此时我们访问两个web客户端：</p>
+<p><a href="http://www.tomcat2.com:8081/cas-web-client/index.jsp" target="_blank" rel="external">http://www.tomcat2.com:8081/cas-web-client/index.jsp</a></p>
+<p><a href="http://www.tomcat2.com:8081/cas-web-client2/index.jsp" target="_blank" rel="external">http://www.tomcat2.com:8081/cas-web-client2/index.jsp</a></p>
+<p>都会被重定想到CAS Server登录界面，登录成功其中之一(将看到对应的index.jsp)，再刷新另一个(也能看到对应的index.jsp了，因为已经登录过了), 这就算服务端和客户端都配置OK了。</p>
+<h2 id="基于数据库验证">基于数据库验证</h2><ol>
+<li><p>新建WEB项目cas-auth-server，你需要将cas-server-webapp-3.5.2.war中的资源对应拷贝到项目中，再把下载包中cas-server-webapp的源码考到项目中，由于基于数据库验证，还得将cas-server-support-jdbc-3.5.2.jar、commons-dbcp2-2.1.1.jar、commons-pool2-2.4.2.jar、mysql-connector驱动包拷贝到WEB-INF/lib目录下，这样就构成了纯净的cas server项目，当然你也可以通过maven去构建，官网也有说明。<br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1f777afejupj30ck0egdhj.jpg" alt="http://ww2.sinaimg.cn/large/0063lLoQgw1f777afejupj30ck0egdhj.jpg"></p>
+</li>
+<li><p>我们要做的是修改一些配置，就是WEB-INF/deployerConfigContext.xml文件，先配置mysql数据源：</p>
+</li>
+</ol>
+<pre><code>&lt;bean <span class="property">id</span>=<span class="string">"mysqlDataSource"</span> <span class="type">class</span>=<span class="string">"org.apache.commons.dbcp2.BasicDataSource"</span>&gt;
+     &lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"driverClassName"</span> value=<span class="string">"com.mysql.jdbc.Driver"</span> /&gt;
+     &lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"url"</span> value=<span class="string">"jdbc:mysql://127.0.0.1:3306/dubbo_dev?useUnicode=true&amp;amp;characterEncoding=utf-8"</span>/&gt;
+     &lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"username"</span> value=<span class="string">"root"</span> /&gt;
+     &lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"password"</span> value=<span class="string">"root"</span> /&gt;
+&lt;/bean&gt;
+</code></pre><p>3.修改 authenticationManager bean的属性 authenticationHandlers：</p>
+<pre><code><span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"authenticationHandlers"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">list</span>&gt;</span>                
+        <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">class</span>=<span class="value">"org.jasig.cas.authentication.handler.support.HttpBasedServiceCredentialsAuthenticationHandler"</span> <span class="attribute">p:httpClient-ref</span>=<span class="value">"httpClient"</span> /&gt;</span>
+        <span class="comment">&lt;!--注释掉默认的的认证实现&lt;bean 
+        class="org.jasig.cas.authentication.handler.support.SimpleTestUsernamePasswordAuthenticationHandler" /&gt;--&gt;</span>
+        <span class="comment">&lt;!-- 数据库查询认证处理器 --&gt;</span>
+        <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">class</span>=<span class="value">"org.jasig.cas.adaptors.jdbc.QueryDatabaseAuthenticationHandler"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"dataSource"</span> <span class="attribute">ref</span>=<span class="value">"mysqlDataSource"</span>/&gt;</span>
+            <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"sql"</span> 
+                <span class="attribute">value</span>=<span class="value">"select password from user where username = ?"</span> /&gt;</span>
+    <span class="tag">&lt;/<span class="title">bean</span>&gt;</span>            
+    <span class="tag">&lt;/<span class="title">list</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+</code></pre><p>项目地址：<a href="http://pan.baidu.com/s/1i5e4GpZ" target="_blank" rel="external">cas-auth-server</a></p>
+<p>引用链接：<a href="http://my.oschina.net/indestiny/blog/200768" target="_blank" rel="external">http://my.oschina.net/indestiny/blog/200768</a></p>
+<p>我写这篇文章第一是备忘，第二是博客的文章有很多问题我集中整理之后重新写一遍。</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/sso/" rel="tag">#sso</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/01/jenkins-ant-builder-xml/" rel="next">jenkins-ant-build.xml</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/08/26/sso-cas-3-5-2单点登录/"
+     data-title="sso-cas-3.5.2单点登录"
+     data-content=""
+     data-url="http://blog.chen777.com/2016/08/26/sso-cas-3-5-2单点登录/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+ </div>
+
+        
+            <!-- 多说热评文章-->
+            <p>热评文章</p>
+            <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+        
+
+        
+          <div class="comments" id="comments">
+            
+              <div class="ds-thread" data-thread-key="2016/08/26/sso-cas-3-5-2单点登录/"
+                   data-title="sso-cas-3.5.2单点登录" data-url="http://blog.chen777.com/2016/08/26/sso-cas-3-5-2单点登录/">
+              </div>
+            
+          </div>
+        
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Xixi Chain" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Xixi Chain</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">学而不思则罔，思而不学则殆</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">29</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/javaChain/javaChain.github.io" target="_blank">GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5546313096/profile?topnav=1&wvr=6" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/u/1242040" target="_blank">OsChina</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境要求"><span class="nav-number">1.</span> <span class="nav-text">环境要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程图"><span class="nav-number">2.</span> <span class="nav-text">流程图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开始搭建"><span class="nav-number">3.</span> <span class="nav-text">开始搭建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cas客户端"><span class="nav-number">4.</span> <span class="nav-text">cas客户端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于数据库验证"><span class="nav-number">5.</span> <span class="nav-text">基于数据库验证</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner"> <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; &nbsp;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xixi Chain</span>
+	 <span id="busuanzi_container_site_pv" style='display:none'>
+		本站总访问量<span id="busuanzi_value_site_pv"></span>次
+	</span>
+	<span id="busuanzi_container_site_uv">
+	  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+	</span>
+</div>
+
+
+ </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"chainxixi"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+     
+  	<script src="/js/ua-parser.min.js"></script>
+  	<script src="/js/hook-duoshuo.js"></script>
+  
+
+    
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/js/motion_fallback.js?v=0.4.5.1" id="motion.fallback"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 0.4 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    var $tocContent = $('.post-toc-content');
+    if (isDesktop() && CONFIG.sidebar === 'post') {
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+        displaySidebar();
+      }
+    }
+  });
+</script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn"
+      });
+    });
+  </script>
+</body>
+</html>

@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2016-07-01T02:10:45.335Z</updated>
+  <updated>2016-08-26T08:12:19.870Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -13,6 +13,169 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[sso-cas-3.5.2单点登录]]></title>
+    <link href="http://blog.chen777.com/2016/08/26/sso-cas-3-5-2%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95/"/>
+    <id>http://blog.chen777.com/2016/08/26/sso-cas-3-5-2单点登录/</id>
+    <published>2016-08-26T07:16:07.000Z</published>
+    <updated>2016-08-26T08:12:19.870Z</updated>
+    <content type="html"><![CDATA[<p>jasig CAS实现单点登录(数据库认证)</p>
+<h2 id="环境要求">环境要求</h2><pre><code><span class="number">1.</span> jdk7
+<span class="number">2.</span> tomcat7
+</code></pre><h2 id="流程图">流程图</h2><p><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1f776cptn6zg30e708b74b.gif" alt="http://ww2.sinaimg.cn/large/0063lLoQgw1f776cptn6zg30e708b74b.gif"></p>
+<p>官网地址： <a href="http://www.jasig.org/cas" target="_blank" rel="external">http://www.jasig.org/cas</a></p>
+<p>我下载的cas server版本是<a href="http://pan.baidu.com/s/1hs8sTs4" target="_blank" rel="external">cas-server-webapp-3.5.3.war</a><br>client:<a href="http://pan.baidu.com/s/1skPvpyl" target="_blank" rel="external">cas-client-core-3.2.1</a></p>
+<h2 id="开始搭建">开始搭建</h2><p>准备2个tomcat7，分别命名为tomcat1,tomcat2，tomcat1放置server.</p>
+<ol>
+<li><p>首先在C:\Windows\System32\drivers\etc\hosts 文件中添加<br>127.0.0.1    www.tomcat1.com<br>127.0.0.1    www.tomcat2.com</p>
+</li>
+<li><p>把下载下来的cas-server-webapp-3.5.3.war 部署在tomcat1下面的webapps下，修改war包名称为cas.war</p>
+</li>
+<li>创建证书<br><code>keytool -genkey -alias ssotest -keyalg RSA -keysize 2048 -keystore C:/cas/keys/ssotest.keystore</code><br>导出证书<br><code>keytool -export -file c:/cas/keys/ssotest.crt -alias ssotest -keystore  C:/cas/keys/ssotest.keystore</code><br>客户端JVM导入证书<br><code>keytool -import -keystore &quot;E:\Program Files\Java\jdk1.7.0_17\jre\lib\security\cacerts&quot; -file c:/cas/keys/ssotest.crt -alias ssotest</code><br> 如果提示：<br>keytool error: java.io.IOException: Keystore was tampered with, or password was incorrect<br>那么输入密码：changeit<br>这是因为JDK安装后会默认创建一个密钥库，密码为：changeit<br>也可以删除E:\Program Files\Java\jdk1.7.0_17\jre\lib\security\cacerts 在输入上述命令</li>
+<li>让tomcat使用证书<br>打开tomcat目录的conf/server.xml文件，8443端处，并设置keystoreFile、keystorePass修改结果如下：</li>
+</ol>
+<p><code>&lt;Connector port=&quot;8443&quot; protocol=&quot;org.apache.coyote.http11.Http11Protocol&quot;  
+               maxThreads=&quot;150&quot; SSLEnabled=&quot;true&quot; scheme=&quot;https&quot; secure=&quot;true&quot;  
+               clientAuth=&quot;false&quot; sslProtocol=&quot;TLS&quot;   
+        keystoreFile=&quot;c:/cas/keys/ssotest.keystore&quot;    
+            keystorePass=&quot;123456&quot; /&gt;</code></p>
+<p>启动tomcat，这时进入<a href="https://www.tomcat1.com:8443/cas/" target="_blank" rel="external">https://www.tomcat1.com:8443/cas/</a>, 见下图，则服务端已经配置ok：<br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1f776y5d6n4g30t60e5wf2.gif" alt="http://ww2.sinaimg.cn/large/0063lLoQgw1f776y5d6n4g30t60e5wf2.gif">  </p>
+<p>这时输入用户名及密码(保持一样就可以，默认CAS验证方式只要用户名密码一样就行), 可见其默认验证实现类SimpleTestUsernamePasswordAuthenticationHandler：</p>
+<pre><code>    public <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleTestUsernamePasswordAuthenticationHandler</span> <span class="keyword"><span class="keyword">extends</span></span>
+</span>    <span class="type">AbstractUsernamePasswordAuthenticationHandler</span> {
+
+    public boolean authenticateUsernamePasswordInternal(<span class="keyword">final</span> <span class="type">UsernamePasswordCredentials</span> credentials) {
+        <span class="keyword">final</span> <span class="type">String</span> username = credentials.getUsername();
+        <span class="keyword">final</span> <span class="type">String</span> password = credentials.getPassword();
+
+        <span class="keyword">if</span> (<span class="type">StringUtils</span>.hasText(username) &amp;&amp; <span class="type">StringUtils</span>.hasText(password)
+            &amp;&amp; username.equals(getPasswordEncoder().encode(password))) {<span class="comment">//用户名及密码相同就成功</span>
+            <span class="keyword">return</span> <span class="literal">true</span>;
+        }
+        <span class="keyword">return</span> <span class="literal">false</span>;
+    }
+}
+</code></pre><p>这样CAS服务端就默认配置完毕了，待会儿我们还要配置数据库验证。</p><p style="color:red;">*cas4.0后默认的密码验证不是简单的相同了。在配置文件里， 默认是 casuser：Mellon</p><p></p>
+<h2 id="cas客户端">cas客户端</h2><ol>
+<li>新建WEB项目cas-web-client, 并加入依赖包：cas-client-core-3.2.1.jar，commons-logging-1.1.jar</li>
+<li><p>配置web.xml(一台电脑启动2个tomcat肯定会端口冲突，这个自行修改端口就好):</p>
+<p>   &lt;?xml version=”1.0” encoding=”UTF-8”?&gt;</p>
+<pre><code><span class="tag">&lt;<span class="title">web-app</span> <span class="attribute">xmlns:xsi</span>=<span class="value">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="attribute">xmlns</span>=<span class="value">"http://java.sun.com/xml/ns/javaee"</span> <span class="attribute">xsi:schemaLocation</span>=<span class="value">"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span> <span class="attribute">id</span>=<span class="value">"WebApp_ID"</span> <span class="attribute">version</span>=<span class="value">"2.5"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">display-name</span>&gt;</span>cas-web-client<span class="tag">&lt;/<span class="title">display-name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">listener</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">listener-class</span>&gt;</span>
+            org.jasig.cas.client.session.SingleSignOutHttpSessionListener
+        <span class="tag">&lt;/<span class="title">listener-class</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">listener</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>CasSingleSignOutFilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-class</span>&gt;</span>org.jasig.cas.client.session.SingleSignOutFilter<span class="tag">&lt;/<span class="title">filter-class</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">filter</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter-mapping</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>CasSingleSignOutFilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">filter-mapping</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter</span>&gt;</span>
+       <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>CASFilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+       <span class="tag">&lt;<span class="title">filter-class</span>&gt;</span>org.jasig.cas.client.authentication.AuthenticationFilter<span class="tag">&lt;/<span class="title">filter-class</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">init-param</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">param-name</span>&gt;</span>casServerLoginUrl<span class="tag">&lt;/<span class="title">param-name</span>&gt;</span><span class="comment">&lt;!-- Cas Server登录url--&gt;</span>
+            <span class="tag">&lt;<span class="title">param-value</span>&gt;</span>https://www.tomcat1.com:8443/cas/login<span class="tag">&lt;/<span class="title">param-value</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">init-param</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">init-param</span>&gt;</span><span class="comment">&lt;!-- 配置当前web应用所在的web服务器域名url --&gt;</span>
+            <span class="tag">&lt;<span class="title">param-name</span>&gt;</span>serverName<span class="tag">&lt;/<span class="title">param-name</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">param-value</span>&gt;</span>http://www.tomcat2.com:8081<span class="tag">&lt;/<span class="title">param-value</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">init-param</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">filter</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter-mapping</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>CASFilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">filter-mapping</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>CasTicketFilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-class</span>&gt;</span>
+            org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter<span class="tag">&lt;/<span class="title">filter-class</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">init-param</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">param-name</span>&gt;</span>casServerUrlPrefix<span class="tag">&lt;/<span class="title">param-name</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">param-value</span>&gt;</span>https://www.tomcat1.com:8443/cas<span class="tag">&lt;/<span class="title">param-value</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">init-param</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">init-param</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">param-name</span>&gt;</span>serverName<span class="tag">&lt;/<span class="title">param-name</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">param-value</span>&gt;</span>http://www.tomcat2.com:8081<span class="tag">&lt;/<span class="title">param-value</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">init-param</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">filter</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter-mapping</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>CasTicketFilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">filter-mapping</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>CasRequestWrapFilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-class</span>&gt;</span>
+            org.jasig.cas.client.util.HttpServletRequestWrapperFilter<span class="tag">&lt;/<span class="title">filter-class</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">filter</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter-mapping</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>CasRequestWrapFilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">filter-mapping</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>AssertionThreadLocalFilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-class</span>&gt;</span>org.jasig.cas.client.util.AssertionThreadLocalFilter<span class="tag">&lt;/<span class="title">filter-class</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">filter</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter-mapping</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>AssertionThreadLocalFilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">filter-mapping</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">welcome-file-list</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">welcome-file</span>&gt;</span>index.jsp<span class="tag">&lt;/<span class="title">welcome-file</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">welcome-file-list</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">web-app</span>&gt;</span>
+</code></pre></li>
+</ol>
+<p>这样cas-web-client就完成了，拷贝一份为另一个web客户端cas-web-client2：<br><img src="http://ww4.sinaimg.cn/large/0063lLoQgw1f7776nxf1ij30au08emy3.jpg" alt="http://ww4.sinaimg.cn/large/0063lLoQgw1f7776nxf1ij30au08emy3.jpg"><br>启动Cas Server所在tomcat(Tomcat1)，再启动web客户端所在tomcat(Tomcat2)，此时我们访问两个web客户端：</p>
+<p><a href="http://www.tomcat2.com:8081/cas-web-client/index.jsp" target="_blank" rel="external">http://www.tomcat2.com:8081/cas-web-client/index.jsp</a></p>
+<p><a href="http://www.tomcat2.com:8081/cas-web-client2/index.jsp" target="_blank" rel="external">http://www.tomcat2.com:8081/cas-web-client2/index.jsp</a></p>
+<p>都会被重定想到CAS Server登录界面，登录成功其中之一(将看到对应的index.jsp)，再刷新另一个(也能看到对应的index.jsp了，因为已经登录过了), 这就算服务端和客户端都配置OK了。</p>
+<h2 id="基于数据库验证">基于数据库验证</h2><ol>
+<li><p>新建WEB项目cas-auth-server，你需要将cas-server-webapp-3.5.2.war中的资源对应拷贝到项目中，再把下载包中cas-server-webapp的源码考到项目中，由于基于数据库验证，还得将cas-server-support-jdbc-3.5.2.jar、commons-dbcp2-2.1.1.jar、commons-pool2-2.4.2.jar、mysql-connector驱动包拷贝到WEB-INF/lib目录下，这样就构成了纯净的cas server项目，当然你也可以通过maven去构建，官网也有说明。<br><img src="http://ww2.sinaimg.cn/large/0063lLoQgw1f777afejupj30ck0egdhj.jpg" alt="http://ww2.sinaimg.cn/large/0063lLoQgw1f777afejupj30ck0egdhj.jpg"></p>
+</li>
+<li><p>我们要做的是修改一些配置，就是WEB-INF/deployerConfigContext.xml文件，先配置mysql数据源：</p>
+</li>
+</ol>
+<pre><code>&lt;bean <span class="property">id</span>=<span class="string">"mysqlDataSource"</span> <span class="type">class</span>=<span class="string">"org.apache.commons.dbcp2.BasicDataSource"</span>&gt;
+     &lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"driverClassName"</span> value=<span class="string">"com.mysql.jdbc.Driver"</span> /&gt;
+     &lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"url"</span> value=<span class="string">"jdbc:mysql://127.0.0.1:3306/dubbo_dev?useUnicode=true&amp;amp;characterEncoding=utf-8"</span>/&gt;
+     &lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"username"</span> value=<span class="string">"root"</span> /&gt;
+     &lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"password"</span> value=<span class="string">"root"</span> /&gt;
+&lt;/bean&gt;
+</code></pre><p>3.修改 authenticationManager bean的属性 authenticationHandlers：</p>
+<pre><code><span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"authenticationHandlers"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">list</span>&gt;</span>                
+        <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">class</span>=<span class="value">"org.jasig.cas.authentication.handler.support.HttpBasedServiceCredentialsAuthenticationHandler"</span> <span class="attribute">p:httpClient-ref</span>=<span class="value">"httpClient"</span> /&gt;</span>
+        <span class="comment">&lt;!--注释掉默认的的认证实现&lt;bean 
+        class="org.jasig.cas.authentication.handler.support.SimpleTestUsernamePasswordAuthenticationHandler" /&gt;--&gt;</span>
+        <span class="comment">&lt;!-- 数据库查询认证处理器 --&gt;</span>
+        <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">class</span>=<span class="value">"org.jasig.cas.adaptors.jdbc.QueryDatabaseAuthenticationHandler"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"dataSource"</span> <span class="attribute">ref</span>=<span class="value">"mysqlDataSource"</span>/&gt;</span>
+            <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"sql"</span> 
+                <span class="attribute">value</span>=<span class="value">"select password from user where username = ?"</span> /&gt;</span>
+    <span class="tag">&lt;/<span class="title">bean</span>&gt;</span>            
+    <span class="tag">&lt;/<span class="title">list</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+</code></pre><p>项目地址：<a href="http://pan.baidu.com/s/1i5e4GpZ" target="_blank" rel="external">cas-auth-server</a></p>
+<p>引用链接：<a href="http://my.oschina.net/indestiny/blog/200768" target="_blank" rel="external">http://my.oschina.net/indestiny/blog/200768</a></p>
+<p>我写这篇文章第一是备忘，第二是博客的文章有很多问题我集中整理之后重新写一遍。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>jasig CAS实现单点登录(数据库认证)</p>
+<h2 id="环境要求">环境要求</h2><pre><code><span class="number">1.</span> jdk7
+<span class="number">2.</span> tomcat7
+<]]>
+    </summary>
+    
+      <category term="sso" scheme="http://blog.chen777.com/tags/sso/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[jenkins-ant-build.xml]]></title>
@@ -2196,250 +2359,6 @@ $(<span class="string">'#submitForm'</span>).click(<span class="function"><span 
     </summary>
     
       <category term="xheditor" scheme="http://blog.chen777.com/tags/xheditor/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Java与C#AES加密解密]]></title>
-    <link href="http://blog.chen777.com/2015/10/13/Java%E4%B8%8EC-AES%E5%8A%A0%E5%AF%86%E8%A7%A3%E5%AF%86/"/>
-    <id>http://blog.chen777.com/2015/10/13/Java与C-AES加密解密/</id>
-    <published>2015-10-13T02:54:08.000Z</published>
-    <updated>2015-10-14T08:20:54.008Z</updated>
-    <content type="html"><![CDATA[<p>Java与C#AES加密解密，曾经做过特此留下来备份.<br><a id="more"></a></p>
-<p><em>C#</em></p>
-<pre><code><span class="preprocessor">#<span class="keyword">region</span> AES加解密  </span>
-   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span>  </span>
-   <span class="comment"><span class="xmlDocTag">///</span>AES加密（加密步骤）  </span>
-   <span class="comment"><span class="xmlDocTag">///</span>1，加密字符串得到2进制数组；  </span>
-   <span class="comment"><span class="xmlDocTag">///</span>2，将2禁止数组转为16进制；  </span>
-   <span class="comment"><span class="xmlDocTag">///</span>3，进行base64编码  </span>
-   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span>  </span>
-   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;param name="toEncrypt"&gt;</span>要加密的字符串<span class="xmlDocTag">&lt;/param&gt;</span>  </span>
-   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;param name="key"&gt;</span>密钥<span class="xmlDocTag">&lt;/param&gt;</span>  </span>
-   <span class="function"><span class="keyword">public</span> String <span class="title">Encrypt</span>(<span class="params">String toEncrypt, String key</span>)   
-   </span>{  
-       Byte[] _Key = Encoding.ASCII.GetBytes(key);  
-       Byte[] _Source = Encoding.UTF8.GetBytes(toEncrypt);  
-
-       Aes aes = Aes.Create(<span class="string">"AES"</span>);  
-       aes.Mode = CipherMode.ECB;  
-       aes.Padding = PaddingMode.PKCS7;  
-       aes.Key = _Key;  
-       ICryptoTransform cTransform = aes.CreateEncryptor();  
-       Byte[] cryptData = cTransform.TransformFinalBlock(_Source, <span class="number">0</span>, _Source.Length);  
-       String HexCryptString = Hex_2To16(cryptData);  
-       Byte[] HexCryptData = Encoding.UTF8.GetBytes(HexCryptString);  
-       String CryptString =Convert.ToBase64String(HexCryptData);  
-       <span class="keyword">return</span> CryptString;  
-   }  
-
-   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span>  </span>
-   <span class="comment"><span class="xmlDocTag">///</span> AES解密（解密步骤）  </span>
-   <span class="comment"><span class="xmlDocTag">///</span> 1，将BASE64字符串转为16进制数组  </span>
-   <span class="comment"><span class="xmlDocTag">///</span> 2，将16进制数组转为字符串  </span>
-   <span class="comment"><span class="xmlDocTag">///</span> 3，将字符串转为2进制数据  </span>
-   <span class="comment"><span class="xmlDocTag">///</span> 4，用AES解密数据  </span>
-   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span>  </span>
-   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;param name="encryptedSource"&gt;</span>已加密的内容<span class="xmlDocTag">&lt;/param&gt;</span>  </span>
-   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;param name="key"&gt;</span>密钥<span class="xmlDocTag">&lt;/param&gt;</span>  </span>
-   <span class="function"><span class="keyword">public</span> String <span class="title">Decrypt</span>(<span class="params"><span class="keyword">string</span> encryptedSource, <span class="keyword">string</span> key</span>)  
-   </span>{  
-       Byte[] _Key = Encoding.ASCII.GetBytes(key);  
-       Aes aes = Aes.Create(<span class="string">"AES"</span>);  
-       aes.Mode = CipherMode.ECB;  
-       aes.Padding = PaddingMode.PKCS7;  
-       aes.Key = _Key;  
-       ICryptoTransform cTransform = aes.CreateDecryptor();  
-
-       Byte[] encryptedData = Convert.FromBase64String(encryptedSource);  
-       String encryptedString = Encoding.UTF8.GetString(encryptedData);  
-       Byte[] _Source = Hex_16To2(encryptedString);  
-       Byte[] originalSrouceData = cTransform.TransformFinalBlock(_Source, <span class="number">0</span>, _Source.Length);  
-       String originalString = Encoding.UTF8.GetString(originalSrouceData);  
-       <span class="keyword">return</span> originalString;  
-   }  
-
-   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span>  </span>
-   <span class="comment"><span class="xmlDocTag">///</span> 2进制转16进制  </span>
-   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span>  </span>
-   <span class="function">String <span class="title">Hex_2To16</span>(<span class="params">Byte[] bytes</span>)  
-   </span>{  
-       String hexString = String.Empty;  
-       Int32 iLength = <span class="number">65535</span>;  
-       <span class="keyword">if</span> (bytes != <span class="keyword">null</span>)  
-       {  
-           StringBuilder strB = <span class="keyword">new</span> StringBuilder();  
-
-           <span class="keyword">if</span> (bytes.Length &lt; iLength)  
-           {  
-               iLength = bytes.Length;  
-           }  
-
-           <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; iLength; i++)  
-           {  
-               strB.Append(bytes[i].ToString(<span class="string">"X2"</span>));  
-           }  
-           hexString = strB.ToString();  
-       }  
-       <span class="keyword">return</span> hexString;  
-   }  
-
-   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span>  </span>
-   <span class="comment"><span class="xmlDocTag">///</span> 16进制转2进制  </span>
-   <span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span>  </span>
-   Byte[] Hex_16To2(String hexString)  
-   {  
-       <span class="keyword">if</span> ((hexString.Length % <span class="number">2</span>) != <span class="number">0</span>)  
-       {  
-           hexString += <span class="string">" "</span>;  
-       }  
-       Byte[] returnBytes = <span class="keyword">new</span> Byte[hexString.Length / <span class="number">2</span>];  
-       <span class="keyword">for</span> (Int32 i = <span class="number">0</span>; i &lt; returnBytes.Length; i++)  
-       {  
-           returnBytes[i] = Convert.ToByte(hexString.Substring(i * <span class="number">2</span>, <span class="number">2</span>), <span class="number">16</span>);  
-       }  
-       <span class="keyword">return</span> returnBytes;  
-   }  
-   <span class="preprocessor">#<span class="keyword">endregion</span>  </span>
-</code></pre><p><em>java</em></p>
-<pre><code><span class="keyword">package</span> com.palic.pss.afcs.worldthrough.common.util;
-
-<span class="keyword">import</span> javax.crypto.Cipher;
-<span class="keyword">import</span> javax.crypto.spec.SecretKeySpec;
-
-<span class="keyword">import</span> repack.com.thoughtworks.xstream.core.util.Base64Encoder;
-<span class="comment">/**
- * AES加密解密
- * @author
- *
- */</span>
-<span class="keyword">public</span> class AesUtils {
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">String</span> cKey= <span class="string">"assistant7654321"</span>;
-      <span class="comment">/** 
-     * 加密--把加密后的byte数组先进行二进制转16进制在进行base64编码 
-     * @param sSrc 
-     * @param sKey 
-     * @return 
-     * @throws Exception 
-     */</span>  
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">String</span> encrypt(<span class="keyword">String</span> sSrc, <span class="keyword">String</span> sKey) <span class="keyword">throws</span> Exception {  
-        <span class="keyword">if</span> (sKey == <span class="keyword">null</span>) {  
-            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Argument sKey is null."</span>);  
-        }  
-        <span class="keyword">if</span> (sKey.length() != <span class="number">16</span>) {  
-            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(  
-                    <span class="string">"Argument sKey'length is not 16."</span>);  
-        }  
-        <span class="built_in">byte</span>[] raw = sKey.getBytes(<span class="string">"ASCII"</span>);  
-        SecretKeySpec skeySpec = <span class="keyword">new</span> SecretKeySpec(raw, <span class="string">"AES"</span>);  
-
-        Cipher cipher = Cipher.getInstance(<span class="string">"AES"</span>);  
-        cipher.init(Cipher.ENCRYPT_MODE, skeySpec);  
-
-        <span class="built_in">byte</span>[] encrypted = cipher.doFinal(sSrc.getBytes(<span class="string">"UTF-8"</span>));  
-        <span class="keyword">String</span> tempStr = parseByte2HexStr(encrypted);  
-
-        Base64Encoder encoder = <span class="keyword">new</span> Base64Encoder();  
-        <span class="keyword">return</span> encoder.encode(tempStr.getBytes(<span class="string">"UTF-8"</span>));  
-    }  
-
-    <span class="comment">/** 
-     *解密--先 进行base64解码，在进行16进制转为2进制然后再解码 
-     * @param sSrc 
-     * @param sKey 
-     * @return 
-     * @throws Exception 
-     */</span>  
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">String</span> decrypt(<span class="keyword">String</span> sSrc, <span class="keyword">String</span> sKey) <span class="keyword">throws</span> Exception {  
-
-        <span class="keyword">if</span> (sKey == <span class="keyword">null</span>) {  
-            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"499"</span>);  
-        }  
-        <span class="keyword">if</span> (sKey.length() != <span class="number">16</span>) {  
-            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"498"</span>);  
-        }  
-
-        <span class="built_in">byte</span>[] raw = sKey.getBytes(<span class="string">"ASCII"</span>);  
-        SecretKeySpec skeySpec = <span class="keyword">new</span> SecretKeySpec(raw, <span class="string">"AES"</span>);  
-
-        Cipher cipher = Cipher.getInstance(<span class="string">"AES"</span>);  
-        cipher.init(Cipher.DECRYPT_MODE, skeySpec);  
-
-        Base64Encoder encoder = <span class="keyword">new</span> Base64Encoder();  
-        <span class="built_in">byte</span>[] encrypted1 = encoder.decode(sSrc);  
-
-        <span class="keyword">String</span> tempStr = <span class="keyword">new</span> <span class="keyword">String</span>(encrypted1, <span class="string">"utf-8"</span>);  
-        encrypted1 = parseHexStr2Byte(tempStr);  
-        <span class="built_in">byte</span>[] original = cipher.doFinal(encrypted1);  
-        <span class="keyword">String</span> originalString = <span class="keyword">new</span> <span class="keyword">String</span>(original, <span class="string">"utf-8"</span>);  
-        <span class="keyword">return</span> originalString;  
-    }  
-
-    <span class="comment">/** 
-     * 将二进制转换成16进制 
-     *  
-     * @param buf 
-     * @return 
-     */</span>  
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">String</span> parseByte2HexStr(<span class="built_in">byte</span> buf[]) {  
-        StringBuffer sb = <span class="keyword">new</span> StringBuffer();  
-        <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; buf.length; i++) {  
-            <span class="keyword">String</span> <span class="built_in">hex</span> = Integer.toHexString(buf[i] &amp; <span class="number">0xFF</span>);  
-            <span class="keyword">if</span> (<span class="built_in">hex</span>.length() == <span class="number">1</span>) {  
-                <span class="built_in">hex</span> = <span class="string">'0'</span> + <span class="built_in">hex</span>;  
-            }  
-            sb.<span class="built_in">append</span>(<span class="built_in">hex</span>.toUpperCase());  
-        }  
-        <span class="keyword">return</span> sb.toString();  
-    }  
-
-    <span class="comment">/** 
-     * 将16进制转换为二进制 
-     *  
-     * @param hexStr 
-     * @return 
-     */</span>  
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">byte</span>[] parseHexStr2Byte(<span class="keyword">String</span> hexStr) {  
-        <span class="keyword">if</span> (hexStr.length() &lt; <span class="number">1</span>)  
-            <span class="keyword">return</span> <span class="keyword">null</span>;  
-        <span class="built_in">byte</span>[] result = <span class="keyword">new</span> <span class="built_in">byte</span>[hexStr.length() / <span class="number">2</span>];  
-        <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; hexStr.length() / <span class="number">2</span>; i++) {  
-            <span class="built_in">int</span> high = Integer.parseInt(hexStr.substring(i * <span class="number">2</span>, i * <span class="number">2</span> + <span class="number">1</span>), <span class="number">16</span>);  
-            <span class="built_in">int</span> low = Integer.parseInt(hexStr.substring(i * <span class="number">2</span> + <span class="number">1</span>, i * <span class="number">2</span> + <span class="number">2</span>),  
-                    <span class="number">16</span>);  
-            result[i] = (<span class="built_in">byte</span>) (high * <span class="number">16</span> + low);  
-        }  
-        <span class="keyword">return</span> result;  
-    } 
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args) <span class="keyword">throws</span> Exception {
-        <span class="comment">/*
-         * 加密用的Key 可以用26个字母和数字组成，最好不要用保留字符，虽然不会错，至于怎么裁决，个人看情况而定
-         */</span>
-        <span class="keyword">String</span> cKey = <span class="string">"assistant7654321"</span>;
-        <span class="comment">// 需要加密的字串</span>
-        <span class="keyword">String</span> cSrc = <span class="string">"123456"</span>;
-        <span class="comment">// 加密</span>
-        <span class="keyword">long</span> lStart = System.currentTimeMillis();
-        <span class="keyword">String</span> enString = encrypt(cSrc, cKey);
-        System.out.<span class="built_in">println</span>(<span class="string">"加密后的字串是："</span> + enString);
-        <span class="keyword">long</span> lUseTime = System.currentTimeMillis() - lStart;
-        System.out.<span class="built_in">println</span>(<span class="string">"加密耗时："</span> + lUseTime + <span class="string">"毫秒"</span>);
-        <span class="comment">// 解密</span>
-        lStart = System.currentTimeMillis();
-        <span class="keyword">String</span> DeString = decrypt(enString, cKey);
-        System.out.<span class="built_in">println</span>(<span class="string">"解密后的字串是："</span> + DeString);
-        lUseTime = System.currentTimeMillis() - lStart;
-        System.out.<span class="built_in">println</span>(<span class="string">"解密耗时："</span> + lUseTime + <span class="string">"毫秒"</span>);
-    }
-}
-</code></pre><p>附上百度云盘链接地址：链接：<a href="http://pan.baidu.com/s/1pJout5L" target="_blank" rel="external">http://pan.baidu.com/s/1pJout5L</a> （密码：y4bd）</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>Java与C#AES加密解密，曾经做过特此留下来备份.<br>]]>
-    
-    </summary>
-    
-      <category term="AES" scheme="http://blog.chen777.com/tags/AES/"/>
     
   </entry>
   
