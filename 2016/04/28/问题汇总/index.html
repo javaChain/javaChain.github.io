@@ -60,7 +60,7 @@
 <meta property="og:image" content="http://ww3.sinaimg.cn/large/0063lLoQgw1f3i2jsbbsmj30ij0d9abh.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/0063lLoQgw1f3db2gvn0ej30hs07pdg1.jpg">
 <meta property="og:image" content="http://ww4.sinaimg.cn/large/0063lLoQgw1f3k9od65xwj30b40850tn.jpg">
-<meta property="og:updated_time" content="2016-05-05T02:27:19.266Z">
+<meta property="og:updated_time" content="2016-12-12T06:21:29.083Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="问题汇总">
 <meta name="twitter:description" content="悲观锁和乐观锁使用场景乐观锁是在应用层加锁，而悲观锁是在数据库层加锁(for update)
@@ -443,6 +443,18 @@ import java.util.List;
 <li>BirthDate d1= new BirthDate(7,7,1970);<br>d1 为对象引用，存在栈中，对象(new BirthDate())存在堆中，其中d，m，y为局部变量存储在栈中，且它们的类型为基础类型，因此它们的数据也存储在栈中。day,month,year为成员变量，它们存储在堆中(new BirthDate()里面)。当BirthDate构造方法执行完之后，d,m,y将从栈中消失。<br>5.main方法执行完之后，date变量，test，d1引用将从栈中消失，new Test(),new BirthDate()将等待垃圾回收。</li>
 </ol>
 <h2 id="5-_内存结构跟内存模型有没有什么关系?">5. 内存结构跟内存模型有没有什么关系?</h2><p>jvm内存结构:顾名思义,就是内存是以什么结构存的.<br>java内存模型(Java Memory Model,JMM):主要目标是用来定义程序中各个变量的访问规则,来屏蔽掉各种硬件和操作系统的内存访问差异,以实现让java程序在各种平台下都能达到一致的并发效果.<br>jvm内存分配策略:分配策略主要是跟回收策略对应的. GC的算法会影响分配策略.</p>
+<h2 id="MyBatis/Ibatis中#和$的区别">MyBatis/Ibatis中#和$的区别</h2><ol>
+<li><p>#将传入的数据都当成一个字符串，会对自动传入的数据加一个双引号。如：order by #user_id#，如果传入的值是111,那么解析成sql时的值为order by “111”, 如果传入的值是id，则解析成的sql为order by “id”.</p>
+</li>
+<li><p>$将传入的数据直接显示生成在sql中。如：order by $user_id$，如果传入的值是111,那么解析成sql时的值为order by user_id,  如果传入的值是id，则解析成的sql为order by id.</p>
+</li>
+<li><p>#方式能够很大程度防止sql注入。</p>
+</li>
+</ol>
+<p>4.$方式无法防止Sql注入。</p>
+<p>5.$方式一般用于传入数据库对象，例如传入表名. </p>
+<p>6.一般能用#的就别用$. </p>
+<p>ps:在使用mybatis中还遇到&lt;![CDATA[]]&gt;的用法，在该符号内的语句，将不会被当成字符串来处理，而是直接当成sql语句，比如要执行一个存储过程。</p>
 </span>
       
     </div>
@@ -555,7 +567,7 @@ import java.util.List;
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">29</span>
+              <span class="site-state-item-count">30</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -624,7 +636,7 @@ import java.util.List;
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#悲观锁和乐观锁使用场景"><span class="nav-number">1.</span> <span class="nav-text">悲观锁和乐观锁使用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mybatis乐观锁实现，解决并发问题"><span class="nav-number">1.1.</span> <span class="nav-text">mybatis乐观锁实现，解决并发问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务传播机制以及隔离级别"><span class="nav-number">2.</span> <span class="nav-text">事务传播机制以及隔离级别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#java多线程"><span class="nav-number">3.</span> <span class="nav-text">java多线程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring_MVC_流程图"><span class="nav-number">4.</span> <span class="nav-text">Spring MVC 流程图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#java线程池"><span class="nav-number">5.</span> <span class="nav-text">java线程池</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存模型"><span class="nav-number">6.</span> <span class="nav-text">内存模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JVM内存分配"><span class="nav-number">7.</span> <span class="nav-text">JVM内存分配</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-_JVM运行时数据区结构图"><span class="nav-number">7.1.</span> <span class="nav-text">1. JVM运行时数据区结构图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-_各个区的作用"><span class="nav-number">7.2.</span> <span class="nav-text">2. 各个区的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-_这些区会内存溢出吗,什么情况下会出现?报错信息是什么?怎么设置每个区的大小?"><span class="nav-number">7.3.</span> <span class="nav-text">3. 这些区会内存溢出吗,什么情况下会出现?报错信息是什么?怎么设置每个区的大小?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-_这些区跟多线程有没有什么关系?"><span class="nav-number">7.4.</span> <span class="nav-text">4.   这些区跟多线程有没有什么关系?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-_内存结构跟内存模型有没有什么关系?"><span class="nav-number">7.5.</span> <span class="nav-text">5. 内存结构跟内存模型有没有什么关系?</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#悲观锁和乐观锁使用场景"><span class="nav-number">1.</span> <span class="nav-text">悲观锁和乐观锁使用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mybatis乐观锁实现，解决并发问题"><span class="nav-number">1.1.</span> <span class="nav-text">mybatis乐观锁实现，解决并发问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务传播机制以及隔离级别"><span class="nav-number">2.</span> <span class="nav-text">事务传播机制以及隔离级别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#java多线程"><span class="nav-number">3.</span> <span class="nav-text">java多线程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring_MVC_流程图"><span class="nav-number">4.</span> <span class="nav-text">Spring MVC 流程图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#java线程池"><span class="nav-number">5.</span> <span class="nav-text">java线程池</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内存模型"><span class="nav-number">6.</span> <span class="nav-text">内存模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JVM内存分配"><span class="nav-number">7.</span> <span class="nav-text">JVM内存分配</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-_JVM运行时数据区结构图"><span class="nav-number">7.1.</span> <span class="nav-text">1. JVM运行时数据区结构图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-_各个区的作用"><span class="nav-number">7.2.</span> <span class="nav-text">2. 各个区的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-_这些区会内存溢出吗,什么情况下会出现?报错信息是什么?怎么设置每个区的大小?"><span class="nav-number">7.3.</span> <span class="nav-text">3. 这些区会内存溢出吗,什么情况下会出现?报错信息是什么?怎么设置每个区的大小?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-_这些区跟多线程有没有什么关系?"><span class="nav-number">7.4.</span> <span class="nav-text">4.   这些区跟多线程有没有什么关系?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-_内存结构跟内存模型有没有什么关系?"><span class="nav-number">7.5.</span> <span class="nav-text">5. 内存结构跟内存模型有没有什么关系?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MyBatis/Ibatis中#和$的区别"><span class="nav-number">7.6.</span> <span class="nav-text">MyBatis/Ibatis中#和$的区别</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -642,7 +654,7 @@ import java.util.List;
 <div class="copyright" >
   
   &copy; &nbsp;  2015 - 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="icon-next-heart"></i>
   </span>

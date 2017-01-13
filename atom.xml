@@ -4,7 +4,7 @@
   <subtitle><![CDATA[通往架构师的路上]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.chen777.com/"/>
-  <updated>2016-08-26T08:12:19.870Z</updated>
+  <updated>2016-12-15T03:40:30.087Z</updated>
   <id>http://blog.chen777.com/</id>
   
   <author>
@@ -13,6 +13,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[2016年终总结]]></title>
+    <link href="http://blog.chen777.com/2016/12/15/2016%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/"/>
+    <id>http://blog.chen777.com/2016/12/15/2016年终总结/</id>
+    <published>2016-12-15T02:03:03.000Z</published>
+    <updated>2016-12-15T03:40:30.087Z</updated>
+    <content type="html"><![CDATA[<p>2016转瞬即逝，已经是12月的小尾巴了。2月出来在优高sheng创业公司工作，工作周期为3个月，结果最后发不出工资，少发了几千块钱。吃一堑长一智。优高胜当时是做接项目外包的，我被要求做了一个分销模块，然后就被客户公司挖过去了。毕竟优高胜工资都发不出。<br>先细说一下经过，当时优高sheng的叶某某出去谈客户，谈了一个项目20W 2个月搞定，就是我现在这个公司的项目，客户需要的是一个B2B2C并且带APP，然后当时优高sheng的叶某某答应的这件事，叶某某是业务老大，技术方面并不知道，结果就签下来了。搞笑的是最后用了半年还没有做完这个系统。后面客户公司说优高sheng不行，没搞定。 说白了其实客户公司都不知道自己想要什么样的软件，即需求都不知道。所以后来两个公司就开始撕逼了，A说B公司需求复杂，B说A公司搞不定需求，不给钱。哈哈哈。<br>虽然最后给了钱，但是B公司还是说A公司怎么样怎么样。ZZZ</p>
+<p>A公司钱少活多死得早，蓝瘦。</p>
+<p>然后开始长达大半年的爬坑之路。完全是一个人玩整个项目，所以从运维到开发到优化。大概汇总一下：</p>
+<p>3-4月份做分销系统整个模块</p><br><p>5月份搭建过jenkins持续集成,禅道搭建，解决过短信轰炸</p><br><p>6月份完成hibernate search 全文检索BUG修复,讨论集群部署</p><br><p>7月份解决部分UI问题，以及支付宝WAP支付</p><br><p>8月份修复推广名片以及分享,再次购买等问题</p><br><p>9月份改本出新首页,新首页改版带出很多BUG</p><br><p>10月份解决老用户需要注册，以及token失效的问题</p><br><p>11月份尝试部署集群</p><br><p>12月份备案失误，重新部署香港节点（海外节点无需备案）</p>
+
+
+
+
+
+
+
+
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>2016转瞬即逝，已经是12月的小尾巴了。2月出来在优高sheng创业公司工作，工作周期为3个月，结果最后发不出工资，少发了几千块钱。吃一堑长一智。优高胜当时是做接项目外包的，我被要求做了一个分销模块，然后就被客户公司挖过去了。毕竟优高胜工资都发不出。<br>先细说一下经过]]>
+    </summary>
+    
+      <category term="日记" scheme="http://blog.chen777.com/tags/%E6%97%A5%E8%AE%B0/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[sso-cas-3.5.2单点登录]]></title>
@@ -411,7 +438,7 @@
     <link href="http://blog.chen777.com/2016/04/28/%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/"/>
     <id>http://blog.chen777.com/2016/04/28/问题汇总/</id>
     <published>2016-04-28T01:48:15.000Z</published>
-    <updated>2016-05-05T02:27:19.266Z</updated>
+    <updated>2016-12-12T06:21:29.083Z</updated>
     <content type="html"><![CDATA[<h1 id="悲观锁和乐观锁使用场景">悲观锁和乐观锁使用场景</h1><p>乐观锁是在应用层加锁，而悲观锁是在数据库层加锁(for update)</p>
 <p>乐观锁顾名思义就是在操作时很乐观，这数据只有我在用，我先尽管用，最后发现不行时就回滚。</p>
 <p>悲观锁在操作时很悲观，生怕数据被其他人更新掉，我就先将其先锁住，让别人用不了，我操作完成后再释放掉。</p>
@@ -615,6 +642,18 @@ import java.util.List;
 <li>BirthDate d1= new BirthDate(7,7,1970);<br>d1 为对象引用，存在栈中，对象(new BirthDate())存在堆中，其中d，m，y为局部变量存储在栈中，且它们的类型为基础类型，因此它们的数据也存储在栈中。day,month,year为成员变量，它们存储在堆中(new BirthDate()里面)。当BirthDate构造方法执行完之后，d,m,y将从栈中消失。<br>5.main方法执行完之后，date变量，test，d1引用将从栈中消失，new Test(),new BirthDate()将等待垃圾回收。</li>
 </ol>
 <h2 id="5-_内存结构跟内存模型有没有什么关系?">5. 内存结构跟内存模型有没有什么关系?</h2><p>jvm内存结构:顾名思义,就是内存是以什么结构存的.<br>java内存模型(Java Memory Model,JMM):主要目标是用来定义程序中各个变量的访问规则,来屏蔽掉各种硬件和操作系统的内存访问差异,以实现让java程序在各种平台下都能达到一致的并发效果.<br>jvm内存分配策略:分配策略主要是跟回收策略对应的. GC的算法会影响分配策略.</p>
+<h2 id="MyBatis/Ibatis中#和$的区别">MyBatis/Ibatis中#和$的区别</h2><ol>
+<li><p>#将传入的数据都当成一个字符串，会对自动传入的数据加一个双引号。如：order by #user_id#，如果传入的值是111,那么解析成sql时的值为order by “111”, 如果传入的值是id，则解析成的sql为order by “id”.</p>
+</li>
+<li><p>$将传入的数据直接显示生成在sql中。如：order by $user_id$，如果传入的值是111,那么解析成sql时的值为order by user_id,  如果传入的值是id，则解析成的sql为order by id.</p>
+</li>
+<li><p>#方式能够很大程度防止sql注入。</p>
+</li>
+</ol>
+<p>4.$方式无法防止Sql注入。</p>
+<p>5.$方式一般用于传入数据库对象，例如传入表名. </p>
+<p>6.一般能用#的就别用$. </p>
+<p>ps:在使用mybatis中还遇到&lt;![CDATA[]]&gt;的用法，在该符号内的语句，将不会被当成字符串来处理，而是直接当成sql语句，比如要执行一个存储过程。</p>
 ]]></content>
     <summary type="html">
     <![CDATA[<h1 id="悲观锁和乐观锁使用场景">悲观锁和乐观锁使用场景</h1><p>乐观锁是在应用层加锁，而悲观锁是在数据库层加锁(for update)</p>
@@ -2279,86 +2318,6 @@ pageEncoding=<span class="string">"UTF-8"</span></span>%&gt;<span class="xml">
     </summary>
     
       <category term="hexo" scheme="http://blog.chen777.com/tags/hexo/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[富文本编辑器]]></title>
-    <link href="http://blog.chen777.com/2015/10/14/%E5%AF%8C%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8/"/>
-    <id>http://blog.chen777.com/2015/10/14/富文本编辑器/</id>
-    <published>2015-10-14T03:12:33.000Z</published>
-    <updated>2015-10-14T08:17:44.470Z</updated>
-    <content type="html"><![CDATA[<p>今天学弟需要用到富文本编辑器@喜子，写一下基本用法做备份，我使用的是xheditor官方地址：<a href="http://xheditor.com/" target="_blank" rel="external">http://xheditor.com/</a></p>
-<blockquote>
-<p>在线HTML编辑器就是在线编辑HTML代码的工具，它经常被应用于留言板留言、论坛发贴、Blog编写日志或等需要用户输入HTML的地方，是Web应用的常用模块之一。在线HTML编辑器可以实现对编辑内容添加各种丰富多彩的文字效果，以及提供各种方便快捷的操作功能，最大的提高编辑工作效率。在线HTML编辑器是任何网站不可或缺的重要功能组件，是互联网用户得心应手的驰骋网络的有力工具。<br><a id="more"></a></p>
-</blockquote>
-<p>废话不多说直接贴代码：</p>
-<pre><code><span class="doctype">&lt;!DOCTYPE html&gt;</span>
-<span class="tag">&lt;<span class="title">html</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">head</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">charset</span>=<span class="value">"utf-8"</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">title</span>&gt;</span>xheditor<span class="tag">&lt;/<span class="title">title</span>&gt;</span>
-
-        <span class="tag">&lt;<span class="title">style</span> <span class="attribute">type</span>=<span class="value">"text/css"</span>&gt;</span><span class="css">
-        <span class="class">.videoClassName</span> <span class="rules">{
-            <span class="rule"><span class="attribute">background</span>:<span class="value"> transparent <span class="function">url</span>(img/video_icon_1.png) no-repeat
-                <span class="number">20px</span> <span class="number">20px</span></span></span>;
-            <span class="rule"><span class="attribute">background-position</span>:<span class="value"> <span class="number">3px</span> <span class="number">3px</span></span></span>;
-        }</span>
-        </span><span class="tag">&lt;/<span class="title">style</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"js/jquery-1.7.2.min.js"</span> &gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"js/xheditor/xheditor-1.1.14-zh-cn.min.js"</span> &gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"js/test.js"</span> &gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
-    <span class="tag">&lt;/<span class="title">head</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">body</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">textarea</span>  <span class="attribute">id</span>=<span class="value">"elm2"</span> <span class="attribute">style</span>=<span class="value">"width: 900px; height: 300px;"</span> <span class="attribute">rows</span>=<span class="value">"100"</span> <span class="attribute">cols</span>=<span class="value">"50"</span>&gt;</span><span class="tag">&lt;/<span class="title">textarea</span>&gt;</span> <span class="comment">&lt;!-- 富文本编辑器如果需要一键格式化功能，则要加入此div --&gt;</span>
-        <span class="tag">&lt;<span class="title">br</span> /&gt;</span>
-        <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"button"</span> <span class="attribute">id</span>=<span class="value">"submitForm"</span> <span class="attribute">value</span>=<span class="value">"提交"</span>/&gt;</span>
-    <span class="tag">&lt;/<span class="title">body</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
-</code></pre><p>test.js:</p>
-<pre><code>$(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
-<span class="keyword">var</span> plugins = {
-        video:{c:<span class="string">'videoClassName'</span>,t:<span class="string">'录入视频(Ctrl+7)'</span>,s:<span class="string">'ctrl+7'</span>,i:<span class="function"><span class="keyword">function</span>(<span class="params">editor</span>)</span>{
-            <span class="comment">//editor.setSource('test');</span>
-        },e:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
-            initVideoWin();
-        }}            
-}
-<span class="keyword">var</span> editor=$(<span class="string">'#elm2'</span>).xheditor({
-    tools:<span class="string">'Blocktag,Fontface,FontSize,Bold,Italic,Underline,Strikethrough,FontColor,BackColor,|,SelectAll,Removeformat,|,Align,|,List,Outdent,Indent,|,Link,Unlink,|,Img,|,Table,Source,Fullscreen,test1,Code,Hr,video'</span>,
-    skin:<span class="string">'vista'</span>,
-    upBtnText:<span class="string">' 上传 '</span>,
-    html5Upload:<span class="literal">false</span>,
-    upMultiple:<span class="string">'1'</span>,
-    upLinkUrl:<span class="string">'admin/info/upload.action?_charset_=utf-8'</span>,
-    upLinkExt:<span class="string">'jpeg,jpg,png,gif'</span>,
-    **upImgUrl:<span class="string">'admin/info/upload.action'</span>,**
-    upImgExt:<span class="string">'jpeg,jpg,png,gif'</span>,
-    cleanPaste:<span class="number">2</span>,
-    forcePtag:<span class="literal">true</span>,
-    Pastetext:<span class="literal">true</span>,
-    formatXHTML:<span class="literal">true</span>,
-    plugins:plugins
-    }); 
-})
-
-$(<span class="string">'#submitForm'</span>).click(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
-    <span class="keyword">var</span> sHtml=editor.getSource();
-    <span class="keyword">var</span> test=editor.formatXHTML(sHtml);
-});
-</code></pre><p>mysql数据库使用的是text类型，插件上传图片upImgUrl这个是你controller里面写的上传方法。</p>
-<p>压缩包：<a href="http://pan.baidu.com/s/1kTF6PW7" target="_blank" rel="external">http://pan.baidu.com/s/1kTF6PW7</a>  /mk5a</p>
-<p>分享过期之后你可以联系我索取。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>今天学弟需要用到富文本编辑器@喜子，写一下基本用法做备份，我使用的是xheditor官方地址：<a href="http://xheditor.com/">http://xheditor.com/</a></p>
-<blockquote>
-<p>在线HTML编辑器就是在线编辑HTML代码的工具，它经常被应用于留言板留言、论坛发贴、Blog编写日志或等需要用户输入HTML的地方，是Web应用的常用模块之一。在线HTML编辑器可以实现对编辑内容添加各种丰富多彩的文字效果，以及提供各种方便快捷的操作功能，最大的提高编辑工作效率。在线HTML编辑器是任何网站不可或缺的重要功能组件，是互联网用户得心应手的驰骋网络的有力工具。<br>]]>
-    
-    </summary>
-    
-      <category term="xheditor" scheme="http://blog.chen777.com/tags/xheditor/"/>
     
   </entry>
   

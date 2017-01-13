@@ -189,6 +189,90 @@
           
           
             
+              <a class="post-title-link" href="/2016/04/28/问题汇总/" itemprop="url">
+                问题汇总
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于
+          <time itemprop="dateCreated" datetime="2016-04-28T09:48:15+08:00" content="2016-04-28">
+            2016-04-28
+          </time>
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2016/04/28/问题汇总/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/28/问题汇总/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+            悲观锁和乐观锁使用场景乐观锁是在应用层加锁，而悲观锁是在数据库层加锁(for update)
+乐观锁顾名思义就是在操作时很乐观，这数据只有我在用，我先尽管用，最后发现不行时就回滚。
+悲观锁在操作时很悲观，生怕数据被其他人更新掉，我就先将其先锁住，让别人用不了，我操作完成后再释放掉。
+悲观锁需要数据库级别上的的实现，程序中是做不到的，如果在长事务环境中，数据会一直被锁住，导致并发性能大大地降低。
+一般来说如果并发量很高的话，建议使用悲观锁，否则的话就使用乐观锁。
+如果并发量很高时使用乐观锁的话，会导致很多的并发事务回滚、操作失败。
+总之，冲突几率大用悲观，小就用乐观。
+mybatis乐观锁实现，
+            ...
+          </span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/04/28/问题汇总/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
               <a class="post-title-link" href="/2016/04/25/微信刷卡支付以及扫码支付/" itemprop="url">
                 微信刷卡支付以及扫码支付
               </a>
@@ -503,94 +587,6 @@ cron的表达式被用来配置CronTrigger实例。 cron的
 
 
     
-      
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      
-      
-        <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-              <a class="post-title-link" href="/2016/03/16/java堆栈了解/" itemprop="url">
-                java堆栈了解
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于
-          <time itemprop="dateCreated" datetime="2016-03-16T16:52:53+08:00" content="2016-03-16">
-            2016-03-16
-          </time>
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-              &nbsp; | &nbsp;
-              <a href="/2016/03/16/java堆栈了解/#comments" itemprop="discussionUrl">
-                <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/16/java堆栈了解/" itemprop="commentsCount"></span>
-              </a>
-            </span>
-          
-        
-      </div>
-    </header>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-            　　JAVA的JVM的内存可分为3个区：堆(heap)、栈(stack)和方法区(method)
-堆区:
-1.存储的全部是对象，每个对象都包含一个与之对应的class的信息。(class的目的是得到操作指令)
-2.jvm只有一个堆区(heap)被所有线程共享，堆中不存放基本类型和对象引用，只存放对象本身
-
-栈区:
-1.每个线程包含一个栈区，栈中只保存基础数据类型的对象和自定义对象的引用(不是对象)，对象都存放在堆区中
-2.每个栈中的数据(原始类型和对象引用)都是私有的，其他栈不能访问。
-3.栈分为3个部分：基本类型变量区、执行环境上下文、操作指令区(存放操作指令)。
-
-方法区:
-1.又叫静态区
-            ...
-          </span>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/03/16/java堆栈了解/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -629,7 +625,7 @@ cron的表达式被用来配置CronTrigger实例。 cron的
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">29</span>
+              <span class="site-state-item-count">30</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -705,7 +701,7 @@ cron的表达式被用来配置CronTrigger实例。 cron的
 <div class="copyright" >
   
   &copy; &nbsp;  2015 - 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="icon-next-heart"></i>
   </span>
